@@ -1,0 +1,2 @@
+class MountManagerError(Exception):
+    pass

@@ -1,0 +1,193 @@
+openapi: 3.0.2
+info:
+  title: Thumbtack API
+  version: '0.1.0'
+  description: Thumbtack's API for (un)mounting of forensic disk images
+servers:
+  - url: http://localhost:5000/
+paths:
+  /mounts:
+    get:
+      summary: List all mounted images
+      operationId: listImages
+      responses:
+        '200':
+          description: A list of all mounted images.
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/DiskImages"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /mounts/{imagePath}:
+    get:
+      summary: Info for a specific image
+      operationId: showImage
+      parameters:
+        - name: imagePath
+          in: path
+          required: true
+          description: The path of the image to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DiskImage"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: Mount a specific image
+      operationId: mountImage
+      parameters:
+        - name: imagePath
+          in: path
+          required: true
+          description: The path of the image to mount
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DiskImage"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Unmount a specific image
+      operationId: unmountImage
+      parameters:
+        - name: imagePath
+          in: path
+          required: true
+          description: The path of the image to unmount
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DiskImage"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    DiskImages:
+      type: array
+      items:
+        $ref: "#/components/schemas/DiskImage"
+    DiskImage:
+      description: Information about a forensics disk image
+      type: object
+      required:
+        - name
+        - imagepath
+        - volumes
+      properties:
+        name:
+          type: string
+        imagepath:
+          type: string
+        mountpoint:
+          type: string
+        volumes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Volume"
+      example:
+        name: 10-ntfs-disk.dd
+        mountpoint: /tmp/image_mounter_mywskiue
+        imagepath: /vagrant/tests/test_images/dftt_images/10-ntfs-disk.dd
+        volumes:
+          - label: null
+            fstype: "?unknown"
+            fsdescription: "Primary Table (#0)"
+            mountpoint: ""
+            offset: 0
+            index: 0
+            size: 512
+          - label: null
+            fstype: "?unknown"
+            fsdescription: "Unallocated"
+            mountpoint: ""
+            offset: 0
+            index: 1
+            size: 32256
+          - label: "EXT3?"
+            fstype: "ntfs"
+            fsdescription: "NTFS / exFAT (0x07)"
+            mountpoint: "/tmp/im_2_8lhedh_c_EXT3?"
+            offset: 32256
+            index: 2
+            size: 49319424
+          - label: "UFS1?"
+            fstype: "ntfs"
+            fsdescription: "NTFS / exFAT (0x07)"
+            mountpoint: "/tmp/im_3__v1y0spv_UFS1?"
+            offset: 49351680
+            index: 3
+            size: 49351680
+          - label: null
+            fstype: "?unknown"
+            fsdescription: "Unallocated"
+            mountpoint: ""
+            offset: 98703360
+            index: 4
+            size: 2048
+    Volume:
+      description: Information about a forensics volume
+      type: object
+      required:
+        - name
+        - imagepath
+        - volumes
+      properties:
+        index:
+          type: integer
+        label:
+          type: string
+        fstype:
+          type: string
+        fsdescription:
+          type: string
+        offset:
+          type: integer
+          format: int64
+        size:
+          type: integer
+          format: int64
+        mountpoint:
+          type: string
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

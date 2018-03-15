@@ -1,0 +1,96 @@
+<!-- extend from base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+  <h1>Thumbtack</h1>
+  <p>Hello there! This interface is a proof of concept of what can be done with the Thumbtack server API.
+     It allows you to mount and unmount disk image files in a specified directory.
+     Once mounted, you are shown a tree view of all the image partitions that are available and where they are mounted on the server.
+     In order to more quickly be able to navigate to the mounted directory, you can copy the path to the clipboard as well.
+  </p>
+
+  <h2>Mount types</h2>
+  <p>The following mount types are supported on this Thumbtack server.
+     In order to enable more mount types from the unsupported list below, please reference the documentation for that type in
+     the <a href="https://imagemounter.readthedocs.io/en/latest/specifics.html">imagemounter documentation</a>.
+  </p>
+  <p><b>Supported:</b>
+  {% for mount_type in supported_mount_types %}
+    {{ mount_type }} {{ "-" if not loop.last }}
+  {% endfor %}
+  </p>
+  <p><b>Unsupported:</b>
+  {% for mount_type in unsupported_mount_types %}
+    {{ mount_type }} {{ "-" if not loop.last }}
+  {% endfor %}
+  </p>
+  <p><a href="/supported" >More info</a></p>
+
+  <h2>Path to disk images: {{ image_dir }}</h2>
+
+  <table style="width:70%">
+    <tr>
+      <th>Filename</th>
+      <th>Status</th>
+      <th>Mount</th>
+      <th>Unmount</th>
+      <th>Mountpoint</th>
+    </tr>
+    {% for filename, file_info in images.items() %}
+      <tr>
+        <td>
+          {% if file_info[1] == 'Mounted' %}
+            <a href="/mounts/{{ filename }}">{{ filename }}</a>
+          {% else %}
+            {{ filename }}
+          {% endif %}
+        </td>
+        <td>{{ file_info[1] }}</td>
+        <td>
+          {% if file_info[1] == 'Unmounted' %}
+          <form class="myForm" method="post" action="/mount_form">
+            <input type="hidden" name="img_to_mount" value="{{ filename }}">
+            <input type="hidden" name="operation" value="mount">
+            <button>Mount</button>
+          </form>
+          {% endif %}
+        </td>
+        <td>
+          {% if file_info[1] == 'Mounted' %}
+          <form class="myForm" method="post" action="/mount_form">
+            <input type="hidden" name="img_to_mount" value="{{ filename }}">
+            <input type="hidden" name="operation" value="unmount">
+            <button>Unmount</button>
+          </form>
+          {% endif %}
+        </td>
+        <td>
+          {% if file_info[1] == 'Mounted' %}
+          <ul class="myUL">
+            <li>
+              <span class="caret">{{ file_info[2] }}</span>
+              <ul class="nested">
+                {% for idx, vol_mountpoint in file_info[3].items() %}
+                  <li>
+                    [{{ idx }}] <span id="{{ vol_mountpoint[1] }}">{{ vol_mountpoint[0] }}</span>
+                    {% if vol_mountpoint[0] %}
+                    <div class="tooltip">
+                      <button onclick="copyByID('{{ vol_mountpoint[1] }}')" onmouseout="outFunc('{{ vol_mountpoint[1] }}Tooltip')">
+                        <span class="tooltiptext" id="{{ vol_mountpoint[1] }}Tooltip">Copy to clipboard</span>
+                        Copy
+                      </button>
+                    </div>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            </li>
+          </ul>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+
+{% endblock %}

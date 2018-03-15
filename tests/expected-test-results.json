@@ -1,0 +1,835 @@
+[
+    {
+        "assertions": {
+            "disk_mountpoint": true,
+            "mountable": true,
+            "num_volumes": 5
+        },
+        "expected_json_response": {
+            "imagepath": "dftt_images/10-ntfs-disk.dd",
+            "name": "10-ntfs-disk.dd",
+            "volumes": [
+                {
+                    "fsdescription": "Primary Table (#0)",
+                    "fstype": "?unknown",
+                    "index": 0,
+                    "label": null,
+                    "offset": 0,
+                    "size": 512
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 1,
+                    "label": null,
+                    "offset": 0,
+                    "size": 32256
+                },
+                {
+                    "fsdescription": "NTFS / exFAT (0x07)",
+                    "fstype": "ntfs",
+                    "index": 2,
+                    "label": "EXT3?",
+                    "offset": 32256,
+                    "size": 49319424
+                },
+                {
+                    "fsdescription": "NTFS / exFAT (0x07)",
+                    "fstype": "ntfs",
+                    "index": 3,
+                    "label": "UFS1?",
+                    "offset": 49351680,
+                    "size": 49351680
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 4,
+                    "label": null,
+                    "offset": 98703360,
+                    "size": 2048
+                }
+            ]
+        }
+    },
+    {
+        "assertions": {
+            "disk_mountpoint": true,
+            "mountable": false,
+            "num_volumes": 1
+        },
+        "expected_json_response": {
+            "imagepath": "dftt_images/11-carve-fat.dd",
+            "name": "11-carve-fat.dd",
+            "volumes": [
+                {
+                    "fsdescription": "DOS/MBR boot sector",
+                    "fstype": "volumesystem",
+                    "index": 0,
+                    "label": null,
+                    "offset": 0,
+                    "size": 64979456
+                }
+            ]
+        }
+    },
+    {
+        "assertions": {
+            "disk_mountpoint": true,
+            "mountable": false,
+            "num_volumes": 1
+        },
+        "expected_json_response": {
+            "imagepath": "dftt_images/12-carve-ext2.dd",
+            "name": "12-carve-ext2.dd",
+            "volumes": [
+                {
+                    "fsdescription": "data",
+                    "fstype": "unknown",
+                    "index": 0,
+                    "label": null,
+                    "offset": 0,
+                    "size": 129356800
+                }
+            ]
+        }
+    },
+    {
+        "assertions": {
+            "disk_mountpoint": true,
+            "mountable": true,
+            "num_volumes": 1
+        },
+        "expected_json_response": {
+            "imagepath": "dftt_images/7-ntfs-undel.dd",
+            "name": "7-ntfs-undel.dd",
+            "volumes": [
+                {
+                    "fsdescription": "DOS/MBR boot sector",
+                    "fstype": "ntfs",
+                    "index": 0,
+                    "label": "NTFS_DEL",
+                    "offset": 0,
+                    "size": 6160384
+                }
+            ]
+        }
+    },
+    {
+        "assertions": {
+            "disk_mountpoint": true,
+            "mountable": true,
+            "num_volumes": 1
+        },
+        "expected_json_response": {
+            "imagepath": "dftt_images/8-jpeg-search.dd",
+            "name": "8-jpeg-search.dd",
+            "volumes": [
+                {
+                    "fsdescription": "DOS/MBR boot sector",
+                    "fstype": "ntfs",
+                    "index": 0,
+                    "label": "JPEG-SRCH",
+                    "offset": 0,
+                    "size": 10289152
+                }
+            ]
+        }
+    },
+    {
+        "assertions": {
+            "disk_mountpoint": true,
+            "mountable": true,
+            "num_volumes": 1
+        },
+        "expected_json_response": {
+            "imagepath": "dftt_images/9-fat-label.dd",
+            "name": "9-fat-label.dd",
+            "volumes": [
+                {
+                    "fsdescription": "DOS/MBR boot sector",
+                    "fstype": "fat",
+                    "index": 0,
+                    "label": null,
+                    "offset": 0,
+                    "size": 10321920
+                }
+            ]
+        }
+    },
+    {
+        "assertions": {
+            "disk_mountpoint": true,
+            "mountable": true,
+            "num_volumes": 1
+        },
+        "expected_json_response": {
+            "imagepath": "dftt_images/daylight.dd",
+            "name": "daylight.dd",
+            "volumes": [
+                {
+                    "fsdescription": "DOS/MBR boot sector",
+                    "fstype": "fat",
+                    "index": 0,
+                    "label": null,
+                    "offset": 0,
+                    "size": 1474560
+                }
+            ]
+        }
+    },
+    {
+        "assertions": {
+            "disk_mountpoint": true,
+            "mountable": true,
+            "num_volumes": 15
+        },
+        "expected_json_response": {
+            "imagepath": "dftt_images/ext-part-test-2.dd",
+            "name": "ext-part-test-2.dd",
+            "volumes": [
+                {
+                    "fsdescription": "Primary Table (#0)",
+                    "fstype": "?unknown",
+                    "index": 0,
+                    "label": null,
+                    "offset": 0,
+                    "size": 512
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 1,
+                    "label": null,
+                    "offset": 0,
+                    "size": 32256
+                },
+                {
+                    "fsdescription": "DOS FAT16 (0x04)",
+                    "fstype": "fat",
+                    "index": 2,
+                    "label": null,
+                    "offset": 32256,
+                    "size": 26804736
+                },
+                {
+                    "fsdescription": "DOS FAT16 (0x04)",
+                    "fstype": "fat",
+                    "index": 3,
+                    "label": null,
+                    "offset": 26836992,
+                    "size": 26836992
+                },
+                {
+                    "fsdescription": "DOS FAT16 (0x04)",
+                    "fstype": "fat",
+                    "index": 4,
+                    "label": null,
+                    "offset": 53673984,
+                    "size": 26836992
+                },
+                {
+                    "fsdescription": "DOS Extended (0x05)",
+                    "fstype": "?unknown",
+                    "index": 5,
+                    "label": null,
+                    "offset": 80510976,
+                    "size": 79478784
+                },
+                {
+                    "fsdescription": "Extended Table (#1)",
+                    "fstype": "?unknown",
+                    "index": 6,
+                    "label": null,
+                    "offset": 80510976,
+                    "size": 512
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 7,
+                    "label": null,
+                    "offset": 80510976,
+                    "size": 32256
+                },
+                {
+                    "fsdescription": "DOS FAT16 (0x04)",
+                    "fstype": "fat",
+                    "index": 8,
+                    "label": null,
+                    "offset": 80543232,
+                    "size": 26804736
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 9,
+                    "label": null,
+                    "offset": 107347968,
+                    "size": 32256
+                },
+                {
+                    "fsdescription": "DOS FAT16 (0x04)",
+                    "fstype": "fat",
+                    "index": 10,
+                    "label": null,
+                    "offset": 107380224,
+                    "size": 26804736
+                },
+                {
+                    "fsdescription": "DOS Extended (0x05)",
+                    "fstype": "?unknown",
+                    "index": 11,
+                    "label": null,
+                    "offset": 134184960,
+                    "size": 25804800
+                },
+                {
+                    "fsdescription": "Extended Table (#2)",
+                    "fstype": "?unknown",
+                    "index": 12,
+                    "label": null,
+                    "offset": 134184960,
+                    "size": 512
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 13,
+                    "label": null,
+                    "offset": 134184960,
+                    "size": 32256
+                },
+                {
+                    "fsdescription": "DOS FAT16 (0x06)",
+                    "fstype": "fat",
+                    "index": 14,
+                    "label": null,
+                    "offset": 134217216,
+                    "size": 25772544
+                }
+            ]
+        }
+    },
+    {
+        "assertions": {
+            "disk_mountpoint": true,
+            "mountable": true,
+            "num_volumes": 1
+        },
+        "expected_json_response": {
+            "imagepath": "dftt_images/ntfs-img-kw-1.dd",
+            "name": "ntfs-img-kw-1.dd",
+            "volumes": [
+                {
+                    "fsdescription": "DOS/MBR boot sector",
+                    "fstype": "ntfs",
+                    "index": 0,
+                    "label": "KW-SRCH-1",
+                    "offset": 0,
+                    "size": 8224768
+                }
+            ]
+        }
+    },
+    {
+        "assertions": {
+            "disk_mountpoint": true,
+            "mountable": true,
+            "num_volumes": 9
+        },
+        "expected_json_response": {
+            "imagepath": "digitalcorpora/lone_wolf/LoneWolf.E01",
+            "name": "LoneWolf.E01",
+            "volumes": [
+                {
+                    "fsdescription": "Safety Table",
+                    "fstype": "?unknown",
+                    "index": 0,
+                    "label": null,
+                    "offset": 0,
+                    "size": 512
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 1,
+                    "label": null,
+                    "offset": 0,
+                    "size": 1048576
+                },
+                {
+                    "fsdescription": "GPT Header",
+                    "fstype": "?unknown",
+                    "index": 2,
+                    "label": null,
+                    "offset": 512,
+                    "size": 512
+                },
+                {
+                    "fsdescription": "Partition Table",
+                    "fstype": "?unknown",
+                    "index": 3,
+                    "label": null,
+                    "offset": 1024,
+                    "size": 16384
+                },
+                {
+                    "fsdescription": "Basic data partition",
+                    "fstype": "ntfs",
+                    "index": 4,
+                    "label": "Basic data partition",
+                    "offset": 1048576,
+                    "size": 523239424
+                },
+                {
+                    "fsdescription": "EFI system partition",
+                    "fstype": "fat",
+                    "index": 5,
+                    "label": "EFI system partition",
+                    "offset": 524288000,
+                    "size": 103809024
+                },
+                {
+                    "fsdescription": "Microsoft reserved partition",
+                    "fstype": "unknown",
+                    "index": 6,
+                    "label": "Microsoft reserved partition",
+                    "offset": 628097024,
+                    "size": 16777216
+                },
+                {
+                    "fsdescription": "Basic data partition",
+                    "fstype": "ntfs",
+                    "index": 7,
+                    "label": "Basic data partition",
+                    "offset": 644874240,
+                    "size": 511464964096
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 8,
+                    "label": null,
+                    "offset": 512109838336,
+                    "size": 352256
+                }
+            ]
+        }
+    },
+    {
+        "assertions": {
+            "disk_mountpoint": true,
+            "mountable": true,
+            "num_volumes": 4
+        },
+        "expected_json_response": {
+            "imagepath": "digitalcorpora/m57-jean/nps-2008-jean.E01",
+            "name": "nps-2008-jean.E01",
+            "volumes": [
+                {
+                    "fsdescription": "Primary Table (#0)",
+                    "fstype": "?unknown",
+                    "index": 0,
+                    "label": null,
+                    "offset": 0,
+                    "size": 512
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 1,
+                    "label": null,
+                    "offset": 0,
+                    "size": 32256
+                },
+                {
+                    "fsdescription": "NTFS / exFAT (0x07)",
+                    "fstype": "ntfs",
+                    "index": 2,
+                    "label": null,
+                    "offset": 32256,
+                    "size": 10725732864
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 3,
+                    "label": null,
+                    "offset": 10725765120,
+                    "size": 11653120
+                }
+            ]
+        }
+    },
+    {
+        "assertions": {
+            "disk_mountpoint": true,
+            "mountable": true,
+            "num_volumes": 4
+        },
+        "expected_json_response": {
+            "imagepath": "digitalcorpora/m57-patents/charlie-2009-12-11.E01",
+            "name": "charlie-2009-12-11.E01",
+            "volumes": [
+                {
+                    "fsdescription": "Primary Table (#0)",
+                    "fstype": "?unknown",
+                    "index": 0,
+                    "label": null,
+                    "offset": 0,
+                    "size": 512
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 1,
+                    "label": null,
+                    "offset": 0,
+                    "size": 32256
+                },
+                {
+                    "fsdescription": "NTFS / exFAT (0x07)",
+                    "fstype": "ntfs",
+                    "index": 2,
+                    "label": null,
+                    "offset": 32256,
+                    "size": 10223990784
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 3,
+                    "label": null,
+                    "offset": 10224023040,
+                    "size": 15837696
+                }
+            ]
+        }
+    },
+    {
+        "assertions": {
+            "disk_mountpoint": true,
+            "mountable": true,
+            "num_volumes": 3
+        },
+        "expected_json_response": {
+            "imagepath": "digitalcorpora/m57-patents/charlie-work-usb-2009-12-11.E01",
+            "name": "charlie-work-usb-2009-12-11.E01",
+            "volumes": [
+                {
+                    "fsdescription": "Primary Table (#0)",
+                    "fstype": "?unknown",
+                    "index": 0,
+                    "label": null,
+                    "offset": 0,
+                    "size": 512
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 1,
+                    "label": null,
+                    "offset": 0,
+                    "size": 512
+                },
+                {
+                    "fsdescription": "NTFS / exFAT (0x07)",
+                    "fstype": "ntfs",
+                    "index": 2,
+                    "label": "charliework",
+                    "offset": 512,
+                    "size": 1059061248
+                }
+            ]
+        }
+    },
+    {
+        "assertions": {
+            "disk_mountpoint": true,
+            "mountable": true,
+            "num_volumes": 4
+        },
+        "expected_json_response": {
+            "imagepath": "digitalcorpora/m57-patents/jo-2009-12-11-001.E01",
+            "name": "jo-2009-12-11-001.E01",
+            "volumes": [
+                {
+                    "fsdescription": "Primary Table (#0)",
+                    "fstype": "?unknown",
+                    "index": 0,
+                    "label": null,
+                    "offset": 0,
+                    "size": 512
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 1,
+                    "label": null,
+                    "offset": 0,
+                    "size": 32256
+                },
+                {
+                    "fsdescription": "NTFS / exFAT (0x07)",
+                    "fstype": "ntfs",
+                    "index": 2,
+                    "label": null,
+                    "offset": 32256,
+                    "size": 15373016064
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 3,
+                    "label": null,
+                    "offset": 15373048320,
+                    "size": 9192960
+                }
+            ]
+        }
+    },
+    {
+        "assertions": {
+            "disk_mountpoint": true,
+            "mountable": true,
+            "num_volumes": 4
+        },
+        "expected_json_response": {
+            "imagepath": "digitalcorpora/m57-patents/jo-favorites-usb-2009-12-11.E01",
+            "name": "jo-favorites-usb-2009-12-11.E01",
+            "volumes": [
+                {
+                    "fsdescription": "Primary Table (#0)",
+                    "fstype": "?unknown",
+                    "index": 0,
+                    "label": null,
+                    "offset": 0,
+                    "size": 512
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 1,
+                    "label": null,
+                    "offset": 0,
+                    "size": 32256
+                },
+                {
+                    "fsdescription": "Win95 FAT32 (0x0b)",
+                    "fstype": "fat",
+                    "index": 2,
+                    "label": null,
+                    "offset": 32256,
+                    "size": 1048513536
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 3,
+                    "label": null,
+                    "offset": 1048545792,
+                    "size": 30208
+                }
+            ]
+        }
+    },
+    {
+        "assertions": {
+            "disk_mountpoint": true,
+            "mountable": true,
+            "num_volumes": 4
+        },
+        "expected_json_response": {
+            "imagepath": "digitalcorpora/m57-patents/pat-2009-12-11.E01",
+            "name": "pat-2009-12-11.E01",
+            "volumes": [
+                {
+                    "fsdescription": "Primary Table (#0)",
+                    "fstype": "?unknown",
+                    "index": 0,
+                    "label": null,
+                    "offset": 0,
+                    "size": 512
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 1,
+                    "label": null,
+                    "offset": 0,
+                    "size": 32256
+                },
+                {
+                    "fsdescription": "NTFS / exFAT (0x07)",
+                    "fstype": "ntfs",
+                    "index": 2,
+                    "label": null,
+                    "offset": 32256,
+                    "size": 13004135424
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 3,
+                    "label": null,
+                    "offset": 13004167680,
+                    "size": 15902208
+                }
+            ]
+        }
+    },
+    {
+        "assertions": {
+            "disk_mountpoint": true,
+            "mountable": true,
+            "num_volumes": 4
+        },
+        "expected_json_response": {
+            "imagepath": "digitalcorpora/m57-patents/terry-2009-12-11-001.E01",
+            "name": "terry-2009-12-11-001.E01",
+            "volumes": [
+                {
+                    "fsdescription": "Primary Table (#0)",
+                    "fstype": "?unknown",
+                    "index": 0,
+                    "label": null,
+                    "offset": 0,
+                    "size": 512
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 1,
+                    "label": null,
+                    "offset": 0,
+                    "size": 1048576
+                },
+                {
+                    "fsdescription": "NTFS / exFAT (0x07)",
+                    "fstype": "ntfs",
+                    "index": 2,
+                    "label": "EFI System Partition",
+                    "offset": 1048576,
+                    "size": 41107324928
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 3,
+                    "label": null,
+                    "offset": 41108373504,
+                    "size": 1769472
+                }
+            ]
+        }
+    },
+    {
+        "assertions": {
+            "disk_mountpoint": true,
+            "mountable": true,
+            "num_volumes": 4
+        },
+        "expected_json_response": {
+            "imagepath": "digitalcorpora/m57-patents/terry-work-usb-2009-12-11.E01",
+            "name": "terry-work-usb-2009-12-11.E01",
+            "volumes": [
+                {
+                    "fsdescription": "Primary Table (#0)",
+                    "fstype": "?unknown",
+                    "index": 0,
+                    "label": null,
+                    "offset": 0,
+                    "size": 512
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 1,
+                    "label": null,
+                    "offset": 0,
+                    "size": 32256
+                },
+                {
+                    "fsdescription": "Win95 FAT32 (0x0b)",
+                    "fstype": "fat",
+                    "index": 2,
+                    "label": null,
+                    "offset": 32256,
+                    "size": 2097091584
+                },
+                {
+                    "fsdescription": "Unallocated",
+                    "fstype": "?unknown",
+                    "index": 3,
+                    "label": null,
+                    "offset": 2097123840,
+                    "size": 28160
+                }
+            ]
+        }
+    },
+    {
+        "assertions": {
+            "disk_mountpoint": true,
+            "mountable": false,
+            "num_volumes": 1
+        },
+        "expected_json_response": {
+            "imagepath": "digitalcorpora/national_gallery/tracy-home-2012-07-16-final.E01",
+            "name": "tracy-home-2012-07-16-final.E01",
+            "volumes": [
+                {
+                    "fsdescription": "Macintosh HFS Extended version 4 data last mounted by: 'HFSJ'",
+                    "fstype": "hfs",
+                    "index": 0,
+                    "label": "MacBook Air HD",
+                    "offset": 0,
+                    "size": 4096
+                }
+            ]
+        }
+    },
+    {
+        "assertions": {
+            "disk_mountpoint": true,
+            "mountable": true,
+            "num_volumes": 1
+        },
+        "expected_json_response": {
+            "imagepath": "WinXP2.E01",
+            "name": "WinXP2.E01",
+            "volumes": [
+                {
+                    "fsdescription": "DOS/MBR boot sector",
+                    "fstype": "ntfs",
+                    "index": 0,
+                    "label": null,
+                    "offset": 0,
+                    "size": 2142797824
+                }
+            ]
+        }
+    },
+    {
+        "assertions": {
+            "disk_mountpoint": true,
+            "mountable": true,
+            "num_volumes": 1
+        },
+        "expected_json_response": {
+            "imagepath": "xp-tdungan/xp-tdungan-c-drive.E01",
+            "name": "xp-tdungan-c-drive.E01",
+            "volumes": [
+                {
+                    "fsdescription": "DOS/MBR boot sector",
+                    "fstype": "ntfs",
+                    "index": 0,
+                    "label": null,
+                    "offset": 0,
+                    "size": 16114483712
+                }
+            ]
+        }
+    }
+]

@@ -1,0 +1,9 @@
+bind = "0.0.0.0:8081"
+workers = 4
+#env = None
+#max-requests = None
+#user = user
+#group = group
+logfile = "/var/log/thumbtack/thumbtack.log"
+#loglevel = debug
+IMAGE_DIR = '/vagrant/tests/test_images'
