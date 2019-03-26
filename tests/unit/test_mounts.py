@@ -166,15 +166,16 @@ def test_mount_valid_images(test_client, expected_test_results, test_image_path)
             assert response.status_code == 200
 
             response_json = json.loads(response.data.decode('utf-8'))
-            pprint(response_json)
-            del response_json['mountpoint']
-            assert len(response_json['volumes']) == assertions['num_volumes']
+            # pprint(response_json)
+            disk_info = response_json['disk_info']
+            del disk_info['mountpoint']
+            assert len(disk_info['volumes']) == assertions['num_volumes']
 
-            volumes = response_json['volumes']
+            volumes = disk_info['volumes']
             all_volume_mountpoints = [x['mountpoint'] for x in volumes if x['mountpoint'] != '']
             for volume in volumes:
                 del volume['mountpoint']  # removing because value is randomized
-            assert response_json == expected_json_results
+            assert disk_info == expected_json_results
 
             # UNMOUNT IMAGE
             # Verify DELETE /mounts/<TEST_DISK_IMAGE> unmounts the image
