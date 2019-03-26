@@ -22,9 +22,15 @@ def create_app():
     app.config.from_envvar('THUMBTACK_CONFIG_PRODUCTION', silent=True)
 
     IMAGE_DIR = os.environ.get("IMAGE_DIR", default=None)
+    MOUNT_DIR = os.environ.get("MOUNT_DIR", default=None)
+
     if IMAGE_DIR is not None:
         app.config.update(
             IMAGE_DIR=IMAGE_DIR,
+        )
+    if MOUNT_DIR is not None:
+        app.config.update(
+            MOUNT_DIR=MOUNT_DIR,
         )
 
     configure(app)

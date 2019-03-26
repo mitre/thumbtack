@@ -24,16 +24,17 @@ class MountManager(object):
     def __init__(self):
         self.mounts = {}
 
-    def mount_image(self, relative_image_path):
+    def mount_image(self, relative_image_path, mount_dir='/mnt/thumbtack'):
         """
            First checks if the image is already mounted,
            then verifies that the file path is valid.
 
         Parameters
         ----------
-        image_path : str
-            Path to an image file. This is
-            an absolute path to the file on disk.
+        relative_image_path : str
+            Path to an image file. This is a relative path to the file on disk from the IMAGE_DIR.
+        mount_dir : str
+            Path where the image file will be mounted.
 
         Returns
         -------
@@ -63,7 +64,7 @@ class MountManager(object):
         # Mount it
         current_app.logger.info('MountManager.mount_image: mounting image_path "{}"'.format(relative_image_path))
         # Updates: full_image_path needs to be iterable, pretty keeps path names the way they were
-        image_parser = imagemounter.ImageParser([full_image_path], pretty=True, mountdir='/mnt/thumbtack')
+        image_parser = imagemounter.ImageParser([full_image_path], pretty=True, mountdir=mount_dir)
 
         # Volumes won't be mounted unless this generator is iterated
         for _ in image_parser.init():

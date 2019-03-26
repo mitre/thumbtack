@@ -7,3 +7,4 @@ workers = 4
 logfile = "/var/log/thumbtack/thumbtack.log"
 #loglevel = debug
 IMAGE_DIR = '/vagrant/tests/test_images'
+MOUNT_DIR = '/mnt/thumbtack'

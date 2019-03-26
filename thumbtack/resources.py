@@ -56,7 +56,7 @@ class Mount(Resource):
         self.mount_manager = mount_manager
 
     @marshal_with(disk_fields)
-    def put(self, image_path):
+    def put(self, image_path, mount_dir='/mnt/thumbtack'):
         """Mounts an image file.
 
         Parameters
@@ -64,9 +64,11 @@ class Mount(Resource):
         image_path : str
             Path to an image file to be mounted. This is
             a relative path from the IMAGE_DIR config variable directory to the file on disk.
+        mount_dir : str
+            Path where the image file will be mounted.
         """
         try:
-            return self.mount_manager.mount_image(image_path)
+            return self.mount_manager.mount_image(image_path, mount_dir)
         except MountManagerError as e:
             abort(400, message=str(e))
 

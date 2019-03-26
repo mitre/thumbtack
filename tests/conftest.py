@@ -9,6 +9,7 @@ from thumbtack import create_app
 def test_client():
     flask_app = create_app()
     flask_app.config['IMAGE_DIR'] = 'test_images/'
+    flask_app.config['MOUNT_DIR'] = '.'
     testing_client = flask_app.test_client()
 
     # Establish an application context before running the tests.
