@@ -4,6 +4,30 @@ python: 3.7
 env:
   global:
     - VERSION=$TRAVIS_TAG
+addons:
+  apt:
+    packages:
+      - afflib-tools
+      - archivemount
+      - avfs
+      - cryptsetup
+      - disktype
+      - exfat-fuse
+      - exfat-utils
+      - libguestfs-tools
+      - libvshadow-utils
+      - lvm2
+      - mdadm
+      - mtd-utils
+      - ocfs2-tools
+      - open-vm-tools
+      - qemu-utils
+      - sleuthkit
+      - squashfs-tools
+      - vmfs-tools
+      - xfsprogs
+      - xmount
+      - zlib1g-dev
 
 install:
   - pip install -r requirements.txt
