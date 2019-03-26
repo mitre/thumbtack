@@ -5,6 +5,7 @@ import sys
 from urllib.parse import urlparse
 from zipfile import ZipFile
 
+import click
 import requests
 
 
@@ -62,9 +63,6 @@ def query_yes_no(question, default="yes"):
 
 def download_dftt_images():
     print('Downloading DFTT images (http://dftt.sourceforge.net)')
-    if not query_yes_no('[695 MB] Download DFTT images?', 'no'):
-        return
-
     dftt_urls = [
         'http://prdownloads.sourceforge.net/dftt/1-extend-part.zip?download',
         'http://prdownloads.sourceforge.net/dftt/2-kwsrch-fat.zip?download',
@@ -198,9 +196,16 @@ def download_digitalcorpora_images():
     shutil.rmtree(dl_dir)
 
 
-def main():
-    download_dftt_images()
-    download_digitalcorpora_images()
+@click.command()
+@click.option('--dftt', is_flag=True, default=False, show_default=True, help='Download DFTT images only (25 MB DL size, 695 MB on disk)')
+def main(dftt):
+
+    if dftt:
+        download_dftt_images()
+    else:
+        if query_yes_no('[25 MB DL size, 695 MB on disk] Download DFTT images?', 'no'):
+            download_dftt_images()
+        download_digitalcorpora_images()
 
 
 if __name__ == "__main__":

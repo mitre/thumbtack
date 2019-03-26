@@ -186,7 +186,7 @@ def test_mount_valid_images(test_client, expected_test_results, test_image_path)
 def test_mount_images_with_unmountable_volumes(test_client, expected_test_results):
     """
     GIVEN a Thumbtack Flask application client
-    WHEN a valid disk image that only has volumes that are unmountble are requested to be mounted (PUT)
+    WHEN a valid disk image that only has volumes that are unmountable are requested to be mounted (PUT)
     THEN check the response code is 400
     """
 

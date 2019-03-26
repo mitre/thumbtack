@@ -1,0 +1,28 @@
+dist: xenial
+language: python
+python: 3.7
+env:
+  global:
+    - VERSION=$TRAVIS_TAG
+
+install:
+  - pip install -r requirements.txt
+  - pip install -e .
+
+script:
+  - cd tests
+  - python download-test-images.py --dftt
+  - pytest
+  - cd ..
+  - python setup.py sdist bdist_wheel
+
+deploy:
+  provider: releases
+  api_key:
+    secure: uPvgb2bvb9yxC/n2DNW7w//nxpaf2AU0xKmMor+8cpT/+HDqkAJvF98xfByNg6Y1aGdoj7lXvLcqIRDLcNusKsXsUtxMkiHt3K4KcgI886ovOIvkYZDSFTUhRftwFHRdc4tvaOIYOKRMgmUfWHjJeNK5weFCgYe4icLh+mLJiRAK5BO0LmpNWT1/EmAO3o4RWTrcklb/i2IkNnl98UZhzAmbiJapXEXcq4QdRSoGq3PFSkQiL6PEit0GzFn+N94Sq7Jm13X0K80JgEsWgMVpZhmG+K/I3+cErSSgCQDDZpn63oR7qyNw3gkXNdKTbzyOc5FA/ANFlZWwADASuiwAvgn1l9tqcxWg2EEV/FpnlyrkcUsAwoCzsrKNklHZiIaRIWjbOnYs1QLc4zPzPILgsEQ3KJXTkwXoXH7JGPChV7heE/h6Og+skLMfEaaM6v84hykA+UrP41bpwroXEKThU9qMc3psL0qV+ropUzLF4izL83pmU8jVNkI0Dl5F7ANk6vD0qvIDEvyOer7XjewZ02B74pQteoVZtehIKsx7/vJ+wZDUfgJxZn5uRyqKY6B4VdCiI38YwCsxCEswBO86riFw8BOPFM5DAzrvBkFBxJyIQwWmyahXMiamfWIk3AWNnPpOqrovrziOHjy2J7xyHGeiqDV+/EJQuoeRn7+MpbI=
+  file:
+    - dist/thumbtack-$VERSION.tar.gz
+    - dist/thumbtack-$VERSION-py2.py3-none-any.whl
+  skip_cleanup: true
+  on:
+    tags: true
