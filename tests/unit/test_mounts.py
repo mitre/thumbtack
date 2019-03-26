@@ -1,6 +1,8 @@
 import json
 import os
 
+from pprint import pprint
+
 import apistar
 import pytest
 
@@ -164,6 +166,7 @@ def test_mount_valid_images(test_client, expected_test_results, test_image_path)
             assert response.status_code == 200
 
             response_json = json.loads(response.data.decode('utf-8'))
+            pprint(response_json)
             del response_json['mountpoint']
             assert len(response_json['volumes']) == assertions['num_volumes']
 
