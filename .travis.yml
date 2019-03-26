@@ -36,7 +36,7 @@ install:
 script:
   - cd tests
   - python download-test-images.py --dftt
-  - sudo -E pytest
+  - sudo -E /home/travis/virtualenv/python3.7/bin/pytest
   - cd ..
   - python setup.py sdist bdist_wheel
 
