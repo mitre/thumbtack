@@ -3,7 +3,6 @@ import os
 
 from pprint import pprint
 
-import apistar
 import pytest
 
 

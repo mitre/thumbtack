@@ -127,13 +127,14 @@ class SupportedLibraries(Resource):
 
     def get(self):
 
-        imount_cmd = 'imount'
+        virtualenv_bin_directory = Path(sys.argv[0]).parent
+        imount_cmd = str(virtualenv_bin_directory / 'imount')
 
         # TODO: this seems... not right
-        gunicorn_powered = True if str(Path(sys.argv[0]).name) == 'gunicorn' else False
-        if gunicorn_powered:
-            current_app.logger.info('powered by gunicorn')
-            imount_cmd = str(Path(sys.argv[0]).parent / 'imount')
+        # gunicorn_powered = True if str(Path(sys.argv[0]).name) == 'gunicorn' else False
+        # if gunicorn_powered:
+        #     current_app.logger.info('powered by gunicorn')
+        #     imount_cmd = str(Path(sys.argv[0]).parent / 'imount')
 
         run_args = [imount_cmd, '--check']
 

@@ -92,7 +92,7 @@ class MountManager(object):
         return image_parser.disks[0]
 
     def get_mount(self, relative_image_path):
-        """Rertrieves the disk object at the given image path
+        """Retrieves the disk object at the given image path
 
             Parameters
             ----------

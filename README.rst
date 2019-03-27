@@ -1,3 +1,6 @@
+.. image:: https://travis-ci.org/mitre/thumbtack.svg?branch=master
+    :target: https://travis-ci.org/mitre/thumbtack
+
 thumbtack
 =========
 
