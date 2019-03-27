@@ -117,7 +117,6 @@ def test_mount_valid_images(test_client, expected_test_results, test_image_path)
 
     for disk_image_info in expected_test_results:
         if disk_image_info['expected_json_response']['imagepath'] == test_image_path:
-
             expected_json_results = disk_image_info['expected_json_response']
             assertions = disk_image_info['assertions']
 
@@ -134,8 +133,10 @@ def test_mount_valid_images(test_client, expected_test_results, test_image_path)
 
             # MOUNT IMAGE
             # Verify PUT /mounts/<TEST_DISK_IMAGE> returns the new mount
+            mount_dir = test_client.application.config['MOUNT_DIR']
             print('mounting: {}'.format(relative_image_path))
-            response = test_client.put(u'/mounts/{}'.format(relative_image_path))
+            # response = test_client.put(u'/mounts/{}'.format(relative_image_path))
+            response = test_client.put(u'/mounts/{}?mount_dir={}'.format(relative_image_path, mount_dir))
             assert response.status_code == 200
 
             response_json = json.loads(response.data.decode('utf-8'))

@@ -1,7 +1,7 @@
 import subprocess
 import sys
 
-from flask import current_app
+from flask import current_app, request
 from flask_restful import Resource, marshal_with, abort, fields
 
 try:
@@ -56,7 +56,7 @@ class Mount(Resource):
         self.mount_manager = mount_manager
 
     @marshal_with(disk_fields)
-    def put(self, image_path, mount_dir='/mnt/thumbtack'):
+    def put(self, image_path):
         """Mounts an image file.
 
         Parameters
@@ -68,6 +68,8 @@ class Mount(Resource):
             Path where the image file will be mounted.
         """
         try:
+            mount_dir = request.args.get('mount_dir', '/mnt/thumbtack')
+            print('mount_dir:', mount_dir)
             return self.mount_manager.mount_image(image_path, mount_dir)
         except MountManagerError as e:
             abort(400, message=str(e))
