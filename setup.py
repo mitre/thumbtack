@@ -11,7 +11,7 @@ EMAIL = 'thumbtack@mitre.org'
 AUTHOR = 'The MITRE Corporation'
 LICENSE = 'Apache 2.0'
 REQUIRES_PYTHON = '>=2.7.0'
-VERSION = '0.1.0'
+VERSION = '0.1.1'
 
 REQUIRED = [
     'apistar',
