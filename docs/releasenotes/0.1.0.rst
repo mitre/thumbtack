@@ -4,4 +4,10 @@
 Initial Release
 ---------------
 
-The initial release has the following capabilities...
+**Features**
+
+* Flask server that manages state of multiple disk images
+* Web frontend to show all disk images you are maintaining
+* Ability to mount/unmount images from the UI
+* Flask RESTful API to view status of disk images, mount, unmount, and show supported libraries on the system
+* A python client that interacts directly with the API so you don't have to remember the endpoints
