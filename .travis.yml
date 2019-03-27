@@ -41,12 +41,17 @@ script:
   - python setup.py sdist bdist_wheel
 
 deploy:
-  provider: releases
-  api_key:
-    secure: uPvgb2bvb9yxC/n2DNW7w//nxpaf2AU0xKmMor+8cpT/+HDqkAJvF98xfByNg6Y1aGdoj7lXvLcqIRDLcNusKsXsUtxMkiHt3K4KcgI886ovOIvkYZDSFTUhRftwFHRdc4tvaOIYOKRMgmUfWHjJeNK5weFCgYe4icLh+mLJiRAK5BO0LmpNWT1/EmAO3o4RWTrcklb/i2IkNnl98UZhzAmbiJapXEXcq4QdRSoGq3PFSkQiL6PEit0GzFn+N94Sq7Jm13X0K80JgEsWgMVpZhmG+K/I3+cErSSgCQDDZpn63oR7qyNw3gkXNdKTbzyOc5FA/ANFlZWwADASuiwAvgn1l9tqcxWg2EEV/FpnlyrkcUsAwoCzsrKNklHZiIaRIWjbOnYs1QLc4zPzPILgsEQ3KJXTkwXoXH7JGPChV7heE/h6Og+skLMfEaaM6v84hykA+UrP41bpwroXEKThU9qMc3psL0qV+ropUzLF4izL83pmU8jVNkI0Dl5F7ANk6vD0qvIDEvyOer7XjewZ02B74pQteoVZtehIKsx7/vJ+wZDUfgJxZn5uRyqKY6B4VdCiI38YwCsxCEswBO86riFw8BOPFM5DAzrvBkFBxJyIQwWmyahXMiamfWIk3AWNnPpOqrovrziOHjy2J7xyHGeiqDV+/EJQuoeRn7+MpbI=
-  file:
-    - dist/thumbtack-$VERSION.tar.gz
-    - dist/thumbtack-$VERSION-py2.py3-none-any.whl
-  skip_cleanup: true
-  on:
-    tags: true
+  - provider: releases
+    api_key:
+      secure: uPvgb2bvb9yxC/n2DNW7w//nxpaf2AU0xKmMor+8cpT/+HDqkAJvF98xfByNg6Y1aGdoj7lXvLcqIRDLcNusKsXsUtxMkiHt3K4KcgI886ovOIvkYZDSFTUhRftwFHRdc4tvaOIYOKRMgmUfWHjJeNK5weFCgYe4icLh+mLJiRAK5BO0LmpNWT1/EmAO3o4RWTrcklb/i2IkNnl98UZhzAmbiJapXEXcq4QdRSoGq3PFSkQiL6PEit0GzFn+N94Sq7Jm13X0K80JgEsWgMVpZhmG+K/I3+cErSSgCQDDZpn63oR7qyNw3gkXNdKTbzyOc5FA/ANFlZWwADASuiwAvgn1l9tqcxWg2EEV/FpnlyrkcUsAwoCzsrKNklHZiIaRIWjbOnYs1QLc4zPzPILgsEQ3KJXTkwXoXH7JGPChV7heE/h6Og+skLMfEaaM6v84hykA+UrP41bpwroXEKThU9qMc3psL0qV+ropUzLF4izL83pmU8jVNkI0Dl5F7ANk6vD0qvIDEvyOer7XjewZ02B74pQteoVZtehIKsx7/vJ+wZDUfgJxZn5uRyqKY6B4VdCiI38YwCsxCEswBO86riFw8BOPFM5DAzrvBkFBxJyIQwWmyahXMiamfWIk3AWNnPpOqrovrziOHjy2J7xyHGeiqDV+/EJQuoeRn7+MpbI=
+    file:
+      - dist/thumbtack-$VERSION.tar.gz
+      - dist/thumbtack-$VERSION-py2.py3-none-any.whl
+    skip_cleanup: true
+    on:
+      tags: true
+  - provider: pypi
+    user: jondricek
+    password:
+      secure: aOWtGGRPbEw82VJtu+WBUfH7KzzpyjTa2SpvUC8Pcwk7HIf74mOrgsRgVgdwZDxNAvTfurMSPDPrVc5ldcl6BOSrtGJQI9sYDCyk7rm1BCoj0bebRZJbBZVNfc9bp/07h/cSzO06RrZaEiMPPucvfOWg+6YEiB8KXnwxYrolWy1mUb1HUi/qxmdiI0ny6g4740rKSZPnS+186QS/VrHkCevTygFxIaE5Nwc5A2kgJOwAPlomO6XioCv8lGGmGVC9IfcX3iPzrcwwMKJ0WK8L7O24BpEUgyDBBdqkniAws3w6bCNnQ5Csuuyn4v5waSuH4F9TL+G845kn/LGrHvEtr3eEJQjl/7lzFZswL2RK6Gq81jvr2N7fnOk1a6VGp5Jo1rd/DtY6Z0iSeMdyGF5NiFAV0+pDRcbjsDMPDAp2U1Mdikjpb0ntqpPPkkWTM3FwL2ZlJ6v/JZt5a+HPaQgN4vUKaucfhJX/XWD5cl0TJKnIXUpIxeoPic2CInetIIl5EvxeYYDWbjOcuZQBCORNU3ZgFPFmCiZ9s+Byhm0lGAIrG6yswR6oAtOqMlvJ74s9kKFiCkVLZq1T+GTGu9nKxfQGhB4UhCc7mwyyAxJH6vaKNs/o9nE9BNkulelOeY9CnFiVGubR+RT0K2JqM0hpHnJQPyfG5UQfuLMCfuKyavs=
+(
