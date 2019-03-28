@@ -66,7 +66,7 @@ setup(
     python_requires=REQUIRES_PYTHON,
     url=URL,
     classifiers=[
-        'Development Status :: 3',
+        'Development Status :: 4',
         'Intended Audience :: Developers',
         'Topic :: Security',
         'Topic :: System :: Filesystems',
