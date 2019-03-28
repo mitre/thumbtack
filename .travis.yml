@@ -41,20 +41,12 @@ script:
   - python setup.py sdist bdist_wheel
 
 deploy:
-  - provider: releases
-    api_key:
-      secure: uPvgb2bvb9yxC/n2DNW7w//nxpaf2AU0xKmMor+8cpT/+HDqkAJvF98xfByNg6Y1aGdoj7lXvLcqIRDLcNusKsXsUtxMkiHt3K4KcgI886ovOIvkYZDSFTUhRftwFHRdc4tvaOIYOKRMgmUfWHjJeNK5weFCgYe4icLh+mLJiRAK5BO0LmpNWT1/EmAO3o4RWTrcklb/i2IkNnl98UZhzAmbiJapXEXcq4QdRSoGq3PFSkQiL6PEit0GzFn+N94Sq7Jm13X0K80JgEsWgMVpZhmG+K/I3+cErSSgCQDDZpn63oR7qyNw3gkXNdKTbzyOc5FA/ANFlZWwADASuiwAvgn1l9tqcxWg2EEV/FpnlyrkcUsAwoCzsrKNklHZiIaRIWjbOnYs1QLc4zPzPILgsEQ3KJXTkwXoXH7JGPChV7heE/h6Og+skLMfEaaM6v84hykA+UrP41bpwroXEKThU9qMc3psL0qV+ropUzLF4izL83pmU8jVNkI0Dl5F7ANk6vD0qvIDEvyOer7XjewZ02B74pQteoVZtehIKsx7/vJ+wZDUfgJxZn5uRyqKY6B4VdCiI38YwCsxCEswBO86riFw8BOPFM5DAzrvBkFBxJyIQwWmyahXMiamfWIk3AWNnPpOqrovrziOHjy2J7xyHGeiqDV+/EJQuoeRn7+MpbI=
-    file:
-      - dist/thumbtack-$VERSION.tar.gz
-      - dist/thumbtack-$VERSION-py2.py3-none-any.whl
-    skip_cleanup: true
-    on:
-      tags: true
-  - provider: pypi
-    user: jondricek
-    password:
-      secure: Ja/+i9dWwIXbnV4m0x2sdkaN9UjVZ0Q7h5mIhDFih+nFjsCBIZS0u698KeLxZmYJqi4S4spZV+K0E10UNuQtABg2narOvgZZRP5MNi82NnUjjyly0wx2t6XEr40R+GWHX6ZucZ005ChfigQ5sg+LzghkwVqC+omGQgdrBPvW5ZHbr+rgTnlOGTn+l25VMNK+gAGu5DJd4Kgb71XYnKaKB8UbjLnNnppWDYzOn+OHb58BkE3yFkDjcM8SV4KDxXWDphZ0MG2F8Bh4GaKVZ/1ko+ioiEswxpOzIpF209qKeA0NdkJKlBeGq1vpjleW3ssGg4NZRURkEWKxOSXoNw5dN6zw9FgcsslCbciH3uYUCTTXc/WMR+YR1USDB/vlTsiUZs/A9hdJ7Nydx2jEIisYtbzo71TVzLqgA0rgSEimf5Kaq3O1IOPaJaGDnViEiWmufyVlVrtxxW26q78/dms8xxctxTWxGCvTpauwurwsO1f3VGd4RGeqUAZOyR4YpyNcp3Byu/Oo1BReVVhRQoS1NZndXGIqlRD90dLdAMBdZhYDSlEYkghHmDXIqpgEx6/9Ag8y4fHkGBR2bS6pNpYywje1godqtt09wDLWEryMNmrtqJ9oiFc334IjhDgIAbAJ+gwYheH685n5O+kSHcxKlOngHlEDun7jGcdOTNqq+hQ=
-    distributions: "sdist bdist_wheel"
-    skip_cleanup: true
-    on:
-      tags: true
+  provider: releases
+  api_key:
+    secure: uPvgb2bvb9yxC/n2DNW7w//nxpaf2AU0xKmMor+8cpT/+HDqkAJvF98xfByNg6Y1aGdoj7lXvLcqIRDLcNusKsXsUtxMkiHt3K4KcgI886ovOIvkYZDSFTUhRftwFHRdc4tvaOIYOKRMgmUfWHjJeNK5weFCgYe4icLh+mLJiRAK5BO0LmpNWT1/EmAO3o4RWTrcklb/i2IkNnl98UZhzAmbiJapXEXcq4QdRSoGq3PFSkQiL6PEit0GzFn+N94Sq7Jm13X0K80JgEsWgMVpZhmG+K/I3+cErSSgCQDDZpn63oR7qyNw3gkXNdKTbzyOc5FA/ANFlZWwADASuiwAvgn1l9tqcxWg2EEV/FpnlyrkcUsAwoCzsrKNklHZiIaRIWjbOnYs1QLc4zPzPILgsEQ3KJXTkwXoXH7JGPChV7heE/h6Og+skLMfEaaM6v84hykA+UrP41bpwroXEKThU9qMc3psL0qV+ropUzLF4izL83pmU8jVNkI0Dl5F7ANk6vD0qvIDEvyOer7XjewZ02B74pQteoVZtehIKsx7/vJ+wZDUfgJxZn5uRyqKY6B4VdCiI38YwCsxCEswBO86riFw8BOPFM5DAzrvBkFBxJyIQwWmyahXMiamfWIk3AWNnPpOqrovrziOHjy2J7xyHGeiqDV+/EJQuoeRn7+MpbI=
+  file:
+    - dist/thumbtack-$VERSION.tar.gz
+    - dist/thumbtack-$VERSION-py2.py3-none-any.whl
+  skip_cleanup: true
+  on:
+    tags: true
