@@ -3,50 +3,55 @@ language: python
 python: 3.7
 env:
   global:
-    - VERSION=$TRAVIS_TAG
+  - VERSION=$TRAVIS_TAG
 addons:
   apt:
     packages:
-      - afflib-tools
-      - archivemount
-      - avfs
-      - cryptsetup
-      - disktype
-      - exfat-fuse
-      - exfat-utils
-      - libguestfs-tools
-      - libvshadow-utils
-      - lvm2
-      - mdadm
-      - mtd-utils
-      - ocfs2-tools
-      - open-vm-tools
-      - qemu-utils
-      - sleuthkit
-      - squashfs-tools
-      - vmfs-tools
-      - xfsprogs
-      - xmount
-      - zlib1g-dev
-
+    - afflib-tools
+    - archivemount
+    - avfs
+    - cryptsetup
+    - disktype
+    - exfat-fuse
+    - exfat-utils
+    - libguestfs-tools
+    - libvshadow-utils
+    - lvm2
+    - mdadm
+    - mtd-utils
+    - ocfs2-tools
+    - open-vm-tools
+    - qemu-utils
+    - sleuthkit
+    - squashfs-tools
+    - vmfs-tools
+    - xfsprogs
+    - xmount
+    - zlib1g-dev
 install:
-  - pip install -r requirements.txt
-  - pip install -e .
-
+- pip install -r requirements.txt
+- pip install -e .
 script:
-  - cd tests
-  - python download-test-images.py --dftt
-  - sudo -E /home/travis/virtualenv/python3.7/bin/pytest
-  - cd ..
-  - python setup.py sdist bdist_wheel
-
+- cd tests
+- python download-test-images.py --dftt
+- sudo -E /home/travis/virtualenv/python3.7/bin/pytest
+- cd ..
+- python setup.py sdist bdist_wheel
 deploy:
-  provider: releases
-  api_key:
-    secure: uPvgb2bvb9yxC/n2DNW7w//nxpaf2AU0xKmMor+8cpT/+HDqkAJvF98xfByNg6Y1aGdoj7lXvLcqIRDLcNusKsXsUtxMkiHt3K4KcgI886ovOIvkYZDSFTUhRftwFHRdc4tvaOIYOKRMgmUfWHjJeNK5weFCgYe4icLh+mLJiRAK5BO0LmpNWT1/EmAO3o4RWTrcklb/i2IkNnl98UZhzAmbiJapXEXcq4QdRSoGq3PFSkQiL6PEit0GzFn+N94Sq7Jm13X0K80JgEsWgMVpZhmG+K/I3+cErSSgCQDDZpn63oR7qyNw3gkXNdKTbzyOc5FA/ANFlZWwADASuiwAvgn1l9tqcxWg2EEV/FpnlyrkcUsAwoCzsrKNklHZiIaRIWjbOnYs1QLc4zPzPILgsEQ3KJXTkwXoXH7JGPChV7heE/h6Og+skLMfEaaM6v84hykA+UrP41bpwroXEKThU9qMc3psL0qV+ropUzLF4izL83pmU8jVNkI0Dl5F7ANk6vD0qvIDEvyOer7XjewZ02B74pQteoVZtehIKsx7/vJ+wZDUfgJxZn5uRyqKY6B4VdCiI38YwCsxCEswBO86riFw8BOPFM5DAzrvBkFBxJyIQwWmyahXMiamfWIk3AWNnPpOqrovrziOHjy2J7xyHGeiqDV+/EJQuoeRn7+MpbI=
-  file:
+  - provider: releases
+    api_key:
+      secure: uPvgb2bvb9yxC/n2DNW7w//nxpaf2AU0xKmMor+8cpT/+HDqkAJvF98xfByNg6Y1aGdoj7lXvLcqIRDLcNusKsXsUtxMkiHt3K4KcgI886ovOIvkYZDSFTUhRftwFHRdc4tvaOIYOKRMgmUfWHjJeNK5weFCgYe4icLh+mLJiRAK5BO0LmpNWT1/EmAO3o4RWTrcklb/i2IkNnl98UZhzAmbiJapXEXcq4QdRSoGq3PFSkQiL6PEit0GzFn+N94Sq7Jm13X0K80JgEsWgMVpZhmG+K/I3+cErSSgCQDDZpn63oR7qyNw3gkXNdKTbzyOc5FA/ANFlZWwADASuiwAvgn1l9tqcxWg2EEV/FpnlyrkcUsAwoCzsrKNklHZiIaRIWjbOnYs1QLc4zPzPILgsEQ3KJXTkwXoXH7JGPChV7heE/h6Og+skLMfEaaM6v84hykA+UrP41bpwroXEKThU9qMc3psL0qV+ropUzLF4izL83pmU8jVNkI0Dl5F7ANk6vD0qvIDEvyOer7XjewZ02B74pQteoVZtehIKsx7/vJ+wZDUfgJxZn5uRyqKY6B4VdCiI38YwCsxCEswBO86riFw8BOPFM5DAzrvBkFBxJyIQwWmyahXMiamfWIk3AWNnPpOqrovrziOHjy2J7xyHGeiqDV+/EJQuoeRn7+MpbI=
+    file:
     - dist/thumbtack-$VERSION.tar.gz
     - dist/thumbtack-$VERSION-py2.py3-none-any.whl
-  skip_cleanup: true
-  on:
-    tags: true
+    skip_cleanup: true
+    on:
+      tags: true
+  - provider: pypi
+    user: jondricek
+    password:
+      secure: x9Y9HbXXXdUhiXWXVuYQ/0dkksEUdSsvhqcC+3b8gcUxBA26lyXwIH2/FQzMO3AUM75wOOKtDrjE2MXMRcbk1vVHenpt2MVvfuTs1HT8bgUWgqfvO+3sVQuwC3nc6JuqVFYraB4B+9pxqS3fb9IO7s6j25d7VCF2IpRN3liJ+urEQfpJxy2nx7KR6gmdogMPGY/Ioz0D6ye/yNrt3uLBZsVJLqRoWfHwQbHtY2zTFROSyKW0OaGZ2/QUDbzIA9EjVY15Vfmtkf6p9y6YsJ044Q7JweeQ4Xy+USZaZFBhtK+cyOSDOW86AtWhVwiaGnIDjC/5VTF4PT+5kt57E0RNtBy/1MQLr954PrKRHPFWq147Prnxr3h/wRFyShWhlUz4iLq+a3/b0PgXbYgmciI4s+wHX72w+84ckxD0RIcYy0ihwugymV1zYQ7CXRY8XHRpMQfHSNRg3xaluFSBldMw/vl0dLUUVAt62XDeqRCpZaGefmAN4tgUy5A3v9h86fTFdrTTLQ2ri4Ra2PibFNnGk9XZ/0VUnaW+qnIFJUk624NS6XxQ8Mfm6i/nBgUg+LhAJ+/VAdbxuZkP0LiPuKLM64FrA04UU0lbeaeEKWUMGJvzUlgPpwOcgDolu7RRzk65KxnolDBUFm0HldRDWZlDHdMqK2LMLtRQon+vYn8ObRY=
+    skip_cleanup: true
+    on:
+      tags: true
+
