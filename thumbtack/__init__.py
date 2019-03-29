@@ -80,3 +80,8 @@ def configure_logging(app):
 
         # app.logger.addHandler(fhandler)
         app.logger.addHandler(shandler)
+
+
+def start_app():
+    app = create_app()
+    app.run(debug=True)
