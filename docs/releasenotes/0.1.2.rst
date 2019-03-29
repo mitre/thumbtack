@@ -1,0 +1,11 @@
+0.1.2
+=====
+
+Overview
+--------
+
+This release is... actually solidifying the details releasing the python source package to PyPI via Travis CI.
+
+**Features**
+
+* Using Travis CI to deploy as a Github release and to PyPI
