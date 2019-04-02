@@ -69,8 +69,9 @@ class Mount(Resource):
         """
         try:
             mount_dir = request.args.get('mount_dir', '/mnt/thumbtack')
-            print('mount_dir:', mount_dir)
-            return self.mount_manager.mount_image(image_path, mount_dir)
+            current_app.logger.debug('Image {} will be at mount_dir: {}'.format(image_path, mount_dir))
+            with curren_app.mnt_mutex:
+                return self.mount_manager.mount_image(image_path, mount_dir)
         except MountManagerError as e:
             abort(400, message=str(e))
 
@@ -111,7 +112,7 @@ class Mount(Resource):
         }
         return response
 
-    def delete(self, image_path):
+    def delete(self, image_path=None):
         """Unmounts an image file.
 
         Parameters
@@ -120,7 +121,8 @@ class Mount(Resource):
             Path to an image file to unmount. This is
             an absolute path to the file on disk.
         """
-        self.mount_manager.unmount_image(image_path)
+        with current_app.mnt_mutex:
+            self.mount_manager.unmount_image(image_path)
 
 
 class SupportedLibraries(Resource):

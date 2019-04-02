@@ -1,5 +1,6 @@
 import logging
 import os
+import threading
 from pkg_resources import get_distribution, DistributionNotFound
 
 from flask import Flask, current_app
@@ -32,6 +33,9 @@ def create_app():
         app.config.update(
             MOUNT_DIR=MOUNT_DIR,
         )
+
+    # Used around any ref_count/mount/unmount action to make them atomic
+    app.mnt_mutex = threading.Lock()
 
     configure(app)
 
