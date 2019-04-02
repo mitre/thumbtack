@@ -2,6 +2,7 @@ from collections import namedtuple
 
 import imagemounter
 import os
+import time
 from flask import current_app
 from flask_restful import abort
 
@@ -23,6 +24,7 @@ class MountManager(object):
 
     def __init__(self):
         self.mounts = {}
+        self.to_unmount = {}
 
     def mount_image(self, relative_image_path, mount_dir='/mnt/thumbtack'):
         """
@@ -44,6 +46,8 @@ class MountManager(object):
         """
         full_image_path = '{}/{}'.format(current_app.config['IMAGE_DIR'], relative_image_path)
 
+        # Take out of unmounts ASAP, since it's clear that we want this now
+        self.to_unmount.pop(relative_image_path, None)
         # See if this image is already mounted
         mount_info = self.mounts.get(relative_image_path)
         if mount_info is not None:
@@ -131,9 +135,22 @@ class MountManager(object):
                     relative_image_path, new_ref_count))
             self.mounts[relative_image_path] = self.MountInfo(parser=mount_info.parser, ref_count=new_ref_count)
         else:
-            current_app.logger.info('MountManager.unmount_image: unmounting image_path "{}"'.format(relative_image_path))
-            mount_info.parser.clean(allow_lazy=True)
-            del self.mounts[relative_image_path]
+            # Instead of immediately unmounting the image, defer until a timeout
+            # This will help avoid some race conditions, and minimize OS calls
+            self.to_unmount[relative_image_path] = time.time()
+            current_app.logger.info('MountManager.unmount_image: image_path "{}" tracking for unmount'.format(relative_image_path))
+
+    def do_unmounts(self):
+        to_del = []
+        for relative_image_path, last_image_unmount_t in self.to_unmount.iteritems():
+            if (time.time() - last_image_unmount_t) > (60 * 10):
+                current_app.logger.info('MountManager.do_unmounts: unmounting "{}"'.format(relative_image_path))
+                # TODO use self.clean_parser(self.mounts[relative_image_path].parser
+                self.mounts[relative_image_path].parser.clean(allow_lazy=True)
+                self.mounts.pop(relative_image_path, None)
+                to_del.append(relative_image_path)
+        for td in to_del:
+            self.to_unmount.pop(td, none)
 
     def all_mounts(self):
         """Retrieves disk object for each disk with a valid image path

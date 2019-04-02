@@ -111,7 +111,7 @@ class Mount(Resource):
         }
         return response
 
-    def delete(self, image_path):
+    def delete(self, image_path=None):
         """Unmounts an image file.
 
         Parameters
@@ -120,6 +120,10 @@ class Mount(Resource):
             Path to an image file to unmount. This is
             an absolute path to the file on disk.
         """
+        if image_path is None:
+            # TODO with mutex
+            self.mount_manager.do_unmounts()
+            return
         self.mount_manager.unmount_image(image_path)
 
 
