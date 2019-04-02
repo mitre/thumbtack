@@ -66,14 +66,24 @@ class MountManager(object):
         # Updates: full_image_path needs to be iterable, pretty keeps path names the way they were
         image_parser = imagemounter.ImageParser([full_image_path], pretty=True, mountdir=mount_dir)
 
+        volume_errors = []
+        total_volumes = 0
         # Volumes won't be mounted unless this generator is iterated
-        for _ in image_parser.init():
-            pass
+        for img in image_parser.init():
+            if img.exception is not None:
+                err_msg = 'MountManager.mount_image: "{}" ImageMounter ImageParser error on volume index {}: {}'.format(
+                    relative_image_path,
+                    total_volumes,
+                    img.exception
+                )
+                current_app.logger.error(err_msg)
+                volume_errors.append(err_msg)
+            total_volumes += 1
 
         if len(image_parser.disks) != 1:
             current_app.logger.info('MountManager.mount_image: Error: Unexpected number of disks (expected 1, got {:d})'.format(
                 len(image_parser.disks)))
-            image_parser.clean(allow_lazy=True)
+            self.clean_parser(image_parser)
             raise MountManagerError('Unexpected number of disks (expected 1, got {:d})'.format(len(image_parser.disks)))
 
         current_app.logger.info("MountManager.mount_image: Disk Mounted: {}".format(image_parser.disks[0].mountpoint))
@@ -82,14 +92,20 @@ class MountManager(object):
             current_app.logger.info("MountManager.mount_image: Volume mountpoint: {}".format(
                 volume.mountpoint if volume.mountpoint else '<none>'))
 
-        # Fail if we couldn't mount any of the volumes
+        # Fail if we couldn't mount any of the volumes (eg, all volumes failed to mount)
         if not [v for v in image_parser.disks[0].volumes if v.mountpoint]:
-            image_parser.clean(allow_lazy=True)
-            current_app.logger.error('MountManager.mount_image: No mountable volumes in image "{}"'.format(relative_image_path))
+            self.clean_parser(image_parser)
+            current_app.logger.error('MountManager.mount_image: No mountable volumes in image "{}", {}'.format(relative_image_path, volume_errors))
             raise MountManagerError('Disk image contains no mountable volumes')
 
         self.mounts[relative_image_path] = self.MountInfo(parser=image_parser, ref_count=1)
         return image_parser.disks[0]
+
+    def clean_parser(self, image_parser):
+        try:
+            image_parser.clean(allow_lazy=True)
+        except OSError as e:
+            current_app.logger.debug('MountManager: missing mountpoint {}'.format(e))
 
     def get_mount(self, relative_image_path):
         """Retrieves the disk object at the given image path
@@ -132,7 +148,7 @@ class MountManager(object):
             self.mounts[relative_image_path] = self.MountInfo(parser=mount_info.parser, ref_count=new_ref_count)
         else:
             current_app.logger.info('MountManager.unmount_image: unmounting image_path "{}"'.format(relative_image_path))
-            mount_info.parser.clean(allow_lazy=True)
+            self.clean_parser(mount_info.parser)
             del self.mounts[relative_image_path]
 
     def all_mounts(self):
@@ -163,4 +179,4 @@ class MountManager(object):
             current_app.logger.warning(
                 'MountManager.cleanup: image_path "{}" is being unmounted with {:d} outstanding references.'.format(
                     image_path, mount_info.ref_count))
-            mount_info.parser.clean(allow_lazy=True)
+            self.clean_parser(mount_info.parser)
