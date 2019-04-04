@@ -1,1 +1,6 @@
-include README.rst LICENSE
+include README.rst
+include LICENSE
+include thumbtack/static/css/*
+include thumbtack/static/js/*
+include thumbtack/templates/*
+
