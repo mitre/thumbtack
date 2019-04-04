@@ -1,0 +1,12 @@
+0.1.3
+=====
+
+Overview
+--------
+
+This release is adding in the non-code files that were missing in the built package from before.
+
+**Bug Fixes**
+
+* Add the jinja2 templates into the package file
+
