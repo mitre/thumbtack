@@ -14,7 +14,6 @@ REQUIRES_PYTHON = '>=2.7.0'
 VERSION = '0.1.3'
 
 REQUIRED = [
-    'apistar',
     'Flask',
     'Flask-RESTful',
     'gunicorn',
