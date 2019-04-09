@@ -15,23 +15,24 @@ except DistributionNotFound:
     __version__ = 'Could not find version'
 
 
-def create_app():
+def create_app(image_dir=None):
     app = Flask(__name__)
     app.config.from_object('thumbtack.config')
     # Since development doesn't have this environment variable, it won't do anything
     app.config.from_envvar('THUMBTACK_CONFIG_PRODUCTION', silent=True)
 
-    IMAGE_DIR = os.environ.get("IMAGE_DIR", default=None)
-    MOUNT_DIR = os.environ.get("MOUNT_DIR", default=None)
+    IMAGE_DIR = os.environ.get("IMAGE_DIR")
+    MOUNT_DIR = os.environ.get("MOUNT_DIR")
 
-    if IMAGE_DIR is not None:
-        app.config.update(
-            IMAGE_DIR=IMAGE_DIR,
-        )
-    if MOUNT_DIR is not None:
-        app.config.update(
-            MOUNT_DIR=MOUNT_DIR,
-        )
+    if IMAGE_DIR:
+        app.config.update(IMAGE_DIR=IMAGE_DIR)
+
+    # image_dir is used in the thumbtack entry point, and overwrites the environment variable
+    if image_dir:
+        app.config.update(IMAGE_DIR=image_dir)
+
+    if MOUNT_DIR:
+        app.config.update(MOUNT_DIR=MOUNT_DIR)
 
     configure(app)
 
@@ -83,5 +84,6 @@ def configure_logging(app):
 
 
 def start_app():
-    app = create_app()
+    image_dir = os.getcwd()
+    app = create_app(image_dir=image_dir)
     app.run(debug=True)

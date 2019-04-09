@@ -18,6 +18,7 @@ REQUIRED = [
     'Flask-RESTful',
     'gunicorn',
     'imagemounter',
+    'requests',
     'pathlib2 ; python_version<"3.4"',
 ]
 
