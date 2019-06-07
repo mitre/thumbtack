@@ -24,6 +24,7 @@ addons:
     - open-vm-tools
     - qemu-utils
     - sleuthkit
+    - sqlite3
     - squashfs-tools
     - vmfs-tools
     - xfsprogs
