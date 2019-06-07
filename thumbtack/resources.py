@@ -3,7 +3,7 @@ import imagemounter.exceptions
 from flask import current_app, request
 from flask_restful import Resource, marshal_with, abort, fields
 
-from .exceptions import UnexpectedDiskError, NoMountableVolumesError
+from .exceptions import UnexpectedDiskError, NoMountableVolumesError, ImageNotInDatabaseError
 from .utils import get_mount_info, get_supported_libraries, mount_image, unmount_image
 
 volume_fields = {
@@ -66,6 +66,8 @@ class Mount(Resource):
             status = 'Unexpected number of disks. Thumbtack can only handle disk images that contain one disk.'
         except NoMountableVolumesError:
             status = 'No volumes in {} were able to be mounted.'.format(image_path)
+        except ImageNotInDatabaseError:
+            status = 'Cannot mount {}. Image is not in Thumbtack database.'
 
         current_app.logger.error(status)
         abort(400, message=str(status))
@@ -84,7 +86,13 @@ class Mount(Resource):
         dict
             Dictionary of useful information about a mounted disk image or a list of all mounted images.
         """
-        return get_mount_info(image_path)
+        mount_info = get_mount_info(image_path)
+        if not mount_info:
+            # empty list -- nothing mounted -- is ok to return
+            if isinstance(mount_info, list):
+                return mount_info
+            abort(404, message='{} not mounted'.format(image_path))
+        return mount_info
 
     def delete(self, image_path):
         """Unmounts an image file.

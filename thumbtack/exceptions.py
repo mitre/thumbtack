@@ -4,3 +4,7 @@ class NoMountableVolumesError(Exception):
 
 class UnexpectedDiskError(Exception):
     pass
+
+
+class ImageNotInDatabaseError(Exception):
+    pass

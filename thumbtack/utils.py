@@ -11,7 +11,7 @@ from flask import current_app, g, abort
 
 import imagemounter
 
-from .exceptions import NoMountableVolumesError, UnexpectedDiskError
+from .exceptions import NoMountableVolumesError, UnexpectedDiskError, ImageNotInDatabaseError
 
 
 def get_supported_libraries():
@@ -54,6 +54,8 @@ def get_mount_info(image_path):
         return response
 
     image_info = get_image_info(image_path)
+    if not image_info:
+        return None
     parser = image_info['parser']
 
     disk_info = None
@@ -98,6 +100,9 @@ def mount_image(relative_image_path, mount_dir='/mnt/thumbtack'):
     full_image_path = '{}/{}'.format(current_app.config['IMAGE_DIR'], relative_image_path)
 
     image_info = get_image_info(relative_image_path)
+
+    if not image_info:
+        raise ImageNotInDatabaseError
 
     if image_info['status'] == 'Mounted':
         increment_ref_count(relative_image_path)
@@ -233,6 +238,9 @@ def get_mount_status_by_id(mount_status_id):
 def get_image_info(relative_image_path):
 
     disk_image = query_db("SELECT * FROM disk_images WHERE rel_path = ?", [relative_image_path], one=True)
+
+    if not disk_image:
+        return None
 
     id_ = disk_image['id']
     rel_path = disk_image['rel_path']
