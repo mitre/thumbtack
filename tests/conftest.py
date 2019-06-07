@@ -8,7 +8,7 @@ from thumbtack import create_app
 
 @pytest.fixture(scope='module')
 def test_client():
-    flask_app = create_app()
+    flask_app = create_app(database='database.db')
     dir_path = os.path.dirname(os.path.realpath(__file__))
     flask_app.config['IMAGE_DIR'] = os.path.join(dir_path, 'test_images')
     flask_app.config['MOUNT_DIR'] = 'thumbtack_test_mount_dir'
