@@ -1,95 +1,29 @@
-import os
-import re
+import imagemounter.exceptions
 
-import requests
+from flask import Blueprint, current_app, redirect, render_template, request
 
-from flask import Blueprint, current_app, redirect, render_template, request, url_for
+from .utils import get_supported_libraries, get_images, mount_image, unmount_image, get_ref_count
+from .exceptions import UnexpectedDiskError, NoMountableVolumesError
 
 main = Blueprint('', __name__)
-
-BASE_URL = 'http://localhost:5000'
-
-STATUS_CODES = {
-    200: 'Mounted',
-    400: 'Unable to mount',
-    404: 'Unmounted',
-    500: 'Server error'
-}
 
 
 @main.route('/', methods=['GET'])
 @main.route('/index', methods=['GET'])
 def index():
-    app = current_app._get_current_object()
-    image_dir = app.config['IMAGE_DIR']
+    image_dir = current_app.config['IMAGE_DIR']
     supported_mount_types = []
     unsupported_mount_types = []
 
-    url = '{}/supported'.format(BASE_URL)
-    response = requests.get(url)
-    if response.status_code == 200:
-        json_response = response.json()
-        for mount_type, supported in json_response.items():
-            if supported:
-                supported_mount_types.append(mount_type)
-            else:
-                unsupported_mount_types.append(mount_type)
+    supported_libraries = get_supported_libraries()
 
-    images = {}
-    for root, dirs, files in os.walk(image_dir):
-        for filename in files:
+    for mount_type, supported in supported_libraries.items():
+        if supported:
+            supported_mount_types.append(mount_type)
+        else:
+            unsupported_mount_types.append(mount_type)
 
-            rel_dir = os.path.relpath(root, image_dir)
-            if rel_dir == '.':
-                rel_file = os.path.join(rel_dir, filename)[2:]
-            else:
-                rel_file = os.path.join(rel_dir, filename)
-            url = "{}/mounts/{}".format(BASE_URL, rel_file)
-
-            full_path = os.path.join(root, filename)
-            # Ignore *.E02, *.E03, ..., *.EAA, *.EAB, ..., but not *.E01
-            if (not full_path.lower().endswith('log') and
-                    re.match('.*\.[EL]X?\w\w$', full_path, flags=re.I) and
-                    not re.match('.*\.[EL]X?01$', full_path, flags=re.I)):
-                continue
-
-            # Ignore *.002, *.003, ..., but not *.001
-            if (re.match('.*\.\d\d\d$', full_path) and
-                    not re.match('.*\.001$', full_path)):
-                continue
-
-            # Ignore *-sXXX.vmdk, but not *.vmdk
-            if re.match('.*\-s\w\w\w\.vmdk$', full_path, flags=re.I):
-                continue
-
-            # Ignore  *-1.vhd, *-2.vhd, ...,  *-N.vhd, but not *-0.vhd
-            if (re.match('.*\-\w+\.vhd$', full_path, flags=re.I) and
-                    not re.match('.*\-0\.vhd$', full_path, flags=re.I)):
-                continue
-
-            if not filename.startswith('.') and os.path.isfile(full_path):
-                response = requests.get(url)
-                # response.raise_for_status()
-                status = STATUS_CODES[response.status_code]
-
-                json_response = response.json()
-                # print(json_response)
-
-                disk_mountpoint = ''
-                ref_count = 0
-                vol_mountpoints = {}
-                if status == 'Mounted':
-                    if 'mountpoint' in json_response['disk_info']:
-                        disk_mountpoint = json_response['disk_info']['mountpoint']
-
-                        for volume in json_response['disk_info']['volumes']:
-                            sanitized_rel_file = rel_file.replace('/', '_').replace(':', '-').replace('.', '-')
-                            uid = '{}_{}'.format(sanitized_rel_file, volume['index'])
-                            vol_mountpoints[volume['index']] = [volume['mountpoint'], uid]
-
-                    ref_count = json_response['ref_count']
-
-                images[rel_file] = [full_path, status, disk_mountpoint, vol_mountpoints, ref_count]
+    images = get_images()
 
     return render_template('index.html',
                            supported_mount_types=supported_mount_types,
@@ -100,21 +34,40 @@ def index():
 
 @main.route('/mount_form', methods=['POST'])
 def mount_form():
-    img_to_mount = request.form['img_to_mount']
+    rel_path = request.form['img_to_mount']
     operation = request.form['operation']
-    url = "{}/mounts/{}".format(BASE_URL, img_to_mount)
+
     status = None
 
     if operation == 'mount':
-        response = requests.put(url)
-        if response.status_code == 200:
+
+        mounted_disk = None
+        try:
+            mounted_disk = mount_image(rel_path)
+        except imagemounter.exceptions.SubsystemError:
+            current_app.logger.error('imagemounter was unable to mount: {}', rel_path)
+            status = 'Thumbtack was unable to mount {} using the imagemounter Python library.'.format(rel_path)
+        except PermissionError:
+            current_app.logger.error('Permission error! Are you running with root privileges?')
+            status = 'Thumbtack does not have mounting privileges for {}. Are you running as root?'.format(rel_path)
+        except UnexpectedDiskError:
+            status = 'Unexpected number of disks. Thumbtack can only handle disk images that contain one disk.'
+        except NoMountableVolumesError:
+            status = 'No volumes in {} were able to be mounted.'.format(rel_path)
+
+        if mounted_disk and mounted_disk.mountpoint is not None:
             status = 'Mounted successfully'
+
     elif operation == 'unmount':
-        response = requests.delete(url)
-        if response.status_code == 200:
+
+        if unmount_image(rel_path):
             status = 'Unmounted successfully'
+        else:
+            ref_count = get_ref_count(rel_path)
+            status = '{} is still mounted. Reference count is: {}'.format(rel_path, ref_count)
+
     else:
-        print('Unknown operation! How did you even get here!?')
+        current_app.logger.error('Unknown operation! How did you even get here!?')
         return redirect('/')
 
     if not status:

@@ -1,10 +1,11 @@
-bind = "0.0.0.0:8081"
+bind = "0.0.0.0:8208"
 workers = 4
-#env = None
-#max-requests = None
-#user = user
-#group = group
+# env = None
+# max-requests = None
+# user = user
+# group = group
 logfile = "/var/log/thumbtack/thumbtack.log"
-#loglevel = debug
+# loglevel = debug
 IMAGE_DIR = '/vagrant/tests/test_images'
 MOUNT_DIR = '/mnt/thumbtack'
+DATABASE = '/vagrant/database.db'

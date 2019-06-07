@@ -37,47 +37,56 @@
       <th>Unmount</th>
       <th>Mountpoint</th>
     </tr>
-    {% for filename, file_info in images.items() %}
+    {% for image in images %}
       <tr>
+        <!-- Filename -->
         <td>
-          {% if file_info[1] == 'Mounted' %}
-            <a href="/mounts/{{ filename }}">{{ filename }}</a>
+          {% if image.status == 'Mounted' %}
+            <a href="/mounts/{{ image.rel_path }}">{{ image.rel_path }}</a>
           {% else %}
-            {{ filename }}
+            {{ image.rel_path }}
           {% endif %}
         </td>
-        <td>{{ file_info[1] }}</td>
+
+        <!-- Status -->
+        <td>{{ image.status }}</td>
+
+        <!-- Mount button -->
         <td>
-          {% if file_info[1] == 'Unmounted' %}
+          {% if image.status == 'Unmounted' %}
           <form class="myForm" method="post" action="/mount_form">
-            <input type="hidden" name="img_to_mount" value="{{ filename }}">
+            <input type="hidden" name="img_to_mount" value="{{ image.rel_path }}">
             <input type="hidden" name="operation" value="mount">
             <button>Mount</button>
           </form>
           {% endif %}
         </td>
+
+        <!-- Unount Button -->
         <td>
-          {% if file_info[1] == 'Mounted' %}
+          {% if image.status == 'Mounted' %}
           <form class="myForm" method="post" action="/mount_form">
-            <input type="hidden" name="img_to_mount" value="{{ filename }}">
+            <input type="hidden" name="img_to_mount" value="{{ image.rel_path }}">
             <input type="hidden" name="operation" value="unmount">
             <button>Unmount</button>
           </form>
           {% endif %}
         </td>
+
+        <!-- Mountpoint info -->
         <td>
-          {% if file_info[1] == 'Mounted' %}
+          {% if image.status == 'Mounted' %}
           <ul class="myUL">
             <li>
-              <span class="caret">{{ file_info[2] }}</span>
+              <span class="caret">{{ image.disk_mountpoint }}</span>
               <ul class="nested">
-                {% for idx, vol_mountpoint in file_info[3].items() %}
+                {% for volume in image.volume_info %}
                   <li>
-                    [{{ idx }}] <span id="{{ vol_mountpoint[1] }}">{{ vol_mountpoint[0] }}</span>
-                    {% if vol_mountpoint[0] %}
+                    [{{ volume.index }}] <span id="{{ volume.uid }}">{{ volume.mountpoint }}</span>
+                    {% if volume.mountpoint %}
                     <div class="tooltip">
-                      <button onclick="copyByID('{{ vol_mountpoint[1] }}')" onmouseout="outFunc('{{ vol_mountpoint[1] }}Tooltip')">
-                        <span class="tooltiptext" id="{{ vol_mountpoint[1] }}Tooltip">Copy to clipboard</span>
+                      <button onclick="copyByID('{{ volume.uid }}')" onmouseout="outFunc('{{ volume.uid }}Tooltip')">
+                        <span class="tooltiptext" id="{{ volume.uid }}Tooltip">Copy to clipboard</span>
                         Copy
                       </button>
                     </div>

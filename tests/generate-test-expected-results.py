@@ -5,11 +5,6 @@ import imagemounter
 
 from pprint import pprint
 
-try:
-    from pathlib import Path
-except ImportError:
-    from pathlib2 import Path
-
 images = [
     # from the internet!
     'dftt_images/10-ntfs-disk.dd',
@@ -66,7 +61,6 @@ for image_path in images:
     for volume in image_parser.init():
         # img['mountpoint'] = disk.mountpoint
 
-        # TODO: write a comment
         if not mountable_checked and not volume.mountpoint in [None, '']:
             mountable = True
             mountable_checked = True

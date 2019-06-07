@@ -1,2 +1,6 @@
-class MountManagerError(Exception):
+class NoMountableVolumesError(Exception):
+    pass
+
+
+class UnexpectedDiskError(Exception):
     pass

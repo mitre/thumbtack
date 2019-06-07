@@ -10,16 +10,16 @@ URL = 'https://github.com/mitre/thumbtack'
 EMAIL = 'thumbtack@mitre.org'
 AUTHOR = 'The MITRE Corporation'
 LICENSE = 'Apache 2.0'
-REQUIRES_PYTHON = '>=2.7.0'
+REQUIRES_PYTHON = '>=3.4.0'
 VERSION = '0.1.4'
 
 REQUIRED = [
+    'Click',
     'Flask',
     'Flask-RESTful',
     'gunicorn',
     'imagemounter',
     'requests',
-    'pathlib2 ; python_version<"3.4"',
 ]
 
 doc_requires = [
@@ -71,8 +71,6 @@ setup(
         'Topic :: Security',
         'Topic :: System :: Filesystems',
         'License :: OSI Approved :: Apache Software License',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
