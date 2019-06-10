@@ -49,12 +49,12 @@ class Mount(Resource):
         status = None
         try:
             mount_dir = request.args.get('mount_dir', '/mnt/thumbtack')
-            current_app.logger.info('mount_dir:', mount_dir)
+            current_app.logger.info('mount_dir: {}'.format(mount_dir))
 
             mounted_disk = mount_image(image_path, mount_dir)
 
             if mounted_disk and mounted_disk.mountpoint is not None:
-                current_app.logger.info('Image mounted successfully: {}', image_path)
+                current_app.logger.info('Image mounted successfully: {}'.format(image_path))
                 return mounted_disk
 
         # TODO: refactor to not duplicate code in the mount_form in views.py
