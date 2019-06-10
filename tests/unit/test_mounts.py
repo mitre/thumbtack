@@ -5,6 +5,8 @@ from pprint import pprint
 
 import pytest
 
+from thumbtack import utils
+
 
 def test_find_library_support(test_client):
     """
@@ -111,6 +113,10 @@ def test_mount_valid_images(test_client, expected_test_results, test_image_path)
 
     print('\n################  Test Mount Valid Images')
 
+    # TODO: remove after CI test
+    images_in_db = utils.get_images()
+    pprint(images_in_db)
+
     if not os.path.isfile(os.path.join('test_images', test_image_path)):
         pytest.skip('Skipping disk mounting service test because test disk image is missing ({})'.format(test_image_path))
 
@@ -135,13 +141,6 @@ def test_mount_valid_images(test_client, expected_test_results, test_image_path)
             mount_dir = test_client.application.config['MOUNT_DIR']
             print('mounting: {}'.format(relative_image_path))
             response = test_client.put(u'/mounts/{}?mount_dir={}'.format(relative_image_path, mount_dir))
-
-            # TODO: remove this after CI test
-            response = test_client.get('/mounts/')
-            assert response.status_code == 200
-            ci_test = json.loads(response.data.decode('utf-8'))
-            pprint(ci_test)
-
             assert response.status_code == 200
 
             response_json = json.loads(response.data.decode('utf-8'))
