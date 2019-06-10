@@ -67,7 +67,7 @@ class Mount(Resource):
         except NoMountableVolumesError:
             status = 'No volumes in {} were able to be mounted.'.format(image_path)
         except ImageNotInDatabaseError:
-            status = 'Cannot mount {}. Image is not in Thumbtack database.'
+            status = 'Cannot mount {}. Image is not in Thumbtack database.'.format(image_path)
 
         current_app.logger.error(status)
         abort(400, message=str(status))
