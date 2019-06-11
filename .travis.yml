@@ -36,7 +36,6 @@ install:
   - pip install -e .
 
 script:
-  - pwd
   - cd tests
   - python download-test-images.py --dftt
   - touch database.db
