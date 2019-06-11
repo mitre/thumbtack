@@ -38,12 +38,10 @@ install:
 script:
   - cd tests
   - python download-test-images.py --dftt
-  - touch database.db
-  - ls -la
   - sudo -E /home/travis/virtualenv/python3.7/bin/pytest
   - ls -la
+  - sqlite3 database.db ".tables"
   - sqlite3 database.db ".headers on" ".mode column" "SELECT * FROM disk_images;"
-  - sqlite3 database.db ".headers on" ".mode column" "SELECT * FROM mount_status_codes;"
   - cd ..
   - python setup.py sdist bdist_wheel
 
