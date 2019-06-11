@@ -39,6 +39,7 @@ script:
   - pwd
   - cd tests
   - python download-test-images.py --dftt
+  - touch database.db
   - ls -la
   - sudo -E /home/travis/virtualenv/python3.7/bin/pytest
   - ls -la
