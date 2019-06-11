@@ -1,12 +1,14 @@
-0.1.4
+0.2.0
 =====
 
 Overview
 --------
 
-This release is adding Python 2 support.
+This release removes Python 2 support.
 
 **Bug Fixes**
 
-* Allow thumbtack to be installed on Python 2 for backwards compatibility
-* Make the ``thumbtack`` command serve the current working directory
+* The bundled flask server in the `thumbtack` command now allows port forwarding
+* The `thumbtack` command now has command line help
+* The state of disk images is now tracked in a SQLite database instead of by the client
+
