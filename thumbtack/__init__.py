@@ -79,8 +79,8 @@ def configure_database(app):
     db_file = Path(app.config['DATABASE'])
 
     with app.app_context():
-        if db_file.is_file():
-            db_file.unlink()
+        # if db_file.is_file():
+        #     db_file.unlink()
 
         if not db_file.is_file():
             init_db()
