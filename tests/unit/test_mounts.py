@@ -113,10 +113,6 @@ def test_mount_valid_images(test_client, expected_test_results, test_image_path)
 
     print('\n################  Test Mount Valid Images')
 
-    # TODO: remove after CI test
-    images_in_db = utils.get_images()
-    pprint(images_in_db)
-
     if not os.path.isfile(os.path.join('test_images', test_image_path)):
         pytest.skip('Skipping disk mounting service test because test disk image is missing ({})'.format(test_image_path))
 

@@ -18,7 +18,7 @@ It supports the mounting of many `disk image file types`_, depending on which su
     :maxdepth: 2
     :caption: Contents
 
-    quickstart
+    tutorial
     api_guide
     thumbtack_client
     web-interface

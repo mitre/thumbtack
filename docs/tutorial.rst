@@ -1,9 +1,9 @@
-.. _quickstart:
+.. _tutorial:
 
-Quick Start
-===========
+Tutorial
+========
 
-This document presents a quick walkthrough on how to use Thumbtack.
+This document presents a short walkthrough on how to use Thumbtack.
 Please refer to the links throughout the document for further information.
 
 If you only want to test Thumbtack out, using the Flask development server will suffice.
@@ -46,36 +46,65 @@ The script will give estimated download size and ask permission before downloadi
 Run the Server
 --------------
 
-Thumbtack is a `Flask`_ powered web application.
-We'll use the built in `Flask server`_ in this tutorial.
-
-Put the ``wsgi.py`` file from the top level of the repo in your working directory.
-Then, as a user with admin privileges, run the following commands.
-The ``IMAGE_DIR`` environment variable refers to the directory you created in the previous step.
+Here's the easy part!
+Just make sure to be in the directory where your disk images are as mentioned above in the Create Directory of Disk Images section.
 
 .. code-block:: bash
 
-    wget https://raw.githubusercontent.com/mitre/thumbtack/master/wsgi.py
-    sudo -E IMAGE_DIR=/path/to/disk_images flask run
+    thumbtack
 
-The Thumbtack server is now listening on port 5000, and can be accessed from a web browser at http://127.0.0.1:5000
+The Thumbtack server is now listening on port 8208, and can be accessed from a web browser at http://127.0.0.1:8208
+
+There are a few options that the `thumbtack` command can take, allowing you to change the host, port, image directory, and sqlite database file.
+See them below.
+
+.. code-block:: bash
+
+    $ thumbtack --help
+    Usage: thumbtack [OPTIONS]
+
+    Options:
+      -d, --debug           Run the Thumbtack server in debug mode
+      -h, --host TEXT       Host to run Thumbtack server on  [default: 127.0.0.1]
+      -p, --port TEXT       Port to run Thumbtack server on  [default: 8208]
+      -i, --image-dir TEXT  Directory of disk images for Thumbtack server to
+                            monitor  [default: $CWD]
+      --db TEXT             SQLite database to store mount state  [default:
+                            database.db]
+      --help                Show this message and exit.
 
 Development Environment
 -----------------------
 
 If you are planning to contribute to the development of Thumbtack, you should clone the repository from GitHub rather than installing a released version from PyPI.
-As above, we recommend using a virtualenv.
+Vagrant is recommended and a fully functioning `Vagrantfile` is provided at the top level of the repo.
+It will install an Ubuntu 16.04 VirtualBox VM locally with all libraries required as well as Thumbtack.
 
 .. code-block:: bash
 
+    # Install Vagrant
+    # Install VirtualBox
     git clone https://github.com/mitre/thumbtack.git
     cd thumbtack
-    # Install any required OS libraries for mounting images. See the imagemounter documentation.
-    pip install -r requirements.txt
-    sudo -E FLASK_ENV=development flask run
+    vagrant up
+    vagrant ssh
 
-    # in order to be able to access the thumbtack server from another machine - potentially DANGEROUS!
-    sudo -E FLASK_ENV=development flask run -h 0.0.0.0
+    # inside Vagrant machine
+    cd /vagrant/tests
+    python download_test_images.py
+    cd test_images
+    thumbtack -h 0.0.0.0
+
+The Vagrant VM will be running the Thumbtack server on port 8208, and is set up to automatically forward the port to your localhost.
+You should be able to access the web interface via http://127.0.0.1:8208 now.
+
+Pseudo-Production Environment
+-----------------------------
+
+As mentioned on the homepage of the documentation, Thumbtack should not run in a production setting for security reasons.
+However, if you would like to get Thumbtack to work with a webserver like Nginx or Apache, a `wsgi.py` file is provided at the top level of the repo.
+Once again, for more information on deploying Flask applications, please refer to Flask's `deployment documentation`_.
+
 
 .. _multiple ways: https://docs.python-guide.org/dev/virtualenvs
 .. _virtualenvwrapper: https://virtualenvwrapper.readthedocs.io/en/latest/index.html

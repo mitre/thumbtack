@@ -11,6 +11,8 @@ def test_client():
     dir_path = os.path.dirname(os.path.realpath(__file__))
     image_dir = os.path.join(dir_path, 'test_images')
 
+    # image_dir and database need to be passed in at creation time since they are used in the SQLite db.
+    # at this time it is insufficient to change the flask_app.config after the app has been created
     flask_app = create_app(image_dir=image_dir, database='database.db')
     flask_app.config['MOUNT_DIR'] = os.path.join(dir_path, 'thumbtack_test_mount_dir')
     testing_client = flask_app.test_client()

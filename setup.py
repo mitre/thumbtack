@@ -77,7 +77,8 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7'
     ],
-    packages=find_packages(exclude=('tests',)),
+    packages=find_packages('src'),
+    package_dir={'': 'src'},
     install_requires=REQUIRED,
     extras_require=EXTRAS,
     include_package_data=True,

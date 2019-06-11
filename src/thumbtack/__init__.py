@@ -111,7 +111,7 @@ def configure_logging(app):
 @click.option('-p', '--port', default='8208',
               show_default=True, help='Port to run Thumbtack server on')
 @click.option('-i', '--image-dir', default=os.getcwd(),
-              show_default=True, help='Directory of disk images for Thumbtack server to monitor')
+              help='Directory of disk images for Thumbtack server to monitor  [Default: $CWD]')
 @click.option('--db', 'database', default='database.db',
               show_default=True, help='SQLite database to store mount state')
 def start_app(debug, host, port, image_dir, database):

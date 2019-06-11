@@ -1,0 +1,12 @@
+0.1.4
+=====
+
+Overview
+--------
+
+This release is adding Python 2 support.
+
+**Bug Fixes**
+
+* Allow thumbtack to be installed on Python 2 for backwards compatibility
+* Make the ``thumbtack`` command serve the current working directory
