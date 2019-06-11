@@ -85,24 +85,24 @@ def test_mount_invalid_image(test_client):
 
 @pytest.mark.parametrize("test_image_path", [
     'dftt_images/10-ntfs-disk.dd',
-    # 'dftt_images/11-carve-fat.dd',
-    # 'dftt_images/12-carve-ext2.dd',
-    # 'dftt_images/7-ntfs-undel.dd',
-    # 'dftt_images/8-jpeg-search.dd',
-    # 'dftt_images/9-fat-label.dd',
-    # 'dftt_images/daylight.dd',
-    # 'dftt_images/ext-part-test-2.dd',
-    # 'dftt_images/ntfs-img-kw-1.dd',
-    # 'digitalcorpora/lone_wolf/LoneWolf.E01',
-    # 'digitalcorpora/m57-jean/nps-2008-jean.E01',
-    # 'digitalcorpora/m57-patents/charlie-2009-12-11.E01',
-    # 'digitalcorpora/m57-patents/charlie-work-usb-2009-12-11.E01',
-    # 'digitalcorpora/m57-patents/jo-2009-12-11-001.E01',
-    # 'digitalcorpora/m57-patents/jo-favorites-usb-2009-12-11.E01',
-    # 'digitalcorpora/m57-patents/pat-2009-12-11.E01',
-    # 'digitalcorpora/m57-patents/terry-2009-12-11-001.E01',
-    # 'digitalcorpora/m57-patents/terry-work-usb-2009-12-11.E01',
-    # 'digitalcorpora/national_gallery/tracy-home-2012-07-16-final.E01'
+    'dftt_images/11-carve-fat.dd',
+    'dftt_images/12-carve-ext2.dd',
+    'dftt_images/7-ntfs-undel.dd',
+    'dftt_images/8-jpeg-search.dd',
+    'dftt_images/9-fat-label.dd',
+    'dftt_images/daylight.dd',
+    'dftt_images/ext-part-test-2.dd',
+    'dftt_images/ntfs-img-kw-1.dd',
+    'digitalcorpora/lone_wolf/LoneWolf.E01',
+    'digitalcorpora/m57-jean/nps-2008-jean.E01',
+    'digitalcorpora/m57-patents/charlie-2009-12-11.E01',
+    'digitalcorpora/m57-patents/charlie-work-usb-2009-12-11.E01',
+    'digitalcorpora/m57-patents/jo-2009-12-11-001.E01',
+    'digitalcorpora/m57-patents/jo-favorites-usb-2009-12-11.E01',
+    'digitalcorpora/m57-patents/pat-2009-12-11.E01',
+    'digitalcorpora/m57-patents/terry-2009-12-11-001.E01',
+    'digitalcorpora/m57-patents/terry-work-usb-2009-12-11.E01',
+    'digitalcorpora/national_gallery/tracy-home-2012-07-16-final.E01'
 ])
 def test_mount_valid_images(test_client, expected_test_results, test_image_path):
     """

@@ -39,9 +39,6 @@ script:
   - cd tests
   - python download-test-images.py --dftt
   - sudo -E /home/travis/virtualenv/python3.7/bin/pytest
-  - ls -la
-  - sqlite3 database.db ".tables"
-  - sqlite3 database.db ".headers on" ".mode column" "SELECT * FROM disk_images;"
   - cd ..
   - python setup.py sdist bdist_wheel
 
