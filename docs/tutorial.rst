@@ -113,3 +113,4 @@ Once again, for more information on deploying Flask applications, please refer t
 .. _Digital Corpora: https://digitalcorpora.org
 .. _Flask: http://flask.pocoo.org
 .. _Flask server: http://flask.pocoo.org/docs/1.0/server
+.. _deployment documentation: http://flask.pocoo.org/docs/1.0/deploying
