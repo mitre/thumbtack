@@ -96,7 +96,13 @@ def increment_ref_count(rel_path):
     current_app.logger.info('* Increased ref count for {}. Now: {}'.format(rel_path, new_ref_count))
 
 
-def mount_image(relative_image_path, mount_dir='/mnt/thumbtack'):
+def mount_image(relative_image_path):
+    mount_dir = current_app.config['MOUNT_DIR']
+    if not mount_dir:
+        msg = "Mount directory is not properly set by thumbtack server"
+        current_app.logger.error(msg)
+        raise NotADirectoryError(msg)
+
     full_image_path = '{}/{}'.format(current_app.config['IMAGE_DIR'], relative_image_path)
 
     image_info = get_image_info(relative_image_path)

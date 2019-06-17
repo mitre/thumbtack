@@ -54,7 +54,8 @@ def mount_form():
             status = 'Unexpected number of disks. Thumbtack can only handle disk images that contain one disk.'
         except NoMountableVolumesError:
             status = 'No volumes in {} were able to be mounted.'.format(rel_path)
-
+        except NotADirectoryError:
+            status = 'Mount failed. Thumbtack server has no mount directory set.'
         if mounted_disk and mounted_disk.mountpoint is not None:
             status = 'Mounted successfully'
 
@@ -75,4 +76,3 @@ def mount_form():
 
     return render_template('form_complete.html',
                            status=status)
-

@@ -23,21 +23,20 @@ except DistributionNotFound:
 def create_app(image_dir=None, database=None):
     app = Flask(__name__)
     app.config.from_object('thumbtack.config')
-    # Since development doesn't have this environment variable, it won't do anything
-    app.config.from_envvar('THUMBTACK_CONFIG_PRODUCTION', silent=True)
 
-    if os.environ.get("IMAGE_DIR"):
-        app.config.update(IMAGE_DIR=os.environ.get("IMAGE_DIR"))
     if os.environ.get("MOUNT_DIR"):
         app.config.update(MOUNT_DIR=os.environ.get("MOUNT_DIR"))
-    if os.environ.get("DATABASE"):
-        app.config.update(DATABASE=os.environ.get("DATABASE"))
 
-    # these variables are from the thumbtack entry point, and should overwrite environment variable equivalents
+    # priority goes to command line args, then env variables, then val from config.py
     if image_dir:
         app.config.update(IMAGE_DIR=image_dir)
+    elif os.environ.get("IMAGE_DIR"):
+        app.config.update(IMAGE_DIR=os.environ.get("IMAGE_DIR"))
+
     if database:
         app.config.update(DATABASE=database)
+    elif os.environ.get("DATABASE"):
+        app.config.update(DATABASE=os.environ.get("DATABASE"))
 
     configure(app)
 
@@ -110,10 +109,9 @@ def configure_logging(app):
               show_default=True, help='Host to run Thumbtack server on')
 @click.option('-p', '--port', default='8208',
               show_default=True, help='Port to run Thumbtack server on')
-@click.option('-i', '--image-dir', default=os.getcwd(),
+@click.option('-i', '--image-dir',
               help='Directory of disk images for Thumbtack server to monitor  [Default: $CWD]')
-@click.option('--db', 'database', default='database.db',
-              show_default=True, help='SQLite database to store mount state')
+@click.option('--db', 'database', help='SQLite database to store mount state')
 def start_app(debug, host, port, image_dir, database):
     app = create_app(image_dir=image_dir, database=database)
     app.run(debug=debug, host=host, port=port)

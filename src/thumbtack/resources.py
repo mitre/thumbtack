@@ -1,6 +1,6 @@
 import imagemounter.exceptions
 
-from flask import current_app, request
+from flask import current_app
 from flask_restful import Resource, marshal_with, abort, fields
 
 from .exceptions import UnexpectedDiskError, NoMountableVolumesError, ImageNotInDatabaseError
@@ -48,10 +48,7 @@ class Mount(Resource):
         """
         status = None
         try:
-            mount_dir = request.args.get('mount_dir', '/mnt/thumbtack')
-            current_app.logger.info('mount_dir: {}'.format(mount_dir))
-
-            mounted_disk = mount_image(image_path, mount_dir)
+            mounted_disk = mount_image(image_path)
 
             if mounted_disk and mounted_disk.mountpoint is not None:
                 current_app.logger.info('Image mounted successfully: {}'.format(image_path))

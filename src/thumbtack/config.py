@@ -1,3 +1,5 @@
+import os
+
 bind = "0.0.0.0:8208"
 workers = 4
 # env = None
@@ -6,6 +8,7 @@ workers = 4
 # group = group
 logfile = "/var/log/thumbtack/thumbtack.log"
 # loglevel = debug
-IMAGE_DIR = '/vagrant/tests/test_images'
+IMAGE_DIR = os.getcwd()
+# IMAGE_DIR = '/vagrant/tests/test_images'
 MOUNT_DIR = '/mnt/thumbtack'
-DATABASE = '/vagrant/database.db'
+DATABASE = 'database.db'
