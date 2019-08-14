@@ -2,7 +2,7 @@ import imagemounter.exceptions
 
 from flask import Blueprint, current_app, redirect, render_template, request
 
-from .utils import get_supported_libraries, get_images, mount_image, unmount_image, get_ref_count
+from .utils import get_supported_libraries, get_images, mount_image, unmount_image, get_ref_count, monitor_image_dir
 from .exceptions import UnexpectedDiskError, NoMountableVolumesError
 
 main = Blueprint('', __name__)
@@ -23,6 +23,8 @@ def index():
         else:
             unsupported_mount_types.append(mount_type)
 
+    # On refresh, update DB to match what's on disk
+    monitor_image_dir()
     images = get_images()
 
     return render_template('index.html',

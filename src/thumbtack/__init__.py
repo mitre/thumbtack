@@ -1,5 +1,7 @@
 import logging
 import os
+import time
+import threading
 
 from pathlib import Path
 from pkg_resources import get_distribution, DistributionNotFound
@@ -10,7 +12,7 @@ from flask import Flask, current_app
 from flask_restful import Api
 
 from .resources import Mount, SupportedLibraries
-from .utils import init_db
+from .utils import init_db, monitor_image_dir
 from .views import main
 
 
@@ -18,6 +20,18 @@ try:
     __version__ = get_distribution('thumbtack').version
 except DistributionNotFound:
     __version__ = 'Could not find version'
+
+
+class ditectory_monitoring(threading.Thread):
+    def __init__(self, app):
+        threading.Thread.__init__(self)
+        self.app = app
+
+    def run(self):
+        with self.app.app_context():
+            while True:
+                time.sleep(3)
+                monitor_image_dir()
 
 
 def create_app(image_dir=None, database=None):
@@ -114,4 +128,6 @@ def configure_logging(app):
 @click.option('--db', 'database', help='SQLite database to store mount state')
 def start_app(debug, host, port, image_dir, database):
     app = create_app(image_dir=image_dir, database=database)
+    ditectory_monitoring_thread = ditectory_monitoring(app)
+    ditectory_monitoring_thread.start()
     app.run(debug=debug, host=host, port=port)

@@ -4,6 +4,7 @@ import re
 import sqlite3
 import subprocess
 import sys
+import threading
 
 from pathlib import Path
 
@@ -338,6 +339,53 @@ def insert_images():
 
             if not filename.startswith('.') and full_path.is_file():
                 insert_image(full_path)
+
+
+def remove_image(full_path):
+    full_path_str = str(full_path)
+    disk_image = query_db("SELECT * FROM disk_images WHERE full_path = ?", [full_path_str], one=True)
+
+    if disk_image:
+        current_app.logger.debug('Removing disk image from DB: {}'.format(full_path))
+        sql = "DELETE from disk_images WHERE (full_path) = (?)"
+        update_or_insert_db(sql, [full_path_str])
+    else:
+        current_app.logger.debug('({}) is on disk: {}'.format(disk_image['id'], full_path))
+
+
+def remove_images():
+    images_in_db = get_images()
+    full_path_filenames = []
+
+    for root, dirs, files in os.walk(current_app.config['IMAGE_DIR']):
+        for filename in files:
+            full_path = Path(root, filename)
+            full_path_filenames.append(full_path)
+
+    # If image in DB is not on disk, remove it from DB
+    [remove_image(image["full_path"]) for image in images_in_db if Path(image["full_path"]) not in full_path_filenames]
+
+
+# More efficent than calling insert_images then remove_images which will scan all files twice _and_ hit disk
+def monitor_image_dir():
+    full_path_filenames = []
+
+    for root, dirs, files in os.walk(current_app.config['IMAGE_DIR']):
+        for filename in files:
+
+            full_path = Path(root, filename)
+            full_path_filenames.append(full_path)
+            print(full_path)
+
+            if check_ignored(full_path):
+                continue
+
+            if not filename.startswith('.') and full_path.is_file():
+                insert_image(full_path)
+
+    images_in_db = get_images()
+    # If image in DB is not on disk, remove it from DB
+    [remove_image(image["full_path"]) for image in images_in_db if Path(image["full_path"]) not in full_path_filenames]
 
 
 def get_db():
