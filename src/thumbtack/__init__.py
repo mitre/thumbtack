@@ -128,6 +128,6 @@ def configure_logging(app):
 @click.option('--db', 'database', help='SQLite database to store mount state')
 def start_app(debug, host, port, image_dir, database):
     app = create_app(image_dir=image_dir, database=database)
-    ditectory_monitoring_thread = ditectory_monitoring(app)
-    ditectory_monitoring_thread.start()
+    directory_monitoring_thread = directory_monitoring(app)
+    directory_monitoring_thread.start()
     app.run(debug=debug, host=host, port=port)

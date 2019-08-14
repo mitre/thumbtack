@@ -4,7 +4,6 @@ import re
 import sqlite3
 import subprocess
 import sys
-import threading
 
 from pathlib import Path
 
@@ -375,7 +374,6 @@ def monitor_image_dir():
 
             full_path = Path(root, filename)
             full_path_filenames.append(full_path)
-            print(full_path)
 
             if check_ignored(full_path):
                 continue
