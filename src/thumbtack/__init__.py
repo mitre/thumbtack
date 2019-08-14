@@ -22,7 +22,7 @@ except DistributionNotFound:
     __version__ = 'Could not find version'
 
 
-class ditectory_monitoring(threading.Thread):
+class directory_monitoring(threading.Thread):
     def __init__(self, app):
         threading.Thread.__init__(self)
         self.app = app
