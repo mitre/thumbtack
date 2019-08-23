@@ -9,8 +9,9 @@ import click
 from flask import Flask, current_app
 from flask_restful import Api
 
+from .directory_monitoring import DirectoryMonitoring
 from .resources import Mount, SupportedLibraries
-from .utils import init_db
+from .utils import init_db, monitor_image_dir
 from .views import main
 
 
@@ -90,16 +91,17 @@ def before_first_request():
 
 
 def configure_logging(app):
-    if not app.debug:
-        # In production mode, add log handler to sys.stderr.
+    formatter = logging.Formatter("[%(asctime)s] %(levelname)s in %(name)s.%(module)s: %(message)s")
+
+    if app.debug:
         app.logger.setLevel(logging.DEBUG)
+    else:
+        app.logger.setLevel(logging.INFO)
 
-        formatter = logging.Formatter("[%(asctime)s] %(levelname)s in %(name)s.%(module)s: %(message)s")
-
+        # In production mode, add log handler to sys.stderr.
         shandler = logging.StreamHandler()
-        shandler.setLevel(logging.DEBUG)
+        shandler.setLevel(logging.INFO)
         shandler.setFormatter(formatter)
-
         # app.logger.addHandler(shandler)
 
 
@@ -114,4 +116,6 @@ def configure_logging(app):
 @click.option('--db', 'database', help='SQLite database to store mount state')
 def start_app(debug, host, port, image_dir, database):
     app = create_app(image_dir=image_dir, database=database)
+    directory_monitoring_thread = DirectoryMonitoring(app)
+    directory_monitoring_thread.start()
     app.run(debug=debug, host=host, port=port)
