@@ -35,6 +35,9 @@ sudo apt install -y python3-pip \
                     unzip \
                     zip
 
+# install tools for testing a production setup
+sudo apt install -y nginx
+
 cd /vagrant
 # install the thumbtack python library in development mode
 sudo pip3 install -e .[dev]
