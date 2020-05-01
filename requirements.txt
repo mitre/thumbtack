@@ -5,7 +5,7 @@ Flask==1.1.2
 Flask-RESTful==0.3.7
 gunicorn==19.9.0
 imagemounter==3.1.0
-invoke==1.2.0
+invoke==1.4.1
 pytest==5.4.1
 requests==2.23.0
 sphinx==3.0.3
