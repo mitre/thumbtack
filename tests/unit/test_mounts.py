@@ -114,7 +114,7 @@ def test_mount_invalid_image(test_client):
         "dftt_images/7-ntfs-undel.dd",
         "dftt_images/8-jpeg-search.dd",
         "dftt_images/9-fat-label.dd",
-        "dftt_images/daylight.dd",
+        # "dftt_images/daylight.dd",
         "dftt_images/ext-part-test-2.dd",
         "dftt_images/ntfs-img-kw-1.dd",
         "digitalcorpora/lone_wolf/LoneWolf.E01",
@@ -154,7 +154,9 @@ def test_mount_valid_images(test_client, expected_test_results, test_image_path)
 
             relative_image_path = expected_json_results["imagepath"]
             # update imagepath in expected results to be full path because that is what is returned
-            expected_json_results["imagepath"] = f"{test_client.application.config['IMAGE_DIR']}/{expected_json_results['imagepath']}"
+            expected_json_results[
+                "imagepath"
+            ] = f"{test_client.application.config['IMAGE_DIR']}/{expected_json_results['imagepath']}"
 
             print(f"\n############################  Mounting: {relative_image_path}")
 
