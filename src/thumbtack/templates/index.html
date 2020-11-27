@@ -24,9 +24,9 @@
     {{ mount_type }} {{ "-" if not loop.last }}
   {% endfor %}
   </p>
-  <p><a href="/supported" >More info</a></p>
+  <p><a href="{{ url_for('.supported') }}" >More info</a></p>
 
-  <h2>Path to disk images: {{ image_dir }}</h2>
+  <h2>Path to disk images: <a href="{{ url_for('.mount') }}" >{{ image_dir }}</a></h2>
 
   <table style="width:70%">
     <tr>
@@ -41,7 +41,7 @@
         <!-- Filename -->
         <td>
           {% if image.status == 'Mounted' %}
-            <a href="/mounts/{{ image.rel_path }}">{{ image.rel_path }}</a>
+            <a href="{{ url_for('.mount', image_path=image.rel_path) }}" >{{ image.rel_path }}</a>
           {% else %}
             {{ image.rel_path }}
           {% endif %}
@@ -53,7 +53,7 @@
         <!-- Mount button -->
         <td>
           {% if image.status == 'Unmounted' %}
-          <form class="myForm" method="post" action="/mount_form">
+          <form class="myForm" method="post" action="{{ url_for('.mount_form') }}">
             <input type="hidden" name="img_to_mount" value="{{ image.rel_path }}">
             <input type="hidden" name="operation" value="mount">
             <button>Mount</button>
@@ -64,7 +64,7 @@
         <!-- Unount Button -->
         <td>
           {% if image.status == 'Mounted' %}
-          <form class="myForm" method="post" action="/mount_form">
+          <form class="myForm" method="post" action="{{ url_for('.mount_form') }}">
             <input type="hidden" name="img_to_mount" value="{{ image.rel_path }}">
             <input type="hidden" name="operation" value="unmount">
             <button>Unmount</button>

@@ -68,9 +68,12 @@ See them below.
       -h, --host TEXT       Host to run Thumbtack server on  [default: 127.0.0.1]
       -p, --port TEXT       Port to run Thumbtack server on  [default: 8208]
       -i, --image-dir TEXT  Directory of disk images for Thumbtack server to
-                            monitor  [default: $CWD]
-      --db TEXT             SQLite database to store mount state  [default:
-                            database.db]
+                            monitor  [Default: $CWD]
+
+      --db TEXT             SQLite database to store mount state
+      -b, --base-url TEXT   Base URL where Thumbtack is hosted on the server
+                            [default: /]
+
       --help                Show this message and exit.
 
 Development Environment

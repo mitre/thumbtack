@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath('.'))
 # -- Project information -----------------------------------------------------
 
 project = 'Thumbtack'
-copyright = '2019, The MITRE Corporation'
+copyright = '2019-2020, The MITRE Corporation'
 author = 'The MITRE Corporation'
 
 # The short X.Y version

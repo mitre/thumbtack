@@ -3,28 +3,29 @@ import imagemounter.exceptions
 from flask import current_app
 from flask_restful import Resource, marshal_with, abort, fields
 
-from .exceptions import UnexpectedDiskError, NoMountableVolumesError, ImageNotInDatabaseError
+from .exceptions import (
+    UnexpectedDiskError,
+    NoMountableVolumesError,
+    ImageNotInDatabaseError,
+)
 from .utils import get_mount_info, get_supported_libraries, mount_image, unmount_image
 
 volume_fields = {
-    'size': fields.Integer,
-    'offset': fields.Integer,
-    'index': fields.Integer,
-    'label': fields.String(attribute=lambda obj: obj.info.get('label')),
-    'fsdescription': fields.String(attribute=lambda obj: obj.info.get('fsdescription')),
-    'fstype': fields.String,
-    'mountpoint': fields.String,
+    "size": fields.Integer,
+    "offset": fields.Integer,
+    "index": fields.Integer,
+    "label": fields.String(attribute=lambda obj: obj.info.get("label")),
+    "fsdescription": fields.String(attribute=lambda obj: obj.info.get("fsdescription")),
+    "fstype": fields.String,
+    "mountpoint": fields.String,
 }
 disk_fields = {
-    'name': fields.String(attribute='_name'),
-    'imagepath': fields.String(attribute=lambda obj: obj.paths[0]),
-    'mountpoint': fields.String,
-    'volumes': fields.List(fields.Nested(volume_fields)),
+    "name": fields.String(attribute="_name"),
+    "imagepath": fields.String(attribute=lambda obj: obj.paths[0]),
+    "mountpoint": fields.String,
+    "volumes": fields.List(fields.Nested(volume_fields)),
 }
-disk_mount = {
-    'disk_info': fields.Nested(disk_fields),
-    'ref_count': fields.Integer
-}
+disk_mount = {"disk_info": fields.Nested(disk_fields), "ref_count": fields.Integer}
 
 
 class Mount(Resource):
@@ -34,7 +35,7 @@ class Mount(Resource):
     def __init__(self):
         """Create a Mount object.
         """
-        current_app.logger.debug('Instantiating the Mount class')
+        current_app.logger.debug("Instantiating the Mount class")
 
     @marshal_with(disk_fields)
     def put(self, image_path):
@@ -51,20 +52,20 @@ class Mount(Resource):
             mounted_disk = mount_image(image_path)
 
             if mounted_disk and mounted_disk.mountpoint is not None:
-                current_app.logger.info('Image mounted successfully: {}'.format(image_path))
+                current_app.logger.info(f"Image mounted successfully: {image_path}")
                 return mounted_disk
 
         # TODO: refactor to not duplicate code in the mount_form in views.py
         except imagemounter.exceptions.SubsystemError:
-            status = 'Thumbtack was unable to mount {} using the imagemounter Python library.'.format(image_path)
+            status = f"Thumbtack was unable to mount {image_path} using the imagemounter Python library."
         except PermissionError:
-            status = 'Thumbtack does not have mounting privileges for {}. Are you running as root?'.format(image_path)
+            status = f"Thumbtack does not have mounting privileges for {image_path}. Are you running as root?"
         except UnexpectedDiskError:
-            status = 'Unexpected number of disks. Thumbtack can only handle disk images that contain one disk.'
+            status = "Unexpected number of disks. Thumbtack can only handle disk images that contain one disk."
         except NoMountableVolumesError:
-            status = 'No volumes in {} were able to be mounted.'.format(image_path)
+            status = f"No volumes in {image_path} were able to be mounted."
         except ImageNotInDatabaseError:
-            status = 'Cannot mount {}. Image is not in Thumbtack database.'.format(image_path)
+            status = f"Cannot mount {image_path}. Image is not in Thumbtack database."
 
         current_app.logger.error(status)
         abort(400, message=str(status))
@@ -88,7 +89,7 @@ class Mount(Resource):
             # empty list -- nothing mounted -- is ok to return
             if isinstance(mount_info, list):
                 return mount_info
-            abort(404, message='{} not mounted'.format(image_path))
+            abort(404, message=f"{image_path} not mounted")
         return mount_info
 
     def delete(self, image_path):
@@ -103,6 +104,5 @@ class Mount(Resource):
 
 
 class SupportedLibraries(Resource):
-
     def get(self):
         return get_supported_libraries()
