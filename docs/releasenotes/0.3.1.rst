@@ -1,0 +1,11 @@
+0.3.1
+=====
+
+Overview
+--------
+
+This is only a release because the deploy key to GitHub was stale in Travis CI
+
+**Bug Fixes**
+
+* Nothing significant. Hopefully this fix to Travis CI will stick!
