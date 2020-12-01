@@ -67,6 +67,9 @@ See them below.
       -d, --debug           Run the Thumbtack server in debug mode
       -h, --host TEXT       Host to run Thumbtack server on  [default: 127.0.0.1]
       -p, --port TEXT       Port to run Thumbtack server on  [default: 8208]
+      -m, --mount-dir TEXT  Directory to mount disk images  [Default:
+                            /mnt/thumbtack]
+
       -i, --image-dir TEXT  Directory of disk images for Thumbtack server to
                             monitor  [Default: $CWD]
 

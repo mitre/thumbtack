@@ -8,9 +8,7 @@ workers = 4
 # group = group
 logfile = "/var/log/thumbtack/thumbtack.log"
 # loglevel = debug
-THUMBTACK_IMAGE_DIR = os.getcwd()
-# THUMBTACK_IMAGE_DIR = '/vagrant/tests/test_images'
-THUMBTACK_MOUNT_DIR = "/mnt/thumbtack"
-THUMBTACK_DATABASE = "database.db"
-
-THUMBTACK_APPLICATION_ROOT = "/"
+IMAGE_DIR = os.getcwd()
+MOUNT_DIR = "/mnt/thumbtack"
+DATABASE = "database.db"
+APPLICATION_ROOT = "/"

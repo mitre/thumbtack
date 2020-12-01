@@ -19,7 +19,7 @@ except DistributionNotFound:
     __version__ = "Could not find version"
 
 
-def create_app(image_dir=None, database=None, base_url=None):
+def create_app(mount_dir=None, image_dir=None, database=None, base_url=None):
 
     if base_url:
         static_url_path = f"{base_url}/static"
@@ -32,16 +32,21 @@ def create_app(image_dir=None, database=None, base_url=None):
     app.config.from_object("thumbtack.config")
 
     # configure from ENV variables
-    if os.environ.get("THUMBTACK_MOUNT_DIR"):
+    if mount_dir:
+        app.config.update(MOUNT_DIR=mount_dir)
+    elif os.environ.get("THUMBTACK_MOUNT_DIR"):
         app.config.update(MOUNT_DIR=os.environ.get("THUMBTACK_MOUNT_DIR"))
+
     if image_dir:
         app.config.update(IMAGE_DIR=image_dir)
     elif os.environ.get("THUMBTACK_IMAGE_DIR"):
         app.config.update(IMAGE_DIR=os.environ.get("THUMBTACK_IMAGE_DIR"))
+
     if database:
         app.config.update(DATABASE=database)
     elif os.environ.get("THUMBTACK_DATABASE"):
         app.config.update(DATABASE=os.environ.get("THUMBTACK_DATABASE"))
+
     if base_url:
         app.config.update(APPLICATION_ROOT=base_url)
     elif os.environ.get("THUMBTACK_APPLICATION_ROOT"):
@@ -129,6 +134,11 @@ def configure_logging(app):
     help="Port to run Thumbtack server on",
 )
 @click.option(
+    "-m",
+    "--mount-dir",
+    help="Directory to mount disk images  [Default: /mnt/thumbtack]",
+)
+@click.option(
     "-i",
     "--image-dir",
     help="Directory of disk images for Thumbtack server to monitor  [Default: $CWD]",
@@ -141,8 +151,10 @@ def configure_logging(app):
     show_default=True,
     help="Base URL where Thumbtack is hosted on the server",
 )
-def start_app(debug, host, port, image_dir, database, base_url):
-    app = create_app(image_dir=image_dir, database=database, base_url=base_url)
+def start_app(debug, host, port, mount_dir, image_dir, database, base_url):
+    app = create_app(
+        mount_dir=mount_dir, image_dir=image_dir, database=database, base_url=base_url
+    )
     directory_monitoring_thread = DirectoryMonitoring(app)
     directory_monitoring_thread.start()
     app.run(debug=debug, host=host, port=port)
