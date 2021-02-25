@@ -116,10 +116,6 @@ def mount_image(relative_image_path):
     if not image_info:
         raise ImageNotInDatabaseError
 
-    if image_info["status"] == "Mounted":
-        increment_ref_count(relative_image_path)
-        return image_info
-
     # Verify we have a valid file path
     if not os.access(full_image_path, os.R_OK):
         msg = f"* {relative_image_path} is not a valid file or is not accessible for reading"
@@ -135,6 +131,11 @@ def mount_image(relative_image_path):
     # Volumes won't be mounted unless this generator is iterated
     for _ in image_parser.init():
         pass
+
+    if image_info["status"] == "Mounted":
+        increment_ref_count(relative_image_path)
+        current_app.logger.info(f"* {relative_image_path} is already mounted")
+        return image_parser.disks[0]
 
     # thumbtack can only handle images that have one disk
     num_disks = len(image_parser.disks)
