@@ -49,10 +49,12 @@ class Mount(Resource):
         """
         status = None
         try:
+            current_app.mnt_mutex.acquire()
             mounted_disk = mount_image(image_path)
 
             if mounted_disk and mounted_disk.mountpoint is not None:
                 current_app.logger.info(f"Image mounted successfully: {image_path}")
+                current_app.mnt_mutex.release()
                 return mounted_disk
 
         # TODO: refactor to not duplicate code in the mount_form in views.py
@@ -67,6 +69,7 @@ class Mount(Resource):
         except ImageNotInDatabaseError:
             status = f"Cannot mount {image_path}. Image is not in Thumbtack database."
 
+        current_app.mnt_mutex.release()
         current_app.logger.error(status)
         abort(400, message=str(status))
 
@@ -92,7 +95,7 @@ class Mount(Resource):
             abort(404, message=f"{image_path} not mounted")
         return mount_info
 
-    def delete(self, image_path):
+    def delete(self, image_path=None):
         """Unmounts an image file.
 
         Parameters
@@ -100,7 +103,9 @@ class Mount(Resource):
         image_path : str
             Relative path to an image file to unmount.
         """
+        current_app.mnt_mutex.acquire()
         unmount_image(image_path)
+        current_app.mnt_mutex.release()
 
 
 class SupportedLibraries(Resource):
