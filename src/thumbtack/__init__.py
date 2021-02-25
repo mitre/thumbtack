@@ -1,5 +1,6 @@
 import logging
 import os
+import threading
 
 from pathlib import Path
 from pkg_resources import get_distribution, DistributionNotFound
@@ -51,6 +52,8 @@ def create_app(mount_dir=None, image_dir=None, database=None, base_url=None):
         app.config.update(APPLICATION_ROOT=base_url)
     elif os.environ.get("THUMBTACK_APPLICATION_ROOT"):
         app.config.update(APPLICATION_ROOT=os.environ.get("THUMBTACK_APPLICATION_ROOT"))
+
+    app.mnt_mutex = threading.Lock()
 
     # configure the rest
     configure(app, base_url)
