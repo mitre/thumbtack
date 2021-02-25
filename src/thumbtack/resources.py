@@ -51,10 +51,10 @@ class Mount(Resource):
         try:
             current_app.mnt_mutex.acquire()
             mounted_disk = mount_image(image_path)
-            current_app.mnt_mutex.release()
 
             if mounted_disk and mounted_disk.mountpoint is not None:
                 current_app.logger.info(f"Image mounted successfully: {image_path}")
+                current_app.mnt_mutex.release()
                 return mounted_disk
 
         # TODO: refactor to not duplicate code in the mount_form in views.py
@@ -69,6 +69,7 @@ class Mount(Resource):
         except ImageNotInDatabaseError:
             status = f"Cannot mount {image_path}. Image is not in Thumbtack database."
 
+        current_app.mnt_mutex.release()
         current_app.logger.error(status)
         abort(400, message=str(status))
 
