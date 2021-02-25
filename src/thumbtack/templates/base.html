@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Thumbtack</title>
+
+  <link href={{ url_for("static", filename="css/thumbtack.css") }} rel="stylesheet" type="text/css" >
+  <script type="text/javascript" src={{ url_for("static", filename="js/thumbtack.js") }}></script>
+
+</head>
+<body onload="main()">
+  <h1>Thumbtack</h1>
+  {% block content %}
+  {% endblock %}
+</body>
+</html>

@@ -1,10 +1,10 @@
 openapi: 3.0.2
 info:
   title: Thumbtack API
-  version: '0.1.2'
+  version: '0.3.2'
   description: Thumbtack's API for (un)mounting of forensic disk images
 servers:
-  - url: http://localhost:5000/
+  - url: http://localhost:8208/
 paths:
   /mounts:
     get:
@@ -14,7 +14,7 @@ paths:
         '200':
           description: A list of all mounted images.
           content:
-            application/json:    
+            application/json:
               schema:
                 $ref: "#/components/schemas/DiskImages"
         default:

@@ -16,7 +16,7 @@ Once an image is mounted, a tree view is shown of the partitions in the disk ima
 Mounted Disk Image Info
 -----------------------
 
-This is the view that can be seen at http://127.0.0.1:5000/mounts.
+This is the view that can be seen at http://127.0.0.1:8208/mounts.
 It returns a JSON object of information about the disk image and all of its partitions.
 
 .. image:: img/mounted_disk_images.png

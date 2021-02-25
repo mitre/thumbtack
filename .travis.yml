@@ -24,6 +24,7 @@ addons:
     - open-vm-tools
     - qemu-utils
     - sleuthkit
+    - sqlite3
     - squashfs-tools
     - vmfs-tools
     - xfsprogs
@@ -44,7 +45,7 @@ script:
 deploy:
   - provider: releases
     api_key:
-      secure: uPvgb2bvb9yxC/n2DNW7w//nxpaf2AU0xKmMor+8cpT/+HDqkAJvF98xfByNg6Y1aGdoj7lXvLcqIRDLcNusKsXsUtxMkiHt3K4KcgI886ovOIvkYZDSFTUhRftwFHRdc4tvaOIYOKRMgmUfWHjJeNK5weFCgYe4icLh+mLJiRAK5BO0LmpNWT1/EmAO3o4RWTrcklb/i2IkNnl98UZhzAmbiJapXEXcq4QdRSoGq3PFSkQiL6PEit0GzFn+N94Sq7Jm13X0K80JgEsWgMVpZhmG+K/I3+cErSSgCQDDZpn63oR7qyNw3gkXNdKTbzyOc5FA/ANFlZWwADASuiwAvgn1l9tqcxWg2EEV/FpnlyrkcUsAwoCzsrKNklHZiIaRIWjbOnYs1QLc4zPzPILgsEQ3KJXTkwXoXH7JGPChV7heE/h6Og+skLMfEaaM6v84hykA+UrP41bpwroXEKThU9qMc3psL0qV+ropUzLF4izL83pmU8jVNkI0Dl5F7ANk6vD0qvIDEvyOer7XjewZ02B74pQteoVZtehIKsx7/vJ+wZDUfgJxZn5uRyqKY6B4VdCiI38YwCsxCEswBO86riFw8BOPFM5DAzrvBkFBxJyIQwWmyahXMiamfWIk3AWNnPpOqrovrziOHjy2J7xyHGeiqDV+/EJQuoeRn7+MpbI=
+      secure: "mwzWHORvlkJ05LrC+Cxe/usyESrmUIQqXe6do9mxu7GPDiSKJDUJ1Wu2fOmSOFzPMnurITdhVK8FCXzukaymi6M0keescxxhdTvGVzzutJl5A4IF6jj4kge2LZ3tBzz+iJKMq9+FApzaMV8ltftt5/Iw6gP7HTp0qH/6w0VXVuWdlAm12WKMbC8fX6oVKWluDJMQNT2lsXgK3ZQvjW+5DvfE5eA9BCwIym8S44N8ytPNyDPOvOAQNJd6IiLETu0qNJuEOFX6akiT/hfGvycCeaM9YrE7nozNwguH0GaV30L6BQ7KmlWokPeh3MXcHXQEE2F4DIgrajzxd3lb0UroQ5WgHxDAI1JQcajwSUM5tsE4mznSPPwrjmyg+CYw05SPE28BjjYr2OJEZfOCVdEEBxrXuzeh01GVCsD3WRNcEQVnjJT+eSjRgqlpq7+/fK/kaevKeKIlYZmJxFyIpb1wQk4aIfCvLrpw883Qcz2MYrpV3qMpMb+9fCW5/8cDb5ioqqRLqqiAOeWrhWhPft7jNN4axQC3czwsJOrUCsUouAw7Xo+fTO+XiyDQHeLMiGzbdWiZ4Ch7g/0LP3f45KTF9U7QsR8miJSrVJzVaNgdKOntTvPFQkT5KAcaoTDfOrb/uMwFqljXFg1zfsBcGxe01j45C1GxECrcQwgDDiN0g6s="
     file:
       - dist/thumbtack-$VERSION.tar.gz
       - dist/thumbtack-$VERSION-py2.py3-none-any.whl
@@ -52,9 +53,9 @@ deploy:
     on:
       tags: true
   - provider: pypi
-    user: jondricek
+    user: __token__
     password:
-      secure: x9Y9HbXXXdUhiXWXVuYQ/0dkksEUdSsvhqcC+3b8gcUxBA26lyXwIH2/FQzMO3AUM75wOOKtDrjE2MXMRcbk1vVHenpt2MVvfuTs1HT8bgUWgqfvO+3sVQuwC3nc6JuqVFYraB4B+9pxqS3fb9IO7s6j25d7VCF2IpRN3liJ+urEQfpJxy2nx7KR6gmdogMPGY/Ioz0D6ye/yNrt3uLBZsVJLqRoWfHwQbHtY2zTFROSyKW0OaGZ2/QUDbzIA9EjVY15Vfmtkf6p9y6YsJ044Q7JweeQ4Xy+USZaZFBhtK+cyOSDOW86AtWhVwiaGnIDjC/5VTF4PT+5kt57E0RNtBy/1MQLr954PrKRHPFWq147Prnxr3h/wRFyShWhlUz4iLq+a3/b0PgXbYgmciI4s+wHX72w+84ckxD0RIcYy0ihwugymV1zYQ7CXRY8XHRpMQfHSNRg3xaluFSBldMw/vl0dLUUVAt62XDeqRCpZaGefmAN4tgUy5A3v9h86fTFdrTTLQ2ri4Ra2PibFNnGk9XZ/0VUnaW+qnIFJUk624NS6XxQ8Mfm6i/nBgUg+LhAJ+/VAdbxuZkP0LiPuKLM64FrA04UU0lbeaeEKWUMGJvzUlgPpwOcgDolu7RRzk65KxnolDBUFm0HldRDWZlDHdMqK2LMLtRQon+vYn8ObRY=
+      secure: "m8YipMgALvXeSVChDKZVH0zJZaTqzqZMZMASFu7Ha+TcSy3oBi2ueq3CcwXPT50/zPsiaDQWwHKt83LwMbWEqALzb460tMfYAJiK1a165KVpeajOT2u9XqxtyJjkblp8S6v7g2y3Fap6dfcEJoR6H9XDZS4UraoDUG3AeRQ6Uu+3nUT1P9sYflKd4aj23arAsQsdrAORpbP9FWUekwlPORLdHJPTX+4l3B7yo+NxRXCqQsfmlj08eRdJRugek//3/ihEa+yuW0O2uRYNvY2jPN+fFF4fTZbqO/O28B4TL5iQFRsP8rbrtm9U0nWDuHbAJ6NVJSIIGV2Dy6jRrbmHr0+zGIKB18bC9mU39vDpeaK9YSKZQ4eBTGIQRTMUJ0S6+330hLcuzKL597gaDy3nY6/BHfCWr7nqbCReo53KoDRLkG1Rfhh6sAh43R3G1A2B7mHY12bfgrQruCXf1PWj3ZXQumEXOfIdaZaWsAYjX0zVnKRkRtp/+FGrFURHzv0WYWLjjAeHPkAEWjVZiHVFSxKjxHDClhpV69qKd8VQnBkJrkS42+Sj2abWI8PhfVjNnevgawSZm7rveTy4VI/vsWTmrTGZdnGrspkf9CYlTw3LkLzMUkaADyIg8US03iJFfAKnRN9YF5qPxbW/3b64WskYaOgstlYaPSY4xL6MFng="
     skip_cleanup: true
     on:
       tags: true

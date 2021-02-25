@@ -1,0 +1,16 @@
+0.3.2
+=====
+
+Overview
+--------
+
+Minor fixes
+
+**Features**
+
+* Added a CLI flag to be able to set where the mount directory should be
+
+**Bug Fixes**
+
+* The release of 0.3.1 introduced a breaking change to the CLI version when a database option was not specified.
+  This release fixes that problem

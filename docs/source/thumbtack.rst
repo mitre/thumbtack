@@ -20,14 +20,6 @@ thumbtack.exceptions module
     :undoc-members:
     :show-inheritance:
 
-thumbtack.manager module
-------------------------
-
-.. automodule:: thumbtack.manager
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 thumbtack.resources module
 --------------------------
 

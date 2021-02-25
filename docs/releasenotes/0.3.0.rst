@@ -1,0 +1,12 @@
+0.3.0
+=====
+
+Overview
+--------
+
+This release includes the undocumented 0.2.1 release which had some very minor bugfixes.
+
+**Features**
+
+* Includes an option to set up a thumbtack service with a custom base_url
+
