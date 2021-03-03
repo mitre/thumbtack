@@ -25,9 +25,9 @@ copyright = "2019-2020, The MITRE Corporation"
 author = "The MITRE Corporation"
 
 # The short X.Y version
-version = "0.3.2"
+version = "0.3.3"
 # The full version, including alpha/beta/rc tags
-release = "0.3.2"
+release = "0.3.3"
 
 
 # -- General configuration ---------------------------------------------------

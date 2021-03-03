@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   title: Thumbtack API
-  version: '0.3.2'
+  version: '0.3.3'
   description: Thumbtack's API for (un)mounting of forensic disk images
 servers:
   - url: http://localhost:8208/
