@@ -128,14 +128,14 @@ def mount_image(relative_image_path):
         [full_image_path], pretty=True, mountdir=mount_dir
     )
 
-    # Volumes won't be mounted unless this generator is iterated
-    for _ in image_parser.init():
-        pass
-
     if image_info["status"] == "Mounted":
         increment_ref_count(relative_image_path)
         current_app.logger.info(f"* {relative_image_path} is already mounted")
-        return image_parser.disks[0]
+        return image_info["parser"].disks[0]
+
+    # Volumes won't be mounted unless this generator is iterated
+    for _ in image_parser.init():
+        pass
 
     # thumbtack can only handle images that have one disk
     num_disks = len(image_parser.disks)
