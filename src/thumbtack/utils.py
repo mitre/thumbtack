@@ -124,9 +124,14 @@ def mount_image(relative_image_path):
 
     # Mount it
     current_app.logger.info(f'* Mounting image_path "{relative_image_path}"')
-    image_parser = imagemounter.ImageParser(
-        [full_image_path], pretty=True, mountdir=mount_dir
+    if full_image_path.endswith('.vmdk') or full_image_path.endswith('.vhdx'):
+        image_parser = imagemounter.ImageParser(
+        [full_image_path], pretty=True, mountdir=mount_dir, disk_mounter='nbd'
     )
+    else:
+        image_parser = imagemounter.ImageParser(
+            [full_image_path], pretty=True, mountdir=mount_dir
+        )
 
     if image_info["status"] == "Mounted":
         increment_ref_count(relative_image_path)
