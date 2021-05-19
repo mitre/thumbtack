@@ -24,6 +24,7 @@ disk_fields = {
     "imagepath": fields.String(attribute=lambda obj: obj.paths[0]),
     "mountpoint": fields.String,
     "volumes": fields.List(fields.Nested(volume_fields)),
+    "paths": fields.Raw(attribute=lambda obj: obj._paths, default=None)
 }
 disk_mount = {"disk_info": fields.Nested(disk_fields), "ref_count": fields.Integer}
 
