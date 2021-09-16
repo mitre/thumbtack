@@ -19,6 +19,6 @@ jobs:
       - name: Download test images
         run: cd tests && python download-test-images.py --dftt
       - name: Run tests
-        run: sudo pytest
+        run: pytest
       - name: Build wheel
         run: cd .. && python setup.py sdist bdist_wheel
