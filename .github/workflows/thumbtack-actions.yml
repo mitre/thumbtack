@@ -17,8 +17,10 @@ jobs:
       - name: pip install
         run: pip install -r requirements.txt && pip install -e .
       - name: Download test images
-        run: cd tests && python download-test-images.py --dftt
+        run: python download-test-images.py --dftt
+        working-directory: tests/
       - name: Run tests
         run: pytest
+        working-directory: tests/
       - name: Build wheel
-        run: cd .. && python setup.py sdist bdist_wheel
+        run: python setup.py sdist bdist_wheel
