@@ -4,6 +4,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
       - name: Check out repository
         uses: actions/checkout@v2
         with:
@@ -12,3 +16,9 @@ jobs:
         run: sudo apt update && sudo apt-get install afflib-tools archivemount avfs cryptsetup disktype exfat-fuse exfat-utils libguestfs-tools libvshadow-utils lvm2 mdadm mtd-utils ocfs2-tools open-vm-tools qemu-utils sleuthkit sqlite3 squashfs-tools vmfs-tools xfsprogs xmount zlib1g-dev
       - name: pip install
         run: pip install -r requirements.txt && pip install -e .
+      - name: Download test images
+        run: cd tests && python download-test-images.py --dftt
+      - name: Run tests
+        run: sudo -E ~/virtualenv/python3.7/bin/pytest
+      - name: Build wheel
+        run: cd .. && python setup.py sdist bdist_wheel
