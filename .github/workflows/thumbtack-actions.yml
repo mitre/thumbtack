@@ -1,7 +1,7 @@
 name: thumbtack-actions
 on: [push]
 jobs:
-  build:
+  test-build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Setup python
@@ -15,12 +15,12 @@ jobs:
       - name: Install apt dependencies
         run: sudo apt update && sudo apt-get install afflib-tools archivemount avfs cryptsetup disktype exfat-fuse exfat-utils libguestfs-tools libvshadow-utils lvm2 mdadm mtd-utils ocfs2-tools open-vm-tools qemu-utils sleuthkit sqlite3 squashfs-tools vmfs-tools xfsprogs xmount zlib1g-dev
       - name: pip install
-        run: pip install -r requirements.txt && pip install -e .
+        run: sudo pip install -r requirements.txt && sudo pip install -e .
       - name: Download test images
         run: python download-test-images.py --dftt
         working-directory: tests/
       - name: Run tests
-        run: pytest
+        run: sudo pytest
         working-directory: tests/
       - name: Build wheel
         run: pip install wheel && python setup.py sdist bdist_wheel
