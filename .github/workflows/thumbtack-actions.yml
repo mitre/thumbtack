@@ -23,7 +23,7 @@ jobs:
         run: sudo pytest
         working-directory: tests/
       - name: Build wheel
-        run: pip install wheel && python setup.py sdist bdist_wheel
+        run: sudo pip install wheel && sudo python setup.py sdist bdist_wheel
       - name: Push to PyPI
         if: startsWith(github.ref, 'refs/tags')
         uses: pypa/gh-action-pypi-publish@release/v1
