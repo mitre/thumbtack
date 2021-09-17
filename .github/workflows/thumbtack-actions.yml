@@ -17,7 +17,7 @@ jobs:
       - name: pip install
         run: sudo pip install -r requirements.txt && sudo pip install -e .
       - name: Download test images
-        run: python download-test-images.py --dftt
+        run: sudo python download-test-images.py --dftt
         working-directory: tests/
       - name: Run tests
         run: sudo pytest
