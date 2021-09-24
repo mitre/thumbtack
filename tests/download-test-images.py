@@ -63,7 +63,7 @@ def download_dftt_images():
     print("Downloading DFTT images (http://dftt.sourceforge.net)")
     dftt_urls = [
         "http://prdownloads.sourceforge.net/dftt/1-extend-part.zip?download",
-        "http://prdownloads.sourceforge.net/dftt/2-kwsrch-fat.zip?download",
+        #"http://prdownloads.sourceforge.net/dftt/2-kwsrch-fat.zip?download",
         "http://prdownloads.sourceforge.net/dftt/3-kwsrch-ntfs.zip?download",
         "http://prdownloads.sourceforge.net/dftt/4-kwsrch-ext3.zip?download",
         "http://prdownloads.sourceforge.net/dftt/5-fat-daylight.zip?download",

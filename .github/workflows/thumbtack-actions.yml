@@ -1,0 +1,33 @@
+name: thumbtack-actions
+on: [push]
+jobs:
+  test-build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
+      - name: Check out repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - name: Install apt dependencies
+        run: sudo apt update && sudo apt-get install afflib-tools archivemount avfs cryptsetup disktype exfat-fuse exfat-utils libguestfs-tools libvshadow-utils lvm2 mdadm mtd-utils ocfs2-tools open-vm-tools qemu-utils sleuthkit sqlite3 squashfs-tools vmfs-tools xfsprogs xmount zlib1g-dev
+      - name: pip install
+        run: sudo pip install -r requirements.txt && sudo pip install -e .
+      - name: Download test images
+        run: sudo python download-test-images.py --dftt
+        working-directory: tests/
+      - name: Run tests
+        run: sudo pytest
+        working-directory: tests/
+      - name: Build wheel
+        run: sudo pip install wheel && sudo python setup.py sdist bdist_wheel
+      - name: Push to PyPI
+        if: startsWith(github.ref, 'refs/tags')
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: ${{ secrets.PYPI_USERNAME }}
+          password: ${{ secrets.PYPI_TOKEN_THUMBTACK }}
+
