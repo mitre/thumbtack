@@ -18,7 +18,7 @@ REQUIRED = [
     "Flask==1.1.2",
     "Flask-RESTful",
     "gunicorn",
-    "git+https://github.com/mitre/imagemounter@develop#egg=imagemounter",
+    "imagemounter @ git+https://github.com/mitre/imagemounter@develop#egg=imagemounter"
     "requests",
 ]
 
