@@ -15,7 +15,7 @@ VERSION = "0.3.3"
 
 REQUIRED = [
     "Click",
-    "Flask==1.1.2",
+    "Flask==2.0.2",
     "Flask-RESTful",
     "gunicorn",
     "imagemounter @ git+https://github.com/mitre/imagemounter@develop#egg=imagemounter"
