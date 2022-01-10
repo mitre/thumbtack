@@ -549,4 +549,17 @@ def check_ignored(full_path):
     ):
         return True
 
+    # Ignore file not matching path_contains if specified
+    path_contains = None
+    try:
+        path_contains = current_app.config["PATH_CONTAINS"]
+        current_app.logger.info(f"Path contains var: {path_contains}")
+    except KeyError:
+        current_app.logger.info(f"Path contains var does not exist")
+        pass
+
+    # Ignore file paths not containing specified string if applicable
+    if path_contains is not None and path_contains not in full_path_str:
+        return True
+
     return False

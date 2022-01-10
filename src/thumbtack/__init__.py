@@ -20,7 +20,7 @@ except DistributionNotFound:
     __version__ = "Could not find version"
 
 
-def create_app(mount_dir=None, image_dir=None, database=None, base_url=None):
+def create_app(mount_dir=None, image_dir=None, database=None, base_url=None, path_contains=None):
 
     if base_url:
         static_url_path = f"{base_url}/static"
@@ -52,6 +52,9 @@ def create_app(mount_dir=None, image_dir=None, database=None, base_url=None):
         app.config.update(APPLICATION_ROOT=base_url)
     elif os.environ.get("THUMBTACK_APPLICATION_ROOT"):
         app.config.update(APPLICATION_ROOT=os.environ.get("THUMBTACK_APPLICATION_ROOT"))
+
+    if path_contains:
+        app.config.update(PATH_CONTAINS=path_contains)
 
     app.mnt_mutex = threading.Lock()
 
@@ -154,9 +157,15 @@ def configure_logging(app):
     show_default=True,
     help="Base URL where Thumbtack is hosted on the server",
 )
-def start_app(debug, host, port, mount_dir, image_dir, database, base_url):
+@click.option(
+    "--path-contains",
+    default=None,
+    show_default=True,
+    help="Only select files containing specified string in the path",
+)
+def start_app(debug, host, port, mount_dir, image_dir, database, base_url, path_contains):
     app = create_app(
-        mount_dir=mount_dir, image_dir=image_dir, database=database, base_url=base_url
+        mount_dir=mount_dir, image_dir=image_dir, database=database, base_url=base_url, path_contains=path_contains
     )
     directory_monitoring_thread = DirectoryMonitoring(app)
     directory_monitoring_thread.start()
