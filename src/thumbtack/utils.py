@@ -553,9 +553,7 @@ def check_ignored(full_path):
     path_contains = None
     try:
         path_contains = current_app.config["PATH_CONTAINS"]
-        current_app.logger.info(f"Path contains var: {path_contains}")
     except KeyError:
-        current_app.logger.info(f"Path contains var does not exist")
         pass
 
     # Ignore file paths not containing specified string if applicable
