@@ -111,6 +111,20 @@ As mentioned on the homepage of the documentation, Thumbtack should not run in a
 However, if you would like to get Thumbtack to work with a webserver like Nginx or Apache, a `wsgi.py` file is provided at the top level of the repo.
 Once again, for more information on deploying Flask applications, please refer to Flask's `deployment documentation`_.
 
+Including FUSE for EWF images
+-------------------------------------
+
+In order to mount EWF images, the libewf pakcage needs to be installed and configured to support FUSE. The following steps can be used to install the package.
+
+.. code-block:: bash
+
+    sudo apt install autoconf automake autopoint libtool pkg-config libfuse-dev zlib1g-dev
+    wget https://github.com/libyal/libewf/releases/download/20201230/libewf-experimental-20201230.tar.gz
+    tar -xavf libewf-experimental-20201230.tar.gz
+    cd libewf-20201230/
+    ./configure --enable-python3 --with-libfuse
+    make
+    sudo make install
 
 .. _multiple ways: https://docs.python-guide.org/dev/virtualenvs
 .. _virtualenvwrapper: https://virtualenvwrapper.readthedocs.io/en/latest/index.html
