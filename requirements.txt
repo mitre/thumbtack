@@ -6,7 +6,7 @@ Flask-RESTful==0.3.8
 gunicorn==20.1.0
 git+https://github.com/mitre/imagemounter@develop#egg=imagemounter
 invoke==1.6.0
-pytest==6.2.5
+pytest==7.0.0
 requests==2.27.1
 sphinx==4.3.1
 sphinx-autobuild==2021.3.14
