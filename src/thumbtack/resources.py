@@ -8,7 +8,7 @@ from .exceptions import (
     NoMountableVolumesError,
     ImageNotInDatabaseError,
 )
-from .utils import get_mount_info, get_supported_libraries, mount_image, unmount_image
+from .utils import get_mount_info, get_supported_libraries, mount_image, unmount_image, get_images
 
 volume_fields = {
     "size": fields.Integer,
@@ -112,3 +112,13 @@ class Mount(Resource):
 class SupportedLibraries(Resource):
     def get(self):
         return get_supported_libraries()
+
+class Images(Resource):
+    def get(self):
+        images = get_images()
+        # Remove non-serializable parser for api call
+        for image in images:
+            if "parser" in image:
+                image.pop("parser")
+        return images
+
