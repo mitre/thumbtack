@@ -4,7 +4,7 @@ from flask import Blueprint, current_app, redirect, render_template, request
 from flask_restful import Api
 
 from .exceptions import UnexpectedDiskError, NoMountableVolumesError
-from .resources import Mount, SupportedLibraries
+from .resources import Mount, SupportedLibraries, Images
 from .utils import (
     get_supported_libraries,
     get_images,
@@ -19,6 +19,7 @@ main = Blueprint("", __name__)
 api = Api(main)
 api.add_resource(Mount, "/mounts/<path:image_path>", "/mounts/")
 api.add_resource(SupportedLibraries, "/supported", endpoint="supported")
+api.add_resource(Images, "/images", endpoint="images")
 
 
 @main.route("/", methods=["GET"])
