@@ -223,7 +223,8 @@ def test_mount_valid_images(test_client, expected_test_results, test_image_path)
 
             # Verify the mount point is gone
             for volume_mountpoint in all_volume_mountpoints:
-                assert not os.access(volume_mountpoint, os.R_OK)
+                if volume_mountpoint is not None:
+                    assert not os.access(volume_mountpoint, os.R_OK)
 
 
 @pytest.mark.parametrize(
