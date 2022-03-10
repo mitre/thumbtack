@@ -163,7 +163,8 @@ def mount_image(relative_image_path):
             current_app.logger.info(f"Volume: {str(v)}")
             for vol in v.volumes:
                 current_app.logger.info(f"Mountpoint: {str(vol.mountpoint)}")
-                v.mountpoint = vol.mountpoint
+                if vol.mountpoint is not None:
+                    v.mountpoint = vol.mountpoint
 
     # Fail if we couldn't mount any of the volumes
     if not [v for v in image_parser.disks[0].volumes if v.mountpoint]:
