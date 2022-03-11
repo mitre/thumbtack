@@ -4,7 +4,7 @@ Click==8.0.3
 Flask==2.0.3
 Flask-RESTful==0.3.9
 gunicorn==20.1.0
-git+https://github.com/mitre/imagemounter-1@develop#egg=imagemounter
+git+https://github.com/mitre/imagemounter@develop#egg=imagemounter
 invoke==1.6.0
 pytest==7.0.1
 requests==2.27.1
