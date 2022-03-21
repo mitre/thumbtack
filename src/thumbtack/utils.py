@@ -155,16 +155,18 @@ def mount_image(relative_image_path):
 
     """
     Mountpoints for LVM volumes are not stored in the main mountpoint variable that we check and display in thumbtack.
-    This loop identifies the mountpoint and reassigns it to the correct variable so LVM volume mountpoints can be displayed in thumbtack.
-    Note: this only works with an additional change in imagemounter to allow mountpoints to be manually set.
+    This loop identifies the LVM volumes and add them to the main volumes list.
     """
+    num_volumes = len(image_parser.disks[0].volumes.volumes)
     for v in image_parser.disks[0].volumes:
         if hasattr(v, 'volumes') and v.mountpoint is None:
             current_app.logger.info(f"Volume: {str(v)}")
             for vol in v.volumes:
                 current_app.logger.info(f"Mountpoint: {str(vol.mountpoint)}")
                 if vol.mountpoint is not None:
-                    v.mountpoint = vol.mountpoint
+                    vol.index = str(num_volumes)
+                    num_volumes += 1
+                    image_parser.disks[0].volumes.volumes.append(vol)
 
     # Fail if we couldn't mount any of the volumes
     if not [v for v in image_parser.disks[0].volumes if v.mountpoint]:
