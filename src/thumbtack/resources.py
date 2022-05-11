@@ -1,6 +1,6 @@
 import imagemounter.exceptions
 
-from flask import current_app
+from flask import current_app, request
 from flask_restful import Resource, marshal_with, abort, fields
 
 from .exceptions import (
@@ -121,4 +121,10 @@ class Images(Resource):
             if "parser" in image:
                 image.pop("parser")
         return images
+
+class ImageDir(Resource):
+    def put(self):
+        image_dir = request.args.getlist("image_dir")[0]
+        current_app.config.update(IMAGE_DIR=image_dir)
+        return image_dir
 
