@@ -102,7 +102,7 @@ def increment_ref_count(rel_path):
     )
 
 
-def mount_image(relative_image_path):
+def mount_image(relative_image_path, creds=None):
     mount_dir = current_app.config["MOUNT_DIR"]
     if not mount_dir:
         msg = "Mount directory is not properly set by thumbtack server"
@@ -126,11 +126,11 @@ def mount_image(relative_image_path):
     current_app.logger.info(f'* Mounting image_path "{relative_image_path}"')
     if full_image_path.endswith('.vmdk') or full_image_path.endswith('.vhdx'):
         image_parser = imagemounter.ImageParser(
-        [full_image_path], pretty=True, mountdir=mount_dir, disk_mounter='qemu-nbd'
+        [full_image_path], pretty=True, mountdir=mount_dir, disk_mounter='qemu-nbd', keys=creds
     )
     else:
         image_parser = imagemounter.ImageParser(
-            [full_image_path], pretty=True, mountdir=mount_dir
+            [full_image_path], pretty=True, mountdir=mount_dir, keys=creds
         )
 
     if image_info["status"] == "Mounted":
