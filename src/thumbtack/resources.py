@@ -1,6 +1,6 @@
 import imagemounter.exceptions
 
-from flask import current_app
+from flask import current_app, request
 from flask_restful import Resource, marshal_with, abort, fields
 
 from .exceptions import (
@@ -49,9 +49,18 @@ class Mount(Resource):
             This is relative to the Thumbtack server's IMAGE_DIR config variable.
         """
         status = None
+
+        # Create volume-key mapping. Need to find a better appraoch for this
+        creds = {}
+        if len(request.args.getlist("key")) > 0:
+            for i in range(0, 10):
+                creds[i] = request.args.getlist("key")[0]
+        else:
+            creds = None
+
         try:
             current_app.mnt_mutex.acquire()
-            mounted_disk = mount_image(image_path)
+            mounted_disk = mount_image(image_path, creds=creds)
 
             if mounted_disk and mounted_disk.mountpoint is not None:
                 current_app.logger.info(f"Image mounted successfully: {image_path}")
