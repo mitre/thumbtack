@@ -131,3 +131,9 @@ class Images(Resource):
                 image.pop("parser")
         return images
 
+class ImageDir(Resource):
+    def put(self):
+        image_dir = request.args.getlist("image_dir")[0]
+        current_app.config.update(IMAGE_DIR=image_dir)
+        return image_dir
+
