@@ -34,7 +34,7 @@
       <th>Status</th>
       <th>Mount</th>
       <th>Unmount</th>
-      <th>Mountpoint</th>
+      <th>Mountpoints</th>
     </tr>
     {% for image in images %}
       <tr>
@@ -77,8 +77,16 @@
           {% if image.status == 'Mounted' %}
           <ul class="myUL">
             <li>
-              <span class="caret">{{ image.disk_mountpoint }}</span>
-              <ul class="nested">
+	      <span>Disk mountpoint: <span id="{{ image.disk_mountpoint }}">{{ image.disk_mountpoint }}</span></span>
+	      <div class="tooltip">
+                <button onclick="copyByID('{{ image.disk_mountpoint }}')" onmouseout="outFunc('{{ image.disk_mountpoint }}Tooltip')">
+                  <span class="tooltiptext" id="{{ image.disk_mountpoint }}Tooltip">Copy to clipboard</span>
+                  Copy
+                </button>
+              </div>
+	      <br>
+	      <span>Volume mountpoints:</span>
+              <ul>
                 {% for volume in image.volume_info %}
                   <li>
                     [{{ volume.index }}] <span id="{{ volume.uid }}">{{ volume.mountpoint }}</span>
