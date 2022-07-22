@@ -167,6 +167,13 @@ def mount_image(relative_image_path, creds=None):
                     vol.index = str(num_volumes)
                     num_volumes += 1
                     image_parser.disks[0].volumes.volumes.append(vol)
+                if hasattr(vol, 'volumes'):
+                    for sub_vol in vol.volumes:
+                        current_app.logger.info(f"Mountpoint: {str(sub_vol.mountpoint)}")
+                        if sub_vol.mountpoint is not None:
+                            sub_vol.index = str(num_volumes)
+                            num_volumes += 1
+                            image_parser.disks[0].volumes.volumes.append(sub_vol)
 
     # Fail if we couldn't mount any of the volumes
     if not [v for v in image_parser.disks[0].volumes if v.mountpoint]:
