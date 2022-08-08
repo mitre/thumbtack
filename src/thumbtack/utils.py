@@ -188,7 +188,8 @@ def mount_image(relative_image_path, creds=None):
             image_parser = process_image_parser(image_parser, relative_image_path)
         except NoMountableVolumesError as e:
             no_mountable_volumes = True
-            current_app.logger.error(f"* No mountable volumes in image {relative_image_path}.")
+            msg = f"* No mountable volumes in image {relative_image_path}"
+            raise NoMountableVolumesError(msg)
 
     if image_info["status"] == "Mounted":
         increment_ref_count(relative_image_path)
