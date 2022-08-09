@@ -173,6 +173,12 @@ def mount_image(relative_image_path, creds=None):
         current_app.logger.error(msg)
         raise PermissionError(msg)
 
+    # Check if the image is currently mounted
+    if image_info["status"] == "Mounted":
+        increment_ref_count(relative_image_path)
+        current_app.logger.info(f"* {relative_image_path} is already mounted")
+        return image_info["parser"].disks[0]
+
     # Mount it
     current_app.logger.info(f'* Mounting image_path "{relative_image_path}"')
     no_mountable_volumes = False
@@ -194,11 +200,6 @@ def mount_image(relative_image_path, creds=None):
             no_mountable_volumes = True
             msg = f"* No mountable volumes in image {relative_image_path}"
             raise NoMountableVolumesError(msg)
-
-    if image_info["status"] == "Mounted":
-        increment_ref_count(relative_image_path)
-        current_app.logger.info(f"* {relative_image_path} is already mounted")
-        return image_info["parser"].disks[0]
 
     mount_codes = get_mount_codes()
     disk_mount_status_id = (
