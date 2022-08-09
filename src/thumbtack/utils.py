@@ -102,42 +102,8 @@ def increment_ref_count(rel_path):
     )
 
 
-def mount_image(relative_image_path, creds=None):
-    mount_dir = current_app.config["MOUNT_DIR"]
-    if not mount_dir:
-        msg = "Mount directory is not properly set by thumbtack server"
-        current_app.logger.error(msg)
-        raise NotADirectoryError(msg)
 
-    full_image_path = f"{current_app.config['IMAGE_DIR']}/{relative_image_path}"
-
-    image_info = get_image_info(relative_image_path)
-
-    if not image_info:
-        raise ImageNotInDatabaseError
-
-    # Verify we have a valid file path
-    if not os.access(full_image_path, os.R_OK):
-        msg = f"* {relative_image_path} is not a valid file or is not accessible for reading"
-        current_app.logger.error(msg)
-        raise PermissionError(msg)
-
-    # Mount it
-    current_app.logger.info(f'* Mounting image_path "{relative_image_path}"')
-    if full_image_path.endswith('.vmdk') or full_image_path.endswith('.vhdx'):
-        image_parser = imagemounter.ImageParser(
-        [full_image_path], pretty=True, mountdir=mount_dir, disk_mounter='qemu-nbd', keys=creds
-    )
-    else:
-        image_parser = imagemounter.ImageParser(
-            [full_image_path], pretty=True, mountdir=mount_dir, keys=creds
-        )
-
-    if image_info["status"] == "Mounted":
-        increment_ref_count(relative_image_path)
-        current_app.logger.info(f"* {relative_image_path} is already mounted")
-        return image_info["parser"].disks[0]
-
+def process_image_parser(image_parser, relative_image_path):
     # Volumes won't be mounted unless this generator is iterated
     try:
         for _ in image_parser.init():
@@ -185,6 +151,55 @@ def mount_image(relative_image_path, creds=None):
         msg = f"* No mountable volumes in image {relative_image_path}"
         current_app.logger.error(msg)
         raise NoMountableVolumesError(msg)
+    return image_parser
+
+def mount_image(relative_image_path, creds=None):
+    mount_dir = current_app.config["MOUNT_DIR"]
+    if not mount_dir:
+        msg = "Mount directory is not properly set by thumbtack server"
+        current_app.logger.error(msg)
+        raise NotADirectoryError(msg)
+
+    full_image_path = f"{current_app.config['IMAGE_DIR']}/{relative_image_path}"
+
+    image_info = get_image_info(relative_image_path)
+
+    if not image_info:
+        raise ImageNotInDatabaseError
+
+    # Verify we have a valid file path
+    if not os.access(full_image_path, os.R_OK):
+        msg = f"* {relative_image_path} is not a valid file or is not accessible for reading"
+        current_app.logger.error(msg)
+        raise PermissionError(msg)
+
+    # Check if the image is currently mounted
+    if image_info["status"] == "Mounted":
+        increment_ref_count(relative_image_path)
+        current_app.logger.info(f"* {relative_image_path} is already mounted")
+        return image_info["parser"].disks[0]
+
+    # Mount it
+    current_app.logger.info(f'* Mounting image_path "{relative_image_path}"')
+    no_mountable_volumes = False
+    try:
+        image_parser = imagemounter.ImageParser(
+            [full_image_path], pretty=True, mountdir=mount_dir, keys=creds
+        )
+        image_parser = process_image_parser(image_parser, relative_image_path)
+    except NoMountableVolumesError as e:
+        no_mountable_volumes = True
+        current_app.logger.error(f"* No mountable volumes in image {relative_image_path}. Attempting to mount with qemu-nbd")
+    if no_mountable_volumes:
+        try:
+            image_parser = imagemounter.ImageParser(
+                [full_image_path], pretty=True, mountdir=mount_dir, disk_mounter='qemu-nbd', keys=creds
+            )
+            image_parser = process_image_parser(image_parser, relative_image_path)
+        except NoMountableVolumesError as e:
+            no_mountable_volumes = True
+            msg = f"* No mountable volumes in image {relative_image_path}"
+            raise NoMountableVolumesError(msg)
 
     mount_codes = get_mount_codes()
     disk_mount_status_id = (
