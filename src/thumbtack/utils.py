@@ -139,7 +139,11 @@ def mount_image(relative_image_path, creds=None):
         return image_info["parser"].disks[0]
 
     # Volumes won't be mounted unless this generator is iterated
-    for _ in image_parser.init():
+    try:
+        for _ in image_parser.init():
+            pass
+    except Exception:
+        current_app.logger.info(f"* Error mounting volume in {relative_image_path}")
         pass
 
     # thumbtack can only handle images that have one disk
