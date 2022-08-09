@@ -105,7 +105,11 @@ def increment_ref_count(rel_path):
 
 def process_image_parser(image_parser, relative_image_path):
     # Volumes won't be mounted unless this generator is iterated
-    for _ in image_parser.init():
+    try:
+        for _ in image_parser.init():
+            pass
+    except Exception:
+        current_app.logger.info(f"* Error mounting volume in {relative_image_path}")
         pass
 
     # thumbtack can only handle images that have one disk
