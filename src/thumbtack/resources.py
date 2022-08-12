@@ -136,4 +136,6 @@ class ImageDir(Resource):
         image_dir = request.args.getlist("image_dir")[0]
         current_app.config.update(IMAGE_DIR=image_dir)
         return image_dir
+    def get(self):
+        return current_app.config["IMAGE_DIR"]
 
