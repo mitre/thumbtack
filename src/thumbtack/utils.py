@@ -7,7 +7,7 @@ import sys
 
 from pathlib import Path
 
-from flask import current_app, g, abort
+from flask import current_app, g
 
 import imagemounter
 
@@ -63,7 +63,7 @@ def get_mount_info(image_path):
 
     disk_info = None
     if not parser:
-        abort(404, message=f"Image path {image_path} is not mounted")
+        return None
     else:
         disk_info = parser.disks[0]
 
@@ -280,7 +280,8 @@ def unmount_image(relative_image_path, force=False):
         return True
     # ref_count should only ever be 0 or greater, but anything less than 1 means it is not mounted
     elif ref_count < 1:
-        abort(404, message=f"Image path {relative_image_path} is not mounted")
+        current_app.logger.info(f"Image path {relative_image_path} is not mounted")
+        return True
     elif ref_count > 1:
         decrement_ref_count(relative_image_path)
         return False
