@@ -415,12 +415,22 @@ def insert_image(full_path):
 
 
 def insert_images():
+    skip_subdirs = None
+    try:
+        skip_subdirs = list(current_app.config["SKIP_SUBDIRECTORY"])
+    except (KeyError, TypeError):
+        pass
+
     for root, dirs, files in os.walk(current_app.config["IMAGE_DIR"]):
+        if skip_subdirs:
+            dirs[:] = [d for d in dirs if d not in skip_subdirs]
+
         for filename in files:
 
             full_path = Path(root, filename)
 
             if check_ignored(full_path):
+                #current_app.logger.info(f"Ignoring file {full_path}")
                 continue
 
             if not filename.startswith(".") and full_path.is_file():
@@ -445,7 +455,16 @@ def remove_images():
     images_in_db = get_images()
     full_path_filenames = []
 
+    skip_subdirs = None
+    try:
+        skip_subdirs = list(current_app.config["SKIP_SUBDIRECTORY"])
+    except (KeyError, TypeError):
+        pass
+
     for root, dirs, files in os.walk(current_app.config["IMAGE_DIR"]):
+        if skip_subdirs:
+            dirs[:] = [d for d in dirs if d not in skip_subdirs]
+
         for filename in files:
             full_path = Path(root, filename)
             full_path_filenames.append(full_path)
@@ -462,7 +481,16 @@ def remove_images():
 def monitor_image_dir():
     full_path_filenames = []
 
+    skip_subdirs = None
+    try:
+        skip_subdirs = list(current_app.config["SKIP_SUBDIRECTORY"])
+    except (KeyError, TypeError):
+        pass
+
     for root, dirs, files in os.walk(current_app.config["IMAGE_DIR"]):
+        if skip_subdirs:
+            dirs[:] = [d for d in dirs if d not in skip_subdirs]
+
         for filename in files:
 
             full_path = Path(root, filename)

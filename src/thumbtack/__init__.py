@@ -20,7 +20,7 @@ except DistributionNotFound:
     __version__ = "Could not find version"
 
 
-def create_app(mount_dir=None, image_dir=None, database=None, base_url=None, path_contains=None):
+def create_app(mount_dir=None, image_dir=None, database=None, base_url=None, path_contains=None, skip_subdirectory=None):
 
     if base_url:
         static_url_path = f"{base_url}/static"
@@ -55,6 +55,9 @@ def create_app(mount_dir=None, image_dir=None, database=None, base_url=None, pat
 
     if path_contains:
         app.config.update(PATH_CONTAINS=path_contains)
+
+    if skip_subdirectory:
+        app.config.update(SKIP_SUBDIRECTORY=skip_subdirectory)
 
     app.mnt_mutex = threading.Lock()
 
@@ -163,10 +166,19 @@ def configure_logging(app):
     show_default=True,
     help="Only select files containing specified string in the path",
 )
-def start_app(debug, host, port, mount_dir, image_dir, database, base_url, path_contains):
+@click.option(
+    '-s',
+    "--skip-subdirectory",
+    multiple=True,
+    default=[],
+    show_default=True,
+    help="Subdirectory to ignore when monitoring files",
+)
+def start_app(debug, host, port, mount_dir, image_dir, database, base_url, path_contains, skip_subdirectory):
     app = create_app(
-        mount_dir=mount_dir, image_dir=image_dir, database=database, base_url=base_url, path_contains=path_contains
+        mount_dir=mount_dir, image_dir=image_dir, database=database, base_url=base_url, path_contains=path_contains, skip_subdirectory=skip_subdirectory
     )
+    app.logger.info(f"Skip dir: {skip_subdirectory}")
     directory_monitoring_thread = DirectoryMonitoring(app)
     directory_monitoring_thread.start()
     app.run(debug=debug, host=host, port=port)
