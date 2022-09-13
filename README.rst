@@ -38,14 +38,17 @@ Quick Reference
     Usage: thumbtack [OPTIONS]
 
     Options:
-      -d, --debug           Run the Thumbtack server in debug mode
-      -h, --host TEXT       Host to run Thumbtack server on  [default: 127.0.0.1]
-      -p, --port TEXT       Port to run Thumbtack server on  [default: 8208]
-      -i, --image-dir TEXT  Directory of disk images for Thumbtack server to
-                            monitor  [default: $CWD]
-      --db TEXT             SQLite database to store mount state  [default:
-                            database.db]
-      --help                Show this message and exit.
+      -d, --debug                   Run the Thumbtack server in debug mode
+      -h, --host TEXT               Host to run Thumbtack server on  [default: 127.0.0.1]
+      -p, --port TEXT               Port to run Thumbtack server on  [default: 8208]
+      -i, --image-dir TEXT          Directory of disk images for Thumbtack server to
+                                    monitor  [default: $CWD]
+      --db TEXT                     SQLite database to store mount state  [default:
+                                    database.db]
+      -b, --base-url TEXT           Base URL where Thumbtack is hosted on the server
+      --path-contains TEXT          Only select files containing specified string in the path
+      -s, --skip-subdirectory TEXT  Subdirectory to ignore when monitoring files
+      --help                        Show this message and exit.
 
 LICENSE
 -------
