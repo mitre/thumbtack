@@ -178,7 +178,6 @@ def start_app(debug, host, port, mount_dir, image_dir, database, base_url, path_
     app = create_app(
         mount_dir=mount_dir, image_dir=image_dir, database=database, base_url=base_url, path_contains=path_contains, skip_subdirectory=skip_subdirectory
     )
-    app.logger.info(f"Skip dir: {skip_subdirectory}")
     directory_monitoring_thread = DirectoryMonitoring(app)
     directory_monitoring_thread.start()
     app.run(debug=debug, host=host, port=port)

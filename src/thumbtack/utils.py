@@ -430,7 +430,6 @@ def insert_images():
             full_path = Path(root, filename)
 
             if check_ignored(full_path):
-                #current_app.logger.info(f"Ignoring file {full_path}")
                 continue
 
             if not filename.startswith(".") and full_path.is_file():
