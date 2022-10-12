@@ -8,3 +8,6 @@ class UnexpectedDiskError(Exception):
 
 class ImageNotInDatabaseError(Exception):
     pass
+
+class DuplicateMountAttemptError(Exception):
+    pass
