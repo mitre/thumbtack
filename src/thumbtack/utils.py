@@ -15,6 +15,7 @@ from .exceptions import (
     NoMountableVolumesError,
     UnexpectedDiskError,
     ImageNotInDatabaseError,
+    DuplicateMountAttemptError,
 )
 
 
@@ -178,9 +179,21 @@ def mount_image(relative_image_path, creds=None):
         increment_ref_count(relative_image_path)
         current_app.logger.info(f"* {relative_image_path} is already mounted")
         return image_info["parser"].disks[0]
+    elif get_ref_count(relative_image_path) == 1:
+        msg = f"* Mount attempt in progress for {relative_image_path}"
+        current_app.logger.info(f"{msg}")
+        raise DuplicateMountAttemptError(msg)
 
     # Mount it
     current_app.logger.info(f'* Mounting image_path "{relative_image_path}"')
+
+    # Set reference count to 1 to indicate we currently attempting to mount the image.
+    sql = """UPDATE disk_images
+                 SET ref_count = 1
+                 WHERE rel_path = ?
+          """
+    update_or_insert_db(sql, [relative_image_path])
+
     no_mountable_volumes = False
     try:
         image_parser = imagemounter.ImageParser(
@@ -199,6 +212,13 @@ def mount_image(relative_image_path, creds=None):
         except NoMountableVolumesError as e:
             no_mountable_volumes = True
             msg = f"* No mountable volumes in image {relative_image_path}"
+
+            # Set ref count to 0 to indicate the mount attempt failed and is no longer in progress
+            sql = """UPDATE disk_images
+                         SET ref_count = 0
+                         WHERE rel_path = ?
+                  """
+            update_or_insert_db(sql, [relative_image_path])
             raise NoMountableVolumesError(msg)
 
     mount_codes = get_mount_codes()

@@ -3,7 +3,7 @@ import imagemounter.exceptions
 from flask import Blueprint, current_app, redirect, render_template, request
 from flask_restful import Api
 
-from .exceptions import UnexpectedDiskError, NoMountableVolumesError
+from .exceptions import UnexpectedDiskError, NoMountableVolumesError, DuplicateMountAttemptError
 from .resources import Mount, SupportedLibraries, Images, ImageDir
 from .utils import (
     get_supported_libraries,
@@ -79,6 +79,8 @@ def mount_form():
             status = f"No volumes in {rel_path} were able to be mounted."
         except NotADirectoryError:
             status = "Mount failed. Thumbtack server has no mount directory set."
+        except DuplicateMountAttemptError:
+            status = "Mount attempt is already in progress for this image. Please wait until the current mount attempt completes."
         if mounted_disk and mounted_disk.mountpoint is not None:
             status = "Mounted successfully"
 
