@@ -187,7 +187,7 @@ def mount_image(relative_image_path, creds=None):
     # Mount it
     current_app.logger.info(f'* Mounting image_path "{relative_image_path}"')
 
-    # Set reference count to 1 to indicate that we are actively attempting to mount this image..
+    # Set reference count to 1 to indicate we currently attempting to mount the image.
     sql = """UPDATE disk_images
                  SET ref_count = 1
                  WHERE rel_path = ?

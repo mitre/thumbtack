@@ -7,6 +7,7 @@ from .exceptions import (
     UnexpectedDiskError,
     NoMountableVolumesError,
     ImageNotInDatabaseError,
+    DuplicateMountAttemptError
 )
 from .utils import get_mount_info, get_supported_libraries, mount_image, unmount_image, get_images
 
@@ -78,6 +79,8 @@ class Mount(Resource):
             status = f"No volumes in {image_path} were able to be mounted."
         except ImageNotInDatabaseError:
             status = f"Cannot mount {image_path}. Image is not in Thumbtack database."
+        except DuplicateMountAttemptError:
+            status = "Mount attempt is already in progress for this image. Please wait until the current mount attempt completes."
 
         current_app.mnt_mutex.release()
         current_app.logger.error(status)
