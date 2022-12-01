@@ -9,6 +9,7 @@ table {
 th, td {
   text-align: left;
   padding: 8px;
+  white-space: nowrap;
 }
 
 tr:nth-child(even) {
@@ -59,6 +60,7 @@ ul, .myUL {
 .tooltip {
   position: relative;
   display: inline-block;
+  white-space: normal;
 }
 
 .tooltip .tooltiptext {

@@ -3,8 +3,10 @@ import imagemounter.exceptions
 from flask import Blueprint, current_app, redirect, render_template, request
 from flask_restful import Api
 
+import os
+
 from .exceptions import UnexpectedDiskError, NoMountableVolumesError, DuplicateMountAttemptError
-from .resources import Mount, SupportedLibraries, Images, ImageDir
+from .resources import Mount, SupportedLibraries, Images, ImageDir, ManualMount
 from .utils import (
     get_supported_libraries,
     get_images,
@@ -12,6 +14,7 @@ from .utils import (
     unmount_image,
     get_ref_count,
     monitor_image_dir,
+    add_mountpoint
 )
 
 main = Blueprint("", __name__)
@@ -21,6 +24,7 @@ api.add_resource(Mount, "/mounts/<path:image_path>", "/mounts/")
 api.add_resource(SupportedLibraries, "/supported", endpoint="supported")
 api.add_resource(Images, "/images", endpoint="images")
 api.add_resource(ImageDir, "/image_dir")
+api.add_resource(ManualMount, "/add_mountpoint", endpoint="add_mountpoint")
 
 
 @main.route("/", methods=["GET"])
@@ -100,3 +104,32 @@ def mount_form():
         status = "Unable to complete operation"
 
     return render_template("form_complete.html", status=status)
+
+@main.route("/add_mountpoint_form", methods=["POST"])
+def add_mountpoint_form():
+    rel_path = request.form["img_to_mount"]
+    mountpoint_path = request.form["mountpoint_path"]
+    operation = request.form["operation"]
+
+    if mountpoint_path is None or mountpoint_path == "":
+        status = "No mountpoint provided."
+        return render_template("form_complete.html", status=status)
+    if not os.path.isdir(mountpoint_path):
+        status = f"Could not find {mountpoint_path}. Ensure the mountpoint exists before adding it to thumbtack."
+        return render_template("form_complete.html", status=status)
+
+    if operation == "add_mountpoint":
+        mounted_disk = add_mountpoint(rel_path, mountpoint_path)
+        if mounted_disk:
+            status = f"Added mountpoint {mountpoint_path} for image {rel_path}"
+            return render_template("form_complete.html", status=status)
+        else:
+            status = f"Unable to add mountpoint {mountpoint_path} for image {rel_path}"
+            return render_template("form_complete.html", status=status)
+    elif operation == "mount" or operation == "unmount":
+        status = f"Operation \"{operation}\" is not supported for /add_mounpoint."
+        current_app.logger.error(f"{status}")
+        return render_template("form_complete.html", status=status)
+    else:
+        current_app.logger.error("Unknown operation!")
+        return redirect("/")
