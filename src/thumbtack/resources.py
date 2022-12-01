@@ -1,4 +1,5 @@
 import imagemounter.exceptions
+import os
 
 from flask import current_app, request
 from flask_restful import Resource, marshal_with, abort, fields
@@ -9,7 +10,7 @@ from .exceptions import (
     ImageNotInDatabaseError,
     DuplicateMountAttemptError
 )
-from .utils import get_mount_info, get_supported_libraries, mount_image, unmount_image, get_images
+from .utils import get_mount_info, get_supported_libraries, mount_image, unmount_image, get_images, add_mountpoint
 
 volume_fields = {
     "size": fields.Integer,
@@ -141,4 +142,40 @@ class ImageDir(Resource):
         return image_dir
     def get(self):
         return current_app.config["IMAGE_DIR"]
+
+class ManualMount(Resource):
+    """Mount object that allows users to manually create and add a mountpoint."""
+
+    def __init__(self):
+        pass
+
+    def put(self):
+        """Adds mountpoint to thumbtack database.
+
+        Parameters
+        ----------
+        mountpoint_path : str
+            Absolute path where the image is mounted
+        """
+
+        image_path = request.args.getlist("image_path")[0]
+        mountpoint_path = request.args.getlist("mountpoint_path")[0]
+
+        if mountpoint_path is None or mountpoint_path == "":
+            status = "No mountpoint provided."
+            current_app.logger.error(status)
+            abort(400, message=str(status))
+        if not os.path.isdir(mountpoint_path):
+            status = f"Could not find {mountpoint_path}. Ensure the mountpoint exists before adding it to thumbtack."
+            current_app.logger.error(status)
+            abort(400, message=str(status))
+
+        mounted_disk = add_mountpoint(image_path, mountpoint_path)
+        if mounted_disk:
+            status = f"Added mountpoint {mountpoint_path} for image {image_path}"
+            return mountpoint_path
+        else:
+            status = f"Unable to add mountpoint {mountpoint_path} for image {image_path}"
+            current_app.logger.error(status)
+            abort(400, message=str(status))
 

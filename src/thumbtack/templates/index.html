@@ -35,12 +35,13 @@
       <th>Mount</th>
       <th>Unmount</th>
       <th>Mountpoints</th>
+      <th>Add mountpoint <div class="tooltip">&#9432;<span class="tooltiptext">Add manually created mounpoint to the thumbtack databse.</span></div></th>
     </tr>
     {% for image in images %}
       <tr>
         <!-- Filename -->
         <td>
-          {% if image.status == 'Mounted' %}
+          {% if image.status == 'Mounted' or image.status == 'Manual mount'%}
             <a href="{{ url_for('.mount', image_path=image.rel_path) }}" >{{ image.rel_path }}</a>
           {% else %}
             {{ image.rel_path }}
@@ -63,7 +64,7 @@
 
         <!-- Unount Button -->
         <td>
-          {% if image.status == 'Mounted' %}
+          {% if image.status == 'Mounted' or image.status == 'Manual mount'%}
           <form class="myForm" method="post" action="{{ url_for('.mount_form') }}">
             <input type="hidden" name="img_to_mount" value="{{ image.rel_path }}">
             <input type="hidden" name="operation" value="unmount">
@@ -74,7 +75,7 @@
 
         <!-- Mountpoint info -->
         <td>
-          {% if image.status == 'Mounted' %}
+          {% if image.status == 'Mounted' or image.status == 'Manual mount'%}
           <ul class="myUL">
             <li>
 	      <span>Disk mountpoint: <span id="{{ image.disk_mountpoint }}">{{ image.disk_mountpoint }}</span></span>
@@ -103,6 +104,20 @@
               </ul>
             </li>
           </ul>
+          {% endif %}
+        </td>
+
+	<!-- Add mountpoint -->
+        <td>
+          {% if image.status == 'Unmounted' %}
+          <form class="myForm" method="post" action="{{ url_for('.add_mountpoint_form') }}">
+	    <label for="mountpoint_path">Mountpoint: </label>
+	    <input type="text" id="mountpoint_path" name="mountpoint_path">
+            <input type="hidden" name="img_to_mount" value="{{ image.rel_path }}">
+            <input type="hidden" name="operation" value="add_mountpoint">
+
+            <button>Add mountpoint</button>
+          </form>
           {% endif %}
         </td>
       </tr>

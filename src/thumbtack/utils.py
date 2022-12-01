@@ -1,4 +1,5 @@
 import os
+import json
 import pickle
 import re
 import sqlite3
@@ -17,7 +18,6 @@ from .exceptions import (
     ImageNotInDatabaseError,
     DuplicateMountAttemptError,
 )
-
 
 def get_supported_libraries():
     virtualenv_bin_directory = Path(sys.argv[0]).parent
@@ -58,6 +58,7 @@ def get_mount_info(image_path):
         return response
 
     image_info = get_image_info(image_path)
+
     if not image_info:
         return None
     parser = image_info["parser"]
@@ -175,7 +176,7 @@ def mount_image(relative_image_path, creds=None):
         raise PermissionError(msg)
 
     # Check if the image is currently mounted
-    if image_info["status"] == "Mounted":
+    if image_info["status"] == "Mounted" or image_info["status"] == "Manual mount":
         increment_ref_count(relative_image_path)
         current_app.logger.info(f"* {relative_image_path} is already mounted")
         return image_info["parser"].disks[0]
@@ -273,6 +274,60 @@ def mount_image(relative_image_path, creds=None):
 
     return image_parser.disks[0]
 
+def add_mountpoint(relative_image_path, mountpoint_path):
+    # Get image information and mount codes
+    image_info = get_image_info(relative_image_path)
+    mount_codes = get_mount_codes()
+    disk_mount_status_id = (mount_codes["Manual mount"])
+
+    full_image_path = f"{current_app.config['IMAGE_DIR']}/{relative_image_path}"
+    mount_dir = mountpoint_path
+
+    # Update disk_images table
+    sql = """UPDATE disk_images
+                 SET ref_count = 1, mountpoint = ?, mount_status_id = ?, parser = ?
+                 WHERE rel_path = ?
+          """
+
+    image_parser = imagemounter.ImageParser(
+        [full_image_path], pretty=True, mountdir=mount_dir
+    )
+
+
+
+    #disk = imagemounter.disk.Disk(image_parser, mountpoint_path)
+    disk = image_parser.disks[0]
+
+    volume = imagemounter.volume.Volume(disk)
+    filesystem = imagemounter.filesystems.UnknownFileSystem(volume)
+    filesystem.mountpoint = mountpoint_path
+    volume.filesystem = filesystem
+
+    disk.volumes = [volume]
+    image_parser.disks[0].volumes = volume
+
+    #image_parser.disks.append(disk)
+
+    img_parser_pickle = pickle.dumps(image_parser)
+
+    update_or_insert_db(
+        sql,
+        [
+            mountpoint_path,
+            disk_mount_status_id,
+            sqlite3.Binary(img_parser_pickle),
+            relative_image_path,
+        ],
+    )
+
+    # Update volumes
+    disk_image_id = image_info["id"]
+    mount_status_id = (mount_codes["Manual mount"])
+    v_index = 0
+    sql = "INSERT INTO volumes (disk_id, mount_status_id, partition_index, mountpoint) VALUES (?, ?, ?, ?)"
+    update_or_insert_db(sql, [disk_image_id, mount_status_id, v_index, mountpoint_path])
+    return mountpoint_path
+
 
 def unmount_image(relative_image_path, force=False):
     image_info = get_image_info(relative_image_path)
@@ -281,10 +336,11 @@ def unmount_image(relative_image_path, force=False):
 
     if ref_count == 1 or force:
         current_app.logger.info(f"* Unmounting {relative_image_path}")
-        image_parser = image_info["parser"]
+        if image_info["status"] == "Mounted":
+            image_parser = image_info["parser"]
 
-        image_parser.clean(allow_lazy=True)
-        current_app.logger.info(f"* Unmounted {relative_image_path} successfully")
+            image_parser.clean(allow_lazy=True)
+            current_app.logger.info(f"* Unmounted {relative_image_path} successfully")
 
         sql = """UPDATE disk_images
                      SET ref_count = 0, mountpoint = NULL, mount_status_id = ?, parser = NULL
@@ -292,11 +348,17 @@ def unmount_image(relative_image_path, force=False):
                  """
         update_or_insert_db(sql, [mount_codes["Unmounted"], relative_image_path])
 
-        sql = """UPDATE volumes
+        if image_info["status"] == "Mounted":
+            sql = """UPDATE volumes
                      SET mountpoint = NULL, mount_status_id = ?
                      WHERE disk_id = ?
                  """
-        update_or_insert_db(sql, [mount_codes["Unmounted"], image_info["id"]])
+            update_or_insert_db(sql, [mount_codes["Unmounted"], image_info["id"]])
+        elif image_info["status"] == "Manual mount":
+            sql = """DELETE FROM volumes
+                     WHERE disk_id = ?
+                 """
+            update_or_insert_db(sql, [image_info["id"]])
         return True
     # ref_count should only ever be 0 or greater, but anything less than 1 means it is not mounted
     elif ref_count < 1:
@@ -356,7 +418,7 @@ def get_image_info(relative_image_path):
     disk_mountpoint = disk_image["mountpoint"]
 
     volume_info = []
-    if status == "Mounted":
+    if status == "Mounted" or status == "Manual mount":
         for volume in query_db(
             "SELECT * FROM volumes WHERE disk_id = ? ORDER BY partition_index",
             [disk_image["id"]],
@@ -581,7 +643,7 @@ def init_db():
 
         # insert status codes
         sql = "INSERT INTO mount_status_codes (status) VALUES (?)"
-        status_codes = ["Mounted", "Unable to mount", "Unmounted"]
+        status_codes = ["Mounted", "Unable to mount", "Unmounted", "Manual mount"]
         for code in status_codes:
             update_or_insert_db(sql, [code])
 
