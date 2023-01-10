@@ -8,6 +8,6 @@ git+https://github.com/mitre/imagemounter@master#egg=imagemounter
 invoke==1.7.3
 pytest==7.2.0
 requests==2.28.1
-sphinx==5.3.0
+sphinx==6.1.2
 sphinx-autobuild==2021.3.14
 sphinx_rtd_theme==1.1.1
