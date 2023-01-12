@@ -2,7 +2,7 @@ name: thumbtack-actions
 on: [push]
 jobs:
   test-build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Setup python
         uses: actions/setup-python@v2
