@@ -8,7 +8,7 @@ sudo apt install -y afflib-tools \
                     cryptsetup \
                     disktype \
                     exfat-fuse \
-                    exfat-utils \
+                    exfatprogs \
                     ewf-tools \
                     libbde-utils \
                     libguestfs-tools \
