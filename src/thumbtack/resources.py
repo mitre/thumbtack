@@ -55,7 +55,7 @@ class Mount(Resource):
         # Create volume-key mapping. Need to find a better appraoch for this
         creds = {}
         if len(request.args.getlist("key")) > 0:
-            for i in range(0, 10):
+            for i in range(0, 25):
                 creds[i] = request.args.getlist("key")[0]
         else:
             creds = None
