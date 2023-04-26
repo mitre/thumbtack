@@ -63,7 +63,7 @@ def create_app(mount_dir=None, image_dir=None, database=None, base_url=None, pat
 
     # configure the rest
     configure(app, base_url)
-    configure_logging(current_app)
+    configure_logging(app)
     return app
 
 
