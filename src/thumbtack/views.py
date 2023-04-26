@@ -17,7 +17,7 @@ from .utils import (
     add_mountpoint
 )
 
-main = Blueprint("", __name__)
+main = Blueprint("thumbtack", __name__)
 
 api = Api(main)
 api.add_resource(Mount, "/mounts/<path:image_path>", "/mounts/")
