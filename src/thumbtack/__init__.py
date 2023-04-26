@@ -63,7 +63,7 @@ def create_app(mount_dir=None, image_dir=None, database=None, base_url=None, pat
 
     # configure the rest
     configure(app, base_url)
-    app.before_first_request(before_first_request)
+    configure_logging(current_app)
     return app
 
 
@@ -97,10 +97,6 @@ def configure(app, base_url=None):
         if not db_file.is_file():
             init_db()
     app.logger.info("configured")
-
-
-def before_first_request():
-    configure_logging(current_app)
 
 
 def configure_logging(app):
