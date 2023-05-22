@@ -695,7 +695,7 @@ def check_ignored(full_path):
         return True
 
     # Ignore  *-1.vhd, *-2.vhd, ...,  *-N.vhd, but not *-0.vhd
-    if re.match(r".*\-\w+\.vhd$", full_path_str, flags=re.I) and not re.match(
+    if re.match(r".*\-\d+\.vhd$", full_path_str, flags=re.I) and not re.match(
         r".*\-0\.vhd$", full_path_str, flags=re.I
     ):
         return True
