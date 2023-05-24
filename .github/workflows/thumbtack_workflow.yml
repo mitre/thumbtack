@@ -56,4 +56,12 @@ jobs:
         with:
           user: ${{ secrets.PYPI_USERNAME }}
           password: ${{ secrets.PYPI_TOKEN_THUMBTACK }}
-
+  docker:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Docker build
+        uses: docker/build-push-action
+        with:
+          context: ./docker/thumbtack/
+          push: false
+          tags: mitre/thumbtack:latest
