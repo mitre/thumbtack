@@ -60,7 +60,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Docker build
-        uses: docker/build-push-action
+        uses: docker/build-push-action@v4
         with:
           context: ./docker/thumbtack/
           push: false
