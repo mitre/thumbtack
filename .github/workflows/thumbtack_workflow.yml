@@ -56,7 +56,7 @@ jobs:
         with:
           user: ${{ secrets.PYPI_USERNAME }}
           password: ${{ secrets.PYPI_TOKEN_THUMBTACK }}
-  docker:
+  docker-build:
     runs-on: ubuntu-20.04
     steps:
       - name: Check out repository
@@ -69,3 +69,24 @@ jobs:
           context: ./docker/thumbtack/
           push: false
           tags: mitre/thumbtack:latest
+  docker-push:
+    needs: deploy
+    runs-on: ubuntu-20.04
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - name: Docker build
+        uses: docker/build-push-action@v4
+        with:
+          context: ./docker/thumbtack/
+          push: false
+          tags: mitre/thumbtack:latest
+      - name: Log in to registry
+        run: echo ""
+      - name: Push image
+        run: echo ""
