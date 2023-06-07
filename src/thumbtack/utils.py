@@ -339,21 +339,24 @@ def unmount_image(relative_image_path, force=False):
         if image_info["status"] == "Mounted":
             image_parser = image_info["parser"]
 
-            image_parser.clean(allow_lazy=True)
-            current_app.logger.info(f"* Unmounted {relative_image_path} successfully")
+            if not image_parser.clean(allow_lazy=True):
+                current_app.logger.info(f"* Unable to unmount volume(s) in {relative_image_path}.")
+                return False
+            else:
+                current_app.logger.info(f"* Unmounted {relative_image_path} successfully")
 
-        sql = """UPDATE disk_images
-                     SET ref_count = 0, mountpoint = NULL, mount_status_id = ?, parser = NULL
-                     WHERE rel_path = ?
-                 """
-        update_or_insert_db(sql, [mount_codes["Unmounted"], relative_image_path])
+                sql = """UPDATE disk_images
+                             SET ref_count = 0, mountpoint = NULL, mount_status_id = ?, parser = NULL
+                             WHERE rel_path = ?
+                         """
+                update_or_insert_db(sql, [mount_codes["Unmounted"], relative_image_path])
 
-        if image_info["status"] == "Mounted":
-            sql = """UPDATE volumes
-                     SET mountpoint = NULL, mount_status_id = ?
-                     WHERE disk_id = ?
-                 """
-            update_or_insert_db(sql, [mount_codes["Unmounted"], image_info["id"]])
+                if image_info["status"] == "Mounted":
+                    sql = """UPDATE volumes
+                             SET mountpoint = NULL, mount_status_id = ?
+                             WHERE disk_id = ?
+                         """
+                    update_or_insert_db(sql, [mount_codes["Unmounted"], image_info["id"]])
         elif image_info["status"] == "Manual mount":
             sql = """DELETE FROM volumes
                      WHERE disk_id = ?
