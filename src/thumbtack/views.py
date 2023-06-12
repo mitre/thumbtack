@@ -1,4 +1,4 @@
-import imagemounter.exceptions
+import imagemounter_mitre.exceptions
 
 from flask import Blueprint, current_app, redirect, render_template, request
 from flask_restful import Api
@@ -69,7 +69,7 @@ def mount_form():
         mounted_disk = None
         try:
             mounted_disk = mount_image(rel_path)
-        except imagemounter.exceptions.SubsystemError:
+        except imagemounter_mitre.exceptions.SubsystemError:
             current_app.logger.error("imagemounter was unable to mount: {}", rel_path)
             status = f"Thumbtack was unable to mount {rel_path} using the imagemounter Python library."
         except PermissionError:
