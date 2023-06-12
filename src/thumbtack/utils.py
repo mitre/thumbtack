@@ -10,7 +10,7 @@ from pathlib import Path
 
 from flask import current_app, g
 
-import imagemounter
+import imagemounter_mitre
 
 from .exceptions import (
     NoMountableVolumesError,
@@ -197,7 +197,7 @@ def mount_image(relative_image_path, creds=None):
 
     no_mountable_volumes = False
     try:
-        image_parser = imagemounter.ImageParser(
+        image_parser = imagemounter_mitre.ImageParser(
             [full_image_path], pretty=True, mountdir=mount_dir, keys=creds
         )
         image_parser = process_image_parser(image_parser, relative_image_path)
@@ -206,7 +206,7 @@ def mount_image(relative_image_path, creds=None):
         current_app.logger.error(f"* No mountable volumes in image {relative_image_path}. Attempting to mount with qemu-nbd")
     if no_mountable_volumes:
         try:
-            image_parser = imagemounter.ImageParser(
+            image_parser = imagemounter_mitre.ImageParser(
                 [full_image_path], pretty=True, mountdir=mount_dir, disk_mounter='qemu-nbd', keys=creds
             )
             image_parser = process_image_parser(image_parser, relative_image_path)
@@ -289,17 +289,16 @@ def add_mountpoint(relative_image_path, mountpoint_path):
                  WHERE rel_path = ?
           """
 
-    image_parser = imagemounter.ImageParser(
+    image_parser = imagemounter_mitre.ImageParser(
         [full_image_path], pretty=True, mountdir=mount_dir
     )
 
 
 
-    #disk = imagemounter.disk.Disk(image_parser, mountpoint_path)
     disk = image_parser.disks[0]
 
-    volume = imagemounter.volume.Volume(disk)
-    filesystem = imagemounter.filesystems.UnknownFileSystem(volume)
+    volume = imagemounter_mitre.volume.Volume(disk)
+    filesystem = imagemounter_mitre.filesystems.UnknownFileSystem(volume)
     filesystem.mountpoint = mountpoint_path
     volume.filesystem = filesystem
 

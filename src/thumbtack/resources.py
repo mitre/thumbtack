@@ -1,4 +1,4 @@
-import imagemounter.exceptions
+import imagemounter_mitre.exceptions
 import os
 
 from flask import current_app, request
@@ -70,7 +70,7 @@ class Mount(Resource):
                 return mounted_disk
 
         # TODO: refactor to not duplicate code in the mount_form in views.py
-        except imagemounter.exceptions.SubsystemError:
+        except imagemounter_mitre.exceptions.SubsystemError:
             status = f"Thumbtack was unable to mount {image_path} using the imagemounter Python library."
         except PermissionError:
             status = f"Thumbtack does not have mounting privileges for {image_path}. Are you running as root?"
