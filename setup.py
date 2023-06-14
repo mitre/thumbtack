@@ -11,14 +11,14 @@ EMAIL = "thumbtack@mitre.org"
 AUTHOR = "The MITRE Corporation"
 LICENSE = "Apache 2.0"
 REQUIRES_PYTHON = ">=3.4.0"
-VERSION = "0.3.3"
+VERSION = "0.4.0"
 
 REQUIRED = [
     "Click",
     "Flask==2.3.2",
     "Flask-RESTful",
     "gunicorn",
-    "imagemounter @ git+https://github.com/mitre/imagemounter@develop#egg=imagemounter"
+    "imagemounter_mitre==2023.6.12",
     "requests",
 ]
 
