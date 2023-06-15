@@ -15,7 +15,7 @@ RUN apt install -y afflib-tools archivemount avfs cryptsetup disktype ewf-tools 
 
 # Install thumbtack
 RUN apt install -y python3 python3-pip git
-RUN pip install git+https://github.com/mitre/thumbtack.git@master
+RUN pip install thumbtack
 
 WORKDIR "tmp/"
 RUN apt install -y wget
