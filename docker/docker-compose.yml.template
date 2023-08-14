@@ -8,7 +8,7 @@ services:
     volumes:
       - /dev:/dev
       - /lib/modules:/lib/modules
-      - evidence_dir:evidence_dir
+      - image_dir:image_dir
       - type: bind
         source: mount_dir
         target: mount_dir
@@ -16,4 +16,4 @@ services:
           propagation: shared
     ports:
       - "8208:8208"
-    command: ["thumbtack", "-h", "0.0.0.0", "-i", "evidence_dir", "-m", "mount_dir", "--db", "/tmp/database.db"]
+    command: ["thumbtack", "-h", "0.0.0.0", "-i", "image_dir", "-m", "mount_dir", "--db", "/tmp/database.db"]
