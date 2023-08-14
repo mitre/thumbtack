@@ -10,7 +10,6 @@ It supports the mounting of many `disk image file types`_, depending on which su
 
 .. warning::
 
-    DO NOT USE THIS TOOL IN A PRODUCTION SETTING!
     Due to the user restrictions of most disk-mounting utilities, you will have more success with Thumbtack when it is run as root.
     For more information on deploying Flask applications, please refer to Flask's `deployment documentation`_.
 
@@ -20,9 +19,8 @@ It supports the mounting of many `disk image file types`_, depending on which su
 
     tutorial
     api_guide
-    thumbtack_client
-    web-interface
     about
+    web_interface
     releasenotes/index.rst
     source/modules.rst
 
