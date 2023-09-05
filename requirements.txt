@@ -6,7 +6,7 @@ Flask-RESTful==0.3.10
 gunicorn==21.2.0
 imagemounter_mitre==2023.9.5
 invoke==2.2.0
-pytest==7.4.0
+pytest==7.4.1
 requests==2.31.0
 sphinx==6.2.1
 sphinx-autobuild==2021.3.14
