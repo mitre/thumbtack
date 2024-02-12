@@ -32,6 +32,7 @@ Install additional tools needed to mount your images. More information can be fo
 
 
 .. code-block:: bash
+
     # Install tools
     $ sudo apt-get install xmount ewf-tools afflib-tools sleuthkit
     $ cd path/to/disk/image/files
