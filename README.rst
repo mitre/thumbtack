@@ -19,16 +19,16 @@ Quick Start
     $ sudo imount --check # List install status of tools used by imagemounter
     The following commands are used by imagemounter internally. Without most commands, imagemounter works perfectly fine, but may lack some detection or mounting capabilities.
     -- Mounting base disk images (at least one required, first three recommended) --
-    MISSING xmount
-    MISSING ewfmount
-    MISSING affuse
+    MISSING   xmount
+    MISSING   ewfmount
+    MISSING   affuse
     MISSING   vmware-mount        needed for VMWare disks
     MISSING   mountavfs           needed for compressed disk images, part of the avfs package
     MISSING   qemu-nbd            needed for Qcow2 images, part of the qemu-utils package
     ...
     
 
-Install additional tools needed to mount your images. More information can be found in the imagemounter docs https://github.com/mitre/thumbtack.git.
+Install additional tools needed to mount your images. More information can be found in the imagemounter installation docs https://imagemounter.readthedocs.io/en/latest/installation.html.
 
 .. code-block:: bash
     # Install tools
