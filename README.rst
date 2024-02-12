@@ -15,15 +15,35 @@ Quick Start
 
 .. code-block:: bash
 
-    $ pip install thumbtack
+    $ sudo pip install thumbtack
+    $ sudo imount --check # List install status of tools used by imagemounter
+    The following commands are used by imagemounter internally. Without most commands, imagemounter works perfectly fine, but may lack some detection or mounting capabilities.
+    -- Mounting base disk images (at least one required, first three recommended) --
+    MISSING   xmount              needed for several types of disk images, part of the xmount package
+    MISSING   ewfmount            needed for EWF images (partially covered by xmount), part of the ewf-tools package
+    MISSING   affuse              needed for AFF images (partially covered by xmount), part of the afflib-tools package
+    MISSING   vmware-mount        needed for VMWare disks
+    MISSING   mountavfs           needed for compressed disk images, part of the avfs package
+    MISSING   qemu-nbd            needed for Qcow2 images, part of the qemu-utils package
+    ...
+    
+
+Install additional tools needed to mount your images. More information can be found in the imagemounter installation docs https://imagemounter.readthedocs.io/en/latest/installation.html.
+
+
+.. code-block:: bash
+
+    # Install tools
+    $ sudo apt-get install xmount ewf-tools afflib-tools sleuthkit
     $ cd path/to/disk/image/files
-    $ thumbtack
+    $ sudo thumbtack
       * Serving Flask app "thumbtack" (lazy loading)
       * Environment: production
         WARNING: This is a development server. Do not use it in a production deployment.
         Use a production WSGI server instead.
       * Debug mode: off
       * Running on http://127.0.0.1:8208/ (Press CTRL+C to quit)
+
 
 Then go to http://127.0.0.1:8208 and start mounting and unmounting images!
 
@@ -34,7 +54,7 @@ Quick Reference
 
 .. code-block:: bash
 
-    $ thumbtack --help
+    $ sudo thumbtack --help
     Usage: thumbtack [OPTIONS]
 
     Options:
