@@ -90,6 +90,11 @@ def download_dftt_images():
     for filename in os.listdir("."):
         _, ext = os.path.splitext(filename)
         if ext == ".zip":
+            while os.path.getsize(filename) == 154:
+                for url in dftt_urls:
+                    if filename in url:
+                        print(f"Retrying download of {filename}")
+                        download(url)
             print(f"unzipping: {filename}")
             unzip(filename)
 
