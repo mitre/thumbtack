@@ -67,7 +67,7 @@ def download_dftt_images():
         "http://prdownloads.sourceforge.net/dftt/3-kwsrch-ntfs.zip?download",
         "http://prdownloads.sourceforge.net/dftt/4-kwsrch-ext3.zip?download",
         "http://prdownloads.sourceforge.net/dftt/5-fat-daylight.zip?download",
-        "http://prdownloads.sourceforge.net/dftt/6-undel-fat.zip?download",
+        #"http://prdownloads.sourceforge.net/dftt/6-undel-fat.zip?download",
         "http://prdownloads.sourceforge.net/dftt/7-undel-ntfs.zip?download",
         "http://prdownloads.sourceforge.net/dftt/8-jpeg-search.zip?download",
         "http://prdownloads.sourceforge.net/dftt/9-fat-label.zip?download",
