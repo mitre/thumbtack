@@ -3,7 +3,7 @@ bump2version==1.0.1
 Click==8.1.7
 Flask==3.0.2
 Flask-RESTful==0.3.10
-gunicorn==21.2.0
+gunicorn==22.0.0
 imagemounter_mitre==2023.9.5
 invoke==2.2.0
 pytest==8.1.1
