@@ -69,7 +69,7 @@ def download_dftt_images():
         "http://prdownloads.sourceforge.net/dftt/5-fat-daylight.zip?download",
         #"http://prdownloads.sourceforge.net/dftt/6-undel-fat.zip?download",
         "http://prdownloads.sourceforge.net/dftt/7-undel-ntfs.zip?download",
-        "http://prdownloads.sourceforge.net/dftt/8-jpeg-search.zip?download",
+        #"http://prdownloads.sourceforge.net/dftt/8-jpeg-search.zip?download",
         "http://prdownloads.sourceforge.net/dftt/9-fat-label.zip?download",
         "http://prdownloads.sourceforge.net/dftt/10b-ntfs-autodetect.zip?download",
         "http://prdownloads.sourceforge.net/dftt/11-carve-fat.zip?download",
