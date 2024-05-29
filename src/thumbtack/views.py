@@ -114,10 +114,6 @@ def add_mountpoint_form():
     if mountpoint_path is None or mountpoint_path == "":
         status = "No mountpoint provided."
         return render_template("form_complete.html", status=status)
-    if not os.path.isdir(mountpoint_path):
-        status = f"Could not find {mountpoint_path}. Ensure the mountpoint exists before adding it to thumbtack."
-        return render_template("form_complete.html", status=status)
-
     if operation == "add_mountpoint":
         mounted_disk = add_mountpoint(rel_path, mountpoint_path)
         if mounted_disk:
