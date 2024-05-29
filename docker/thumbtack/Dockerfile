@@ -19,12 +19,12 @@ RUN pip install thumbtack==0.4.2
 
 WORKDIR "tmp/"
 RUN apt install -y wget
-RUN wget https://github.com/libyal/libewf/releases/download/20201230/libewf-experimental-20201230.tar.gz
-RUN tar -xf libewf-experimental-20201230.tar.gz
-WORKDIR "/tmp/libewf-20201230/"
+RUN wget https://github.com/libyal/libewf/releases/download/20240506/libewf-experimental-20240506.tar.gz
+RUN tar -xf libewf-experimental-20240506.tar.gz
+WORKDIR "/tmp/libewf-20240506/"
 RUN ./configure --enable-python3 --with-libfuse && make && make install
 RUN cp /usr/local/lib/libewf* /usr/lib/
-RUN rm -rf /tmp/libewf-experimental-20201230*
+RUN rm -rf /tmp/libewf-experimental-20240506*
 
 
 WORKDIR "/"
