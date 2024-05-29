@@ -11,3 +11,6 @@ class ImageNotInDatabaseError(Exception):
 
 class DuplicateMountAttemptError(Exception):
     pass
+
+class EncryptedImageError(Exception):
+    pass
