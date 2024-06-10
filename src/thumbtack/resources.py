@@ -8,7 +8,8 @@ from .exceptions import (
     UnexpectedDiskError,
     NoMountableVolumesError,
     ImageNotInDatabaseError,
-    DuplicateMountAttemptError
+    DuplicateMountAttemptError,
+    EncryptedImageError,
 )
 from .utils import get_mount_info, get_supported_libraries, mount_image, unmount_image, get_images, add_mountpoint
 
