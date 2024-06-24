@@ -49,7 +49,14 @@
         </td>
 
         <!-- Status -->
-        <td>{{ image.status }}</td>
+        <td>
+          {{ image.status }}
+          {% if image.status == 'Mounted' or image.status == 'Manual mount'%}
+          <br>
+            <div class="tooltip">&#9432;<span class="tooltiptext">Increases with each mount attempt, decreases with each unmount attempt. Will not unmount the image until the reference count is 0.</span></div>
+            Reference count: {{ image.ref_count }}
+            {% endif %}
+        </td>
 
         <!-- Mount button -->
         <td>
