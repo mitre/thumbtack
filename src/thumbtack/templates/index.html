@@ -64,20 +64,6 @@
           <form class="myForm" method="post" action="{{ url_for('.mount_form') }}">
             <input type="hidden" name="img_to_mount" value="{{ image.rel_path }}">
             <input type="hidden" name="operation" value="mount">
-            <span id="dec_caret" class="caret">Decryption options</span>
-              <ul class="nested">
-                <label for="decryption_methods">Decryption Method:</label>
-                <select name="decryption methods" id="decryption_methods">
-                  <option value="none">---</option>
-                  <option value="bitlocker password">bitlocker password</option>
-                  <option value="bitlocker recovery key">bitlocker recovery key</option>
-                  <option value="bitlocker full volume encryption and tweak key">bitlocker full volume encryption and tweak key</option>
-                  <option value="luks passphrase">luks passphrase</option>
-                </select>
-                <label for="key">Decryption key:</label>
-                <input type="password" id="key" name="key">
-                <input type="checkbox" onclick="toggleKey()">Show key
-              </ul>
             <button>Mount</button>
           </form>
           {% endif %}

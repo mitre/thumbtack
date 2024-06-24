@@ -36,12 +36,3 @@ function copyToClipboard(str) {
     document.execCommand('copy');
     document.body.removeChild(el);
 }
-
-function toggleKey() {
-  var x = document.getElementById("key");
-  if (x.type === "password") {
-    x.type = "text";
-  } else {
-    x.type = "password";
-  }
-}
