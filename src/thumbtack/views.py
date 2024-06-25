@@ -5,7 +5,7 @@ from flask_restful import Api
 
 import os
 
-from .exceptions import UnexpectedDiskError, NoMountableVolumesError, DuplicateMountAttemptError
+from .exceptions import UnexpectedDiskError, NoMountableVolumesError, DuplicateMountAttemptError, EncryptedImageError
 from .resources import Mount, SupportedLibraries, Images, ImageDir, ManualMount
 from .utils import (
     get_supported_libraries,
@@ -14,7 +14,8 @@ from .utils import (
     unmount_image,
     get_ref_count,
     monitor_image_dir,
-    add_mountpoint
+    add_mountpoint,
+    create_key
 )
 
 main = Blueprint("thumbtack", __name__)
@@ -65,10 +66,20 @@ def mount_form():
     status = None
 
     if operation == "mount":
+        decryption_method = request.form["decryption method"]
+        key = request.form["key"]
+
+        key_dict = create_key(decryption_method, key)
+        creds = {}
+        if key_dict:
+            for i in range(0, 25):
+                creds[i] = key_dict["key"]
+        else:
+            creds = None
 
         mounted_disk = None
         try:
-            mounted_disk = mount_image(rel_path)
+            mounted_disk = mount_image(rel_path, creds)
         except imagemounter_mitre.exceptions.SubsystemError:
             current_app.logger.error("imagemounter was unable to mount: {}", rel_path)
             status = f"Thumbtack was unable to mount {rel_path} using the imagemounter Python library."
@@ -81,6 +92,8 @@ def mount_form():
             status = "Unexpected number of disks. Thumbtack can only handle disk images that contain one disk."
         except NoMountableVolumesError:
             status = f"No volumes in {rel_path} were able to be mounted."
+        except EncryptedImageError as e:
+            status = e
         except NotADirectoryError:
             status = "Mount failed. Thumbtack server has no mount directory set."
         except DuplicateMountAttemptError:

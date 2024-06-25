@@ -8,7 +8,8 @@ from .exceptions import (
     UnexpectedDiskError,
     NoMountableVolumesError,
     ImageNotInDatabaseError,
-    DuplicateMountAttemptError
+    DuplicateMountAttemptError,
+    EncryptedImageError,
 )
 from .utils import get_mount_info, get_supported_libraries, mount_image, unmount_image, get_images, add_mountpoint
 
@@ -80,6 +81,8 @@ class Mount(Resource):
             status = f"No volumes in {image_path} were able to be mounted."
         except ImageNotInDatabaseError:
             status = f"Cannot mount {image_path}. Image is not in Thumbtack database."
+        except EncryptedImageError:
+            status = f"Unable to mount encrypted image."
         except DuplicateMountAttemptError:
             status = "Mount attempt is already in progress for this image. Please wait until the current mount attempt completes."
 

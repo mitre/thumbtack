@@ -17,6 +17,7 @@ from .exceptions import (
     UnexpectedDiskError,
     ImageNotInDatabaseError,
     DuplicateMountAttemptError,
+    EncryptedImageError,
 )
 
 def get_supported_libraries():
@@ -202,6 +203,7 @@ def mount_image(relative_image_path, creds=None):
         )
         image_parser = process_image_parser(image_parser, relative_image_path)
     except NoMountableVolumesError as e:
+        current_app.logger.error(f"fstypes: {image_parser.fstypes}.")
         no_mountable_volumes = True
         current_app.logger.error(f"* No mountable volumes in image {relative_image_path}. Attempting to mount with qemu-nbd")
     if no_mountable_volumes:
@@ -211,6 +213,7 @@ def mount_image(relative_image_path, creds=None):
             )
             image_parser = process_image_parser(image_parser, relative_image_path)
         except NoMountableVolumesError as e:
+            current_app.logger.error(f"fstypes: {image_parser.fstypes}.")
             no_mountable_volumes = True
             msg = f"* No mountable volumes in image {relative_image_path}"
 
@@ -220,6 +223,13 @@ def mount_image(relative_image_path, creds=None):
                          WHERE rel_path = ?
                   """
             update_or_insert_db(sql, [relative_image_path])
+
+            for v in image_parser.disks[0].volumes:
+                if "LUKS encrypted file" in str(v):
+                    if not creds:
+                        raise EncryptedImageError("Encrypted LUKS volume detected. Try mounting with a decryption key.")
+                    else:
+                        raise EncryptedImageError("Encrypted LUKS volume detected. Incorrect decryption key provided.")
             raise NoMountableVolumesError(msg)
 
     mount_codes = get_mount_codes()
@@ -711,3 +721,23 @@ def check_ignored(full_path):
         return True
 
     return False
+
+def create_key(method, key):
+    if method is None or key is None:
+        return None
+
+    method_short = ""
+
+    if method == "bitlocker password":
+        method_short = "p"
+    elif method == "bitlocker recovery key":
+        method_short = "r"
+    elif method == "bitlocker full volume encryption and tweak key":
+        method_short = "k"
+    elif method == "luks passphrase":
+        method_short = "p"
+    else:
+        return None
+
+    key_full = {"key": f"{method_short}:{key}"}
+    return key_full
