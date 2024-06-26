@@ -18,7 +18,7 @@ REQUIRED = [
     "Flask==3.0.3",
     "Flask-RESTful",
     "gunicorn",
-    "imagemounter_mitre==2023.9.5",
+    "imagemounter_mitre",
     "requests",
 ]
 

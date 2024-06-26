@@ -4,7 +4,7 @@ Click==8.1.7
 Flask==3.0.3
 Flask-RESTful==0.3.10
 gunicorn==22.0.0
-imagemounter_mitre==2024.6.26
+imagemounter_mitre
 invoke==2.2.0
 pytest==8.2.2
 requests==2.32.3
