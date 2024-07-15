@@ -600,6 +600,24 @@ def monitor_image_dir():
         if Path(image["full_path"]) not in full_path_filenames
     ]
 
+def startup_remove_dirs():
+    for item in os.listdir(current_app.config["MOUNT_DIR"]):
+        path = Path(current_app.config["MOUNT_DIR"], item)
+        current_app.logger.info(path)
+        try:
+            current_app.logger.info(f"Unmounting: {path}")
+            subprocess.run(["umount", path])
+        except Exception as e:
+            current_app.logger.error(e)
+
+        if os.path.isdir(path):
+            current_app.logger.info(path)
+            try:
+                current_app.logger.info(f"Removing: {path}")
+                os.rmdir(path)
+            except Exception as e:
+                current_app.logger.error(e)
+
 
 def get_db():
     db = getattr(g, "_database", None)
