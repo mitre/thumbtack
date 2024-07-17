@@ -20,7 +20,7 @@ except DistributionNotFound:
     __version__ = "Could not find version"
 
 
-def create_app(mount_dir=None, image_dir=None, database=None, base_url=None, path_contains=None, skip_subdirectory=None):
+def create_app(mount_dir=None, image_dir=None, database=None, base_url=None, path_contains=None, skip_subdirectory=None, remove_directories=None):
 
     if base_url:
         static_url_path = f"{base_url}/static"
@@ -58,6 +58,9 @@ def create_app(mount_dir=None, image_dir=None, database=None, base_url=None, pat
 
     if skip_subdirectory:
         app.config.update(SKIP_SUBDIRECTORY=skip_subdirectory)
+
+    if remove_directories:
+        app.config.update(REMOVE_DIRECTORIES=remove_directories)
 
     app.mnt_mutex = threading.Lock()
 
@@ -170,9 +173,16 @@ def configure_logging(app):
     show_default=True,
     help="Subdirectory to ignore when monitoring files",
 )
-def start_app(debug, host, port, mount_dir, image_dir, database, base_url, path_contains, skip_subdirectory):
+@click.option(
+    '-r',
+    "--remove-directories",
+    default=False,
+    is_flag=True,
+    help="Remove empty directories in the mount directory on startup.",
+)
+def start_app(debug, host, port, mount_dir, image_dir, database, base_url, path_contains, skip_subdirectory, remove_directories):
     app = create_app(
-        mount_dir=mount_dir, image_dir=image_dir, database=database, base_url=base_url, path_contains=path_contains, skip_subdirectory=skip_subdirectory
+        mount_dir=mount_dir, image_dir=image_dir, database=database, base_url=base_url, path_contains=path_contains, skip_subdirectory=skip_subdirectory, remove_directories=remove_directories,
     )
     directory_monitoring_thread = DirectoryMonitoring(app)
     directory_monitoring_thread.start()
