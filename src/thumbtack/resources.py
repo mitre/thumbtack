@@ -10,6 +10,7 @@ from .exceptions import (
     ImageNotInDatabaseError,
     DuplicateMountAttemptError,
     EncryptedImageError,
+    DuplicateVolumeGroupError,
 )
 from .utils import get_mount_info, get_supported_libraries, mount_image, unmount_image, get_images, add_mountpoint
 
@@ -85,6 +86,8 @@ class Mount(Resource):
             status = f"Unable to mount encrypted image."
         except DuplicateMountAttemptError:
             status = "Mount attempt is already in progress for this image. Please wait until the current mount attempt completes."
+        except DuplicateVolumeGroupError as e:
+            status = f"Unable to mount all volumes. Found duplicate volume group name: {str(e)}. Deactivate the volume group and remount the image."
 
         current_app.mnt_mutex.release()
         current_app.logger.error(status)

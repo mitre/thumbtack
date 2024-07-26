@@ -18,6 +18,7 @@ from .exceptions import (
     ImageNotInDatabaseError,
     DuplicateMountAttemptError,
     EncryptedImageError,
+    DuplicateVolumeGroupError,
 )
 
 def get_supported_libraries():
@@ -130,11 +131,20 @@ def process_image_parser(image_parser, relative_image_path):
     Mountpoints for LVM volumes are not stored in the main mountpoint variable that we check and display in thumbtack.
     This loop identifies the LVM volumes and add them to the main volumes list.
     """
+    duplicate_vg = False
+    vgname = ""
+
     num_volumes = len(image_parser.disks[0].volumes.volumes)
     for v in image_parser.disks[0].volumes:
+        if v.duplicate_volume_group:
+            duplicate_vg = True
+            vgname = v.vgname
         if hasattr(v, 'volumes') and v.mountpoint is None:
             current_app.logger.info(f"Volume: {str(v)}")
             for vol in v.volumes:
+                if vol.duplicate_volume_group:
+                    duplicate_vg = True
+                    vgname = vol.vgname
                 current_app.logger.info(f"Mountpoint: {str(vol.mountpoint)}")
                 if vol.mountpoint is not None:
                     vol.index = str(num_volumes)
@@ -142,11 +152,21 @@ def process_image_parser(image_parser, relative_image_path):
                     image_parser.disks[0].volumes.volumes.append(vol)
                 if hasattr(vol, 'volumes'):
                     for sub_vol in vol.volumes:
+                        if sub_vol.duplicate_volume_group:
+                            duplicate_vg = True
+                            vgname = sub_vol.vgname
                         current_app.logger.info(f"Mountpoint: {str(sub_vol.mountpoint)}")
                         if sub_vol.mountpoint is not None:
                             sub_vol.index = str(num_volumes)
                             num_volumes += 1
                             image_parser.disks[0].volumes.volumes.append(sub_vol)
+
+    if duplicate_vg or [v for v in image_parser.disks[0].volumes if v.duplicate_volume_group]:
+        msg = "* Duplicate Volume groups detected."
+        if vgname:
+            msg += f" VG: {vgname}"
+        current_app.logger.error(msg)
+        raise DuplicateVolumeGroupError(vgname)
 
     # Fail if we couldn't mount any of the volumes
     if not [v for v in image_parser.disks[0].volumes if v.mountpoint]:
@@ -197,11 +217,15 @@ def mount_image(relative_image_path, creds=None):
     update_or_insert_db(sql, [relative_image_path])
 
     no_mountable_volumes = False
+    duplicate_vg = None
     try:
         image_parser = imagemounter_mitre.ImageParser(
             [full_image_path], pretty=True, mountdir=mount_dir, keys=creds
         )
         image_parser = process_image_parser(image_parser, relative_image_path)
+    except DuplicateVolumeGroupError as e:
+        duplicate_vg = e
+
     except NoMountableVolumesError as e:
         current_app.logger.error(f"fstypes: {image_parser.fstypes}.")
         no_mountable_volumes = True
@@ -281,6 +305,10 @@ def mount_image(relative_image_path, creds=None):
             update_or_insert_db(
                 sql, [disk_image_id, mount_status_id, v_index, v_mountpoint]
             )
+
+    if e := duplicate_vg:
+        current_app.logger.info(str(e))
+        raise e
 
     return image_parser.disks[0]
 
