@@ -118,7 +118,7 @@ See them below.
       -b, --base-url TEXT           Base URL where Thumbtack is hosted on the server  [default: /]
       --path-contains TEXT          Only select files containing specified string in the path
       -s, --skip-subdirectory TEXT  Subdirectory to ignore when monitoring files
-      -r, --remove-directories      Remove empty directories in the mount directory on startup.
+      -r, --remove-directories      Unmount all mountpoints and remove all empty directories in the thumbtack mount directory
       --help                        Show this message and exit.
 
 Development Environment
