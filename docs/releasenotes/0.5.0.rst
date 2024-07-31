@@ -12,6 +12,6 @@ Minor bug fixes and added decyption options to the UI
 
 **Bug Fixes**
 
-* Remove requirement that manual mountpoint must exist in the thumbtack docker container before being added to the database.
-* Install new version of libewf in Thumbtack dockerfile.
+* Remove requirement that manual mountpoint must exist in the thumbtack docker container before being added to the database
+* Install new version of libewf in Thumbtack dockerfile
 

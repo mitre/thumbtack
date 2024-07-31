@@ -8,6 +8,6 @@ Minor command line option and mount status message changes
 
 **Features**
 
-* Added a CLI flag to unmoutn all mountpoints and reomve all empty directories in the thumbtack mount directory on startup
-* Added status message to indicate conflicting volume group names for lvm volume groups.
+* Added a CLI flag to unmount all mountpoints and remove all empty directories in the thumbtack mount directory on startup
+* Added status message to indicate conflicting volume group names for lvm volume groups
 
