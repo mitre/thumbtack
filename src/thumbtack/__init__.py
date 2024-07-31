@@ -178,7 +178,7 @@ def configure_logging(app):
     "--remove-directories",
     default=False,
     is_flag=True,
-    help="Remove empty directories in the mount directory on startup.",
+    help="Unmount all mountpoints and remove all empty directories in the thumbtack mount directory",
 )
 def start_app(debug, host, port, mount_dir, image_dir, database, base_url, path_contains, skip_subdirectory, remove_directories):
     app = create_app(
