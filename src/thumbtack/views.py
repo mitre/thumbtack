@@ -5,7 +5,7 @@ from flask_restful import Api
 
 import os
 
-from .exceptions import UnexpectedDiskError, NoMountableVolumesError, DuplicateMountAttemptError, EncryptedImageError
+from .exceptions import UnexpectedDiskError, NoMountableVolumesError, DuplicateMountAttemptError, EncryptedImageError, DuplicateVolumeGroupError
 from .resources import Mount, SupportedLibraries, Images, ImageDir, ManualMount
 from .utils import (
     get_supported_libraries,
@@ -78,6 +78,7 @@ def mount_form():
             creds = None
 
         mounted_disk = None
+        duplicate_vg = False
         try:
             mounted_disk = mount_image(rel_path, creds)
         except imagemounter_mitre.exceptions.SubsystemError:
@@ -98,7 +99,12 @@ def mount_form():
             status = "Mount failed. Thumbtack server has no mount directory set."
         except DuplicateMountAttemptError:
             status = "Mount attempt is already in progress for this image. Please wait until the current mount attempt completes."
+        except DuplicateVolumeGroupError as e:
+            status = f"Unable to mount all volumes. Found duplicate volume group name: {str(e)}. Deactivate the volume group and remount the image."
+            duplicate_vg = True
         if mounted_disk and mounted_disk.mountpoint is not None:
+            if duplicate_vg:
+                status = ' '.join(["Mounted Successfully.", status])
             status = "Mounted successfully"
 
     elif operation == "unmount":

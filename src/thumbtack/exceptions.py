@@ -14,3 +14,7 @@ class DuplicateMountAttemptError(Exception):
 
 class EncryptedImageError(Exception):
     pass
+
+class DuplicateVolumeGroupError(Exception):
+    def __init__(self, msg):
+        super().__init__(msg)
