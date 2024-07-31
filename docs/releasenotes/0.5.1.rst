@@ -1,0 +1,12 @@
+0.5.1
+=====
+
+Overview
+--------
+
+Update dependency version
+
+**Bug Fixes**
+
+* Set imagemounter dependency to most recent version.
+

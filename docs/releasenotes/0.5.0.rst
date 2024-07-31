@@ -1,0 +1,17 @@
+0.5.0
+=====
+
+Overview
+--------
+
+Minor bug fixes and added decyption options to the UI
+
+**Features**
+
+* Add luks and bitlocker decryption options to the Thumbtack UI
+
+**Bug Fixes**
+
+* Remove requirement that manual mountpoint must exist in the thumbtack docker container before being added to the database.
+* Install new version of libewf in Thumbtack dockerfile.
+
