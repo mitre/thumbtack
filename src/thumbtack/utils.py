@@ -139,7 +139,12 @@ def process_image_parser(image_parser, relative_image_path):
         if v.duplicate_volume_group:
             duplicate_vg = True
             vgname = v.vgname
-        if hasattr(v, 'volumes') and v.mountpoint is None:
+        if hasattr(v, 'volumes') and v.mountpoint:
+            for vol in v.volumes:
+                vol.index = str(num_volumes)
+                num_volumes += 1
+                image_parser.disks[0].volumes.volumes.append(vol)
+        elif hasattr(v, 'volumes') and v.mountpoint is None:
             current_app.logger.info(f"Volume: {str(v)}")
             for vol in v.volumes:
                 if vol.duplicate_volume_group:
