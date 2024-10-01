@@ -1,0 +1,10 @@
+0.2.0
+=====
+
+Overview
+--------
+
+**Bug Fixes**
+
+* Non-LVM mounted subvolumes are now included in the volume list.
+
