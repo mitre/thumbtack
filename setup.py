@@ -44,12 +44,7 @@ EXTRAS = {
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-# Import the README and use it as the long-description.
-try:
-    with io.open(os.path.join(here, "README.rst"), encoding="utf-8") as f:
-        long_description = "\n" + f.read()
-except Exception:
-    long_description = DESCRIPTION
+long_description = DESCRIPTION
 
 
 setup(
