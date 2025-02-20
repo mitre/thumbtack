@@ -1,5 +1,3 @@
-.. image:: https://github.com/mitre/thumbtack/actions/workflows/thumbtack_workflow.yml/badge.svg?branch=master
-    :target: https://github.com/mitre/thumbtack/actions
 
 thumbtack
 =========
