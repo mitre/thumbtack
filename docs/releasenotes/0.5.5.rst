@@ -1,0 +1,10 @@
+0.5.5
+=====
+
+Overview
+--------
+
+**Bug Fixes**
+
+* Updated thumbtack docker image to use newer version of libbde
+
