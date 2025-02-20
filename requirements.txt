@@ -8,6 +8,6 @@ imagemounter_mitre
 invoke==2.2.0
 pytest==8.3.3
 requests==2.32.3
-sphinx==6.2.1
+sphinx==8.2.0
 sphinx-autobuild==2021.3.14
 sphinx_rtd_theme==3.0.2
