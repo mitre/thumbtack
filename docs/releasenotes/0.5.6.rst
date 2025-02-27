@@ -1,0 +1,10 @@
+0.5.5
+=====
+
+Overview
+--------
+
+**Bug Fixes**
+
+* Upgrade to imagemounter-mitre v2025.02.27 in docker image to fix vss loop error.
+
