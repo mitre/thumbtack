@@ -570,8 +570,6 @@ def remove_image(full_path):
         current_app.logger.debug(f"Removing disk image from DB: {full_path}")
         sql = "DELETE from disk_images WHERE (full_path) = (?)"
         update_or_insert_db(sql, [full_path_str])
-    else:
-        current_app.logger.debug(f"({disk_image['id']}) is on disk: {full_path}")
 
 
 def remove_images():
@@ -728,6 +726,14 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
+def check_ewf(full_path_str):
+    # Return True if there is a corresponding .E01 for an image
+    image_path = Path(full_path_str)
+
+    if (image_path.with_suffix('.E01').exists() or image_path.with_suffix('.e01').exists()):
+        remove_image(full_path_str)
+        return True
+    return False
 
 def check_ignored(full_path):
     full_path_str = str(full_path)
@@ -741,6 +747,14 @@ def check_ignored(full_path):
         not full_path_str.lower().endswith("log")
         and re.match(r".*\.[EL]X?\w\w$", full_path_str, flags=re.I)
         and not re.match(r".*\.[EL]X?01$", full_path_str, flags=re.I)
+        and check_ewf(full_path_str)
+    ):
+        return True
+    # Ignore *.FAA -> *.JJJ
+    if (
+        not full_path_str.lower().endswith("log")
+        and re.match(r".*\.[F-J]\w\w$", full_path_str, flags=re.I)
+        and check_ewf(full_path_str)
     ):
         return True
 
