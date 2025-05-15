@@ -18,7 +18,7 @@ jobs:
         with:
           ref: ${{ github.ref }}
       - name: Install apt dependencies
-        run: sudo apt update && sudo apt-get install afflib-tools archivemount avfs cryptsetup disktype exfat-fuse exfat-utils libguestfs-tools libvshadow-utils lvm2 mdadm mtd-utils ocfs2-tools open-vm-tools qemu-utils sleuthkit sqlite3 squashfs-tools vmfs-tools xfsprogs xmount zlib1g-dev
+        run: sudo apt update && sudo apt-get install afflib-tools archivemount avfs cryptsetup disktype exfat-fuse exfatprogs libguestfs-tools libvshadow-utils lvm2 mdadm mtd-utils ocfs2-tools open-vm-tools qemu-utils sleuthkit sqlite3 squashfs-tools vmfs-tools xfsprogs xmount zlib1g-dev
       - name: pip install
         run: sudo pip install -r requirements.txt && sudo pip install -e .
       - name: Download test images
@@ -29,12 +29,12 @@ jobs:
         working-directory: tests/
   build:
     needs: test
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Setup python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.7'
+          python-version: '3.13.3'
       - name: Check out repository
         uses: actions/checkout@v2
         with:
@@ -43,12 +43,12 @@ jobs:
         run: sudo pip install wheel && sudo python setup.py sdist bdist_wheel
   deploy:
     needs: build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Setup python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.7'
+          python-version: '3.13.3'
       - name: Check out repository
         uses: actions/checkout@v2
         with:
@@ -63,7 +63,7 @@ jobs:
           password: ${{ secrets.PYPI_TOKEN_THUMBTACK }}
   docker-image:
     needs: deploy
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     permissions:
       packages: write
       contents: read
