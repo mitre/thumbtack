@@ -726,35 +726,47 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
-def check_ewf(full_path_str):
-    # Return True if there is a corresponding .E01 for an image
-    image_path = Path(full_path_str)
-
-    if (image_path.with_suffix('.E01').exists() or image_path.with_suffix('.e01').exists()):
-        remove_image(full_path_str)
-        return True
-    return False
 
 def check_ignored(full_path):
     full_path_str = str(full_path)
+
+    if os.path.isdir(full_path_str):
+        return True
+
+    # Ignore .EXX.txt files
+    # Ignore .EXX.adcf files
+    # Ignore .EXX.log and .EXX.packed_log files
+    if re.match(r".*\.[EL]X?\w\w\.(txt|adcf|(packed_)?log)$", full_path_str, flags=re.I):
+        return True
+
+    # Ignore files: .txt, .packed_log, .log
+    exclude = [".txt", ".log", ".packed_log"]
+    for ign in exclude:
+        if full_path_str.lower().endswith(ign):
+            return True
+
+    # Include .raw files
+    if (
+        re.match(r".*raw$", full_path_str, flags=re.I)
+    ):
+        return False
+
+    # Include .img files
+    if (
+        re.match(r".*img$", full_path_str, flags=re.I)
+    ):
+        return False
+
 
     # Ignore *.db since the sqlite DB could be in this directory
     if re.match(r".*\.db$", full_path_str, flags=re.I):
         return True
 
-    # Ignore *.E02, *.E03, ..., *.EAA, *.EAB, ..., but not *.E01
+    # Ignore *.E02, *.E03, ..., *.EAA, *.EAB, ..., *.FAA, ..., *.GAA, ..., *.HAA, ... but not *.E01
     if (
         not full_path_str.lower().endswith("log")
-        and re.match(r".*\.[EL]X?\w\w$", full_path_str, flags=re.I)
+        and (re.match(r".*\.[EFGHIJKLMNOPQRSTUWXYZ]X?\w\w$", full_path_str, flags=re.I) or re.match(r".*\.[EFGHIJKLMNOPQRSTUWXYZ]X?\d\d+$", full_path_str, flags=re.I))
         and not re.match(r".*\.[EL]X?01$", full_path_str, flags=re.I)
-        and check_ewf(full_path_str)
-    ):
-        return True
-    # Ignore *.FAA -> *.JJJ
-    if (
-        not full_path_str.lower().endswith("log")
-        and re.match(r".*\.[F-J]\w\w$", full_path_str, flags=re.I)
-        and check_ewf(full_path_str)
     ):
         return True
 
