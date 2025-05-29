@@ -570,8 +570,6 @@ def remove_image(full_path):
         current_app.logger.debug(f"Removing disk image from DB: {full_path}")
         sql = "DELETE from disk_images WHERE (full_path) = (?)"
         update_or_insert_db(sql, [full_path_str])
-    else:
-        current_app.logger.debug(f"({disk_image['id']}) is on disk: {full_path}")
 
 
 def remove_images():
@@ -732,14 +730,42 @@ def close_connection(exception):
 def check_ignored(full_path):
     full_path_str = str(full_path)
 
+    if os.path.isdir(full_path_str):
+        return True
+
+    # Ignore .EXX.txt files
+    # Ignore .EXX.adcf files
+    # Ignore .EXX.log and .EXX.packed_log files
+    if re.match(r".*\.[EL]X?\w\w\.(txt|adcf|(packed_)?log)$", full_path_str, flags=re.I):
+        return True
+
+    # Ignore files: .txt, .packed_log, .log
+    exclude = [".txt", ".log", ".packed_log"]
+    for ign in exclude:
+        if full_path_str.lower().endswith(ign):
+            return True
+
+    # Include .raw files
+    if (
+        re.match(r".*raw$", full_path_str, flags=re.I)
+    ):
+        return False
+
+    # Include .img files
+    if (
+        re.match(r".*img$", full_path_str, flags=re.I)
+    ):
+        return False
+
+
     # Ignore *.db since the sqlite DB could be in this directory
     if re.match(r".*\.db$", full_path_str, flags=re.I):
         return True
 
-    # Ignore *.E02, *.E03, ..., *.EAA, *.EAB, ..., but not *.E01
+    # Ignore *.E02, *.E03, ..., *.EAA, *.EAB, ..., *.FAA, ..., *.GAA, ..., *.HAA, ... but not *.E01
     if (
         not full_path_str.lower().endswith("log")
-        and re.match(r".*\.[EL]X?\w\w$", full_path_str, flags=re.I)
+        and (re.match(r".*\.[EFGHIJKLMNOPQRSTUWXYZ]X?\w\w$", full_path_str, flags=re.I) or re.match(r".*\.[EFGHIJKLMNOPQRSTUWXYZ]X?\d\d+$", full_path_str, flags=re.I))
         and not re.match(r".*\.[EL]X?01$", full_path_str, flags=re.I)
     ):
         return True
