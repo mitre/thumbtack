@@ -554,6 +554,7 @@ def insert_images():
             full_path = Path(root, filename)
 
             if check_ignored(full_path):
+                remove_image(full_path)
                 continue
 
             if not filename.startswith(".") and full_path.is_file():
@@ -618,6 +619,7 @@ def monitor_image_dir():
             full_path_filenames.append(full_path)
 
             if check_ignored(full_path):
+                remove_image(full_path)
                 continue
 
             if not filename.startswith(".") and full_path.is_file():
@@ -755,7 +757,13 @@ def check_ignored(full_path):
     if (
         re.match(r".*img$", full_path_str, flags=re.I)
     ):
-        return False
+        file_basename = os.path.basename(full_path_str).split('.')[0].lower()
+
+        check_files = [f'{file_basename}.{ext}'.lower() for ext in ['e01', 'imf']]
+        image_files = [file.lower() for file in os.listdir(os.path.dirname(full_path_str))]
+
+        # Return true if both .e01 and .imf files exist to ignore a multipart ewf file.
+        return all(file in image_files for file in check_files)
 
 
     # Ignore *.db since the sqlite DB could be in this directory
