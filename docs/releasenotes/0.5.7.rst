@@ -1,0 +1,10 @@
+0.5.7
+=====
+
+Overview
+--------
+
+**Bug Fixes**
+
+* Fix issue with handling large amounts fo multipart ewf files (.E01, .E02, etc.).
+
