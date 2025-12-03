@@ -16,7 +16,7 @@ RUN apt install -y git autoconf automake autopoint libtool pkg-config
 
 # Install thumbtack
 RUN apt install -y python3 python3-pip
-RUN pip install thumbtack==0.5.7 pytsk3 python-magic
+RUN pip install thumbtack==0.5.8 pytsk3 python-magic
 
 #### Install libewf
 WORKDIR "/src/"

@@ -2,7 +2,7 @@ version: '3'
 
 services:
   thumbtack:
-    image: ghcr.io/mitre/thumbtack:0.5.7
+    image: ghcr.io/mitre/thumbtack:0.5.8
     container_name: thumbtack
     privileged: true
     volumes:
