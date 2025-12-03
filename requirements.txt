@@ -1,6 +1,6 @@
 apistar==0.7.2
 bump2version==1.0.1
-Click==8.3.0
+Click==8.3.1
 Flask==3.0.3
 Flask-RESTful==0.3.10
 gunicorn==23.0.0
