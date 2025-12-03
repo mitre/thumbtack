@@ -15,7 +15,7 @@ VERSION = "0.5.8"
 
 REQUIRED = [
     "Click",
-    "Flask==3.0.3",
+    "Flask==3.1.2",
     "Flask-RESTful",
     "gunicorn",
     "imagemounter_mitre",
